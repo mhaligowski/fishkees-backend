@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.fishkees</groupId>
+	<artifactId>backend</artifactId>
+	<version>${project.version}</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.version.num>0.0.1</project.version.num>
+		<project.version>${project.version.num}-SNAPSHOT</project.version>
+		<dropwizard.version>0.6.2</dropwizard.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<!-- compile for Java 1.7 -->
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.yammer.dropwizard</groupId>
+			<artifactId>dropwizard-core</artifactId>
+			<version>${dropwizard.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<modules>
+		<module>../api</module>
+		<module>../client</module>
+		<module>../service</module>
+	</modules>
+</project>
