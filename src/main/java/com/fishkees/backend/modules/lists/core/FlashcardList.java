@@ -6,9 +6,12 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 
 @JsonSnakeCase
 public class FlashcardList {
-	private final Long id;
-	private final String title;
-	private final Date createDate;
+	private Long id;
+	private String title;
+	private Date createDate;
+	
+	@SuppressWarnings("unused")
+	private FlashcardList() { }
 	
 	public FlashcardList(Long id, String title, Date createDate) {
 		this.id = id;
@@ -27,5 +30,5 @@ public class FlashcardList {
 	public Date getCreateDate() {
 		return createDate;
 	}
-	
+
 }
