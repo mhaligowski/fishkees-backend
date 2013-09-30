@@ -2,6 +2,9 @@ package com.fishkees.backend.modules.lists.core;
 
 import java.util.Date;
 
+import com.yammer.dropwizard.json.JsonSnakeCase;
+
+@JsonSnakeCase
 public class FlashcardList {
 	private final Long id;
 	private final String title;
@@ -24,6 +27,5 @@ public class FlashcardList {
 	public Date getCreateDate() {
 		return createDate;
 	}
-	
 	
 }
