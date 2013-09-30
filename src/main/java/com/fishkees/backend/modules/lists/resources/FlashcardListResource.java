@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.fishkees.backend.modules.lists.core.FlashcardListDao;
+import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 
 @Path("/flashcardlists")
 @Produces(MediaType.APPLICATION_JSON)
