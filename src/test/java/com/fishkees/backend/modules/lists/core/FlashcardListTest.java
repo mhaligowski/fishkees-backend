@@ -1,7 +1,6 @@
 package com.fishkees.backend.modules.lists.core;
 
 import static com.yammer.dropwizard.testing.JsonHelpers.*;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
@@ -17,9 +16,8 @@ public class FlashcardListTest {
 	@Test
 	public void serializesToJson() throws Exception {
 		final FlashcardList flashcardList = flashcardList();
-		assertThat("FlashcardList can be serialized to JSON",
-				asJson(flashcardList),
-				is(equalTo(jsonFixture("fixtures/lists/single.json"))));
+		assertEquals(jsonFixture("fixtures/lists/single.json"),
+				asJson(flashcardList));
 	}
 
 	@Test
@@ -30,7 +28,7 @@ public class FlashcardListTest {
 		assertEquals(fromJson.getTitle(), flashcardList.getTitle());
 		assertEquals(fromJson.getId(), flashcardList.getId());
 	}
-	
+
 	private FlashcardList flashcardList() throws Exception {
 		return new FlashcardList(1l, "abcd", sdf.parse("01/07/1986 12:00"));
 	}
