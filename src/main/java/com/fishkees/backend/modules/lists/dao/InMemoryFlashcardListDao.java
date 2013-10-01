@@ -10,8 +10,7 @@ import com.google.common.collect.Lists;
 public class InMemoryFlashcardListDao implements FlashcardListDao {
 	@Inject
 	private FlashcardListInMemoryStorage storage;
-	
-	
+		
 	public List<FlashcardList> getAll() {
 		return Lists.newArrayList(storage.all());
 	}
