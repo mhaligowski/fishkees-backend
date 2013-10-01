@@ -1,12 +1,13 @@
 package com.fishkees.backend.modules.lists;
 
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
+import com.fishkees.backend.configuration.FixturesConfiguration;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
@@ -14,17 +15,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class FlashcardListsIntegrationTest {
-	private Injector testObj;
-
-	@Before
-	public void setUp() throws Exception {
-		this.testObj = Guice.createInjector(new ListsModule());
-		loadFixtures();
-	}
-
 	@Test
 	public void testGettingAllLists() {
 		// when
+		Injector testObj = Guice.createInjector(new ListsModule());
+		loadFixtures(testObj);
 		FlashcardListResource resource = testObj
 				.getInstance(FlashcardListResource.class);
 		List<FlashcardList> flashcardLists = resource.getFlashcardLists();
@@ -40,6 +35,7 @@ public class FlashcardListsIntegrationTest {
 
 	@Test
 	public void testStorageIsSingleton() {
+		Injector testObj = Guice.createInjector(new ListsModule());
 		FlashcardListInMemoryStorage instance1 = testObj
 				.getInstance(FlashcardListInMemoryStorage.class);
 		FlashcardListInMemoryStorage instance2 = testObj
@@ -48,8 +44,41 @@ public class FlashcardListsIntegrationTest {
 		assertSame(instance1, instance2);
 	}
 
-	private void loadFixtures() {
-		FlashcardListInMemoryStorage storage = testObj
+	@Test
+	public void testStorageFixtureLoading() {
+		// given
+		FixturesConfiguration config = mock(FixturesConfiguration.class);
+		when(config.getFlashcardListsPath()).thenReturn(
+				"src/test/resources/fixtures/lists/all.json");
+		Injector testObj = Guice.createInjector(new ListsModule(config));
+
+		// when
+		List<FlashcardList> actual = testObj.getInstance(
+				FlashcardListInMemoryStorage.class).all();
+
+		// then
+		assertEquals(2, actual.size());
+		assertEquals(new Long(1L), actual.get(0).getId());
+		assertEquals(new Long(2L), actual.get(1).getId());
+
+		assertEquals("Spanish for beginners", actual.get(0).getTitle());
+		assertEquals("Russian for intermediate", actual.get(1).getTitle());
+
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testStorageFixtureLoading_nonExisting() {
+		FixturesConfiguration config = mock(FixturesConfiguration.class);
+		when(config.getFlashcardListsPath()).thenReturn(
+				"nonExistingFile");
+		Injector testObj = Guice.createInjector(new ListsModule(config));
+
+		// when
+		testObj.getInstance(FlashcardListInMemoryStorage.class);
+	}
+
+	private void loadFixtures(Injector injector) {
+		FlashcardListInMemoryStorage storage = injector
 				.getInstance(FlashcardListInMemoryStorage.class);
 
 		for (FlashcardList fl : FlashcardListFixtures.all()) {

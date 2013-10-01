@@ -2,4 +2,4 @@ http:
   port: 8080
   adminPort: 8081
 fixtures:
-  flashcardListsPath: ../fixtures/flashcardlists.yml
+  flashcardListsPath: fixtures/flashcardlists.json
