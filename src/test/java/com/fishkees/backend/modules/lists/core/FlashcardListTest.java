@@ -4,14 +4,13 @@ import static com.yammer.dropwizard.testing.JsonHelpers.*;
 import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
+import java.util.SimpleTimeZone;
 
 import org.junit.Test;
 
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
 
 public class FlashcardListTest {
-	private static final SimpleDateFormat sdf = new SimpleDateFormat(
-			"dd/MM/yyyy kk:mm");
 
 	@Test
 	public void serializesToJson() throws Exception {
@@ -30,6 +29,9 @@ public class FlashcardListTest {
 	}
 
 	private FlashcardList flashcardList() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
+
 		return new FlashcardList(1l, "abcd", sdf.parse("01/07/1986 12:00"));
 	}
 }
