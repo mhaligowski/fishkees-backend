@@ -25,4 +25,18 @@ public class FlashcardListFixtures {
 
 	private FlashcardListFixtures() {
 	}
+	
+	public static FlashcardList single() {
+		TypeReference<FlashcardList> ref = new TypeReference<FlashcardList>() {
+		};
+		
+		FlashcardList result;
+		try {
+			result = fromJson(jsonFixture("fixtures/lists/single.json"), ref);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return result;
+	}
 }
