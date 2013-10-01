@@ -31,16 +31,16 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 	@Override
 	public void run(FishkeesConfiguration configuration, Environment environment)
 			throws Exception {
-		setInjector();
+		setInjector(configuration);
 		environment.addResource(injector
 				.getInstance(FlashcardListResource.class));
 
 		environment.addHealthCheck(injector.getInstance(PingHealthCheck.class));
 	}
 
-	private void setInjector() {
+	private void setInjector(FishkeesConfiguration config) {
 		List<AbstractModule> modules = Lists.newLinkedList();
-		modules.add(new ListsModule());
+		modules.add(new ListsModule(config.getFixturesConfiguration()));
 		modules.add(new HealthChecksModule());
 		injector = Guice.createInjector(modules);
 	}
