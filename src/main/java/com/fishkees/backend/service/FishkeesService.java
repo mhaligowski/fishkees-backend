@@ -2,6 +2,8 @@ package com.fishkees.backend.service;
 
 import java.util.List;
 
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+
 import com.fishkees.backend.configuration.FishkeesConfiguration;
 import com.fishkees.backend.healthcheck.HealthChecksModule;
 import com.fishkees.backend.healthcheck.PingHealthCheck;
@@ -31,6 +33,8 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 	@Override
 	public void run(FishkeesConfiguration configuration, Environment environment)
 			throws Exception {
+		environment.addFilter(CrossOriginFilter.class, "/*");
+		
 		setInjector(configuration);
 		environment.addResource(injector
 				.getInstance(FlashcardListResource.class));

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -34,6 +35,7 @@ public class FishkeesServiceTest {
 		testObj.run(configuration, environment);
 		
 		// then
+		verify(environment).addFilter(eq(CrossOriginFilter.class), anyString());
 		verify(environment).addResource(any(FlashcardListResource.class));
 	}
 	
