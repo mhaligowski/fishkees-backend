@@ -39,4 +39,18 @@ public class FlashcardListFixtures {
 		
 		return result;
 	}
+
+	public static FlashcardList partial() {
+		TypeReference<FlashcardList> ref = new TypeReference<FlashcardList>() {
+		};
+		
+		FlashcardList result;
+		try {
+			result = fromJson(jsonFixture("fixtures/lists/partial.json"), ref);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return result;
+	}
 }
