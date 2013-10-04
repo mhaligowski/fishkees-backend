@@ -45,7 +45,7 @@ public class InMemoryFlashcardListDaoTest {
 		FlashcardList fl = new FlashcardList(null, "abcd", new Date());
 		
 		// when
-		testObj.create(fl);
+		FlashcardList result = testObj.createNewFromObject(fl);
 		
 		// then
 		verify(storage).getNewId();
@@ -54,11 +54,14 @@ public class InMemoryFlashcardListDaoTest {
 		
 		verify(storage).put(longCaptor.capture(), listCaptor.capture());
 		
+		
 		Long id = longCaptor.getValue();
 		assertNotNull(id);
 		
 		FlashcardList newFl = listCaptor.getValue();
 		assertEquals(id, newFl.getId());
 		assertEquals("abcd", newFl.getTitle());
+		
+		assertEquals(newFl, result);
 	}
 }

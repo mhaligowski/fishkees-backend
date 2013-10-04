@@ -6,5 +6,5 @@ import com.fishkees.backend.modules.lists.core.FlashcardList;
 
 public interface FlashcardListDao {
 	public List<FlashcardList> findAll();
-	public void create(FlashcardList flashcardList);
+	public FlashcardList createNewFromObject(FlashcardList flashcardList);
 }

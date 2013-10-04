@@ -15,13 +15,14 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 		return Lists.newArrayList(storage.all());
 	}
 
-	@Override
-	public void create(FlashcardList flashcardList) {
+	public FlashcardList createNewFromObject(FlashcardList flashcardList) {
 		Long newId = storage.getNewId();
 
 		FlashcardList newList = new FlashcardList(newId,
 				flashcardList.getTitle(), flashcardList.getCreateDate());
 
 		storage.put(newId, newList);
+		
+		return newList;
 	}
 }
