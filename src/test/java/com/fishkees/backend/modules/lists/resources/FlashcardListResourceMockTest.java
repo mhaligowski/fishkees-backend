@@ -32,7 +32,7 @@ public class FlashcardListResourceMockTest {
 		when(flashcardListDao.findAll()).thenReturn(lists);
 		
 		// when
-		List<FlashcardList> result = testObj.getFlashcardLists();
+		List<FlashcardList> result = testObj.findAll();
 		
 		// then
 		assertThat(result).containsAll(lists);

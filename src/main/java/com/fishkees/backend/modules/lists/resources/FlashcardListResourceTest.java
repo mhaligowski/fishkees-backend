@@ -66,6 +66,6 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
 		assertEquals("application/json", response.getHeaders().get("Content-Type").get(0));
-//		assertEquals("/flashcardlists/12345", response.getHeaders().get("Location"));
+		assertEquals("/flashcardlists/12345", response.getHeaders().get("Location").get(0));
 	}
 }

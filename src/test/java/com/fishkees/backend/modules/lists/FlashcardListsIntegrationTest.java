@@ -22,7 +22,7 @@ public class FlashcardListsIntegrationTest {
 		loadFixtures(testObj);
 		FlashcardListResource resource = testObj
 				.getInstance(FlashcardListResource.class);
-		List<FlashcardList> flashcardLists = resource.getFlashcardLists();
+		List<FlashcardList> flashcardLists = resource.findAll();
 
 		assertEquals(2, flashcardLists.size());
 		assertEquals(new Long(1L), flashcardLists.get(0).getId());
