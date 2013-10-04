@@ -1,8 +1,8 @@
 package com.fishkees.backend.modules.lists.resources;
 
 import static com.yammer.dropwizard.testing.JsonHelpers.*;
+import static org.fest.assertions.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,10 +15,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
-import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FlashcardListResourceTest {
+public class FlashcardListResourceMockTest {
 	@InjectMocks
 	private FlashcardListResource testObj;
 	
@@ -39,7 +38,5 @@ public class FlashcardListResourceTest {
 		assertThat(result).containsAll(lists);
 		verify(flashcardListDao).findAll();
 	}
-	
-
 
 }

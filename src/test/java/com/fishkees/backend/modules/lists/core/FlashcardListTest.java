@@ -37,7 +37,7 @@ public class FlashcardListTest {
 		assertEquals(fromJson.getTitle(), flashcardList.getTitle());
 
 	}
-	
+
 	private FlashcardList flashcardList() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
 		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
@@ -53,4 +53,3 @@ public class FlashcardListTest {
 	}
 
 }
-	
