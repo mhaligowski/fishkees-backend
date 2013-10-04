@@ -28,10 +28,28 @@ public class FlashcardListTest {
 		assertEquals(fromJson.getId(), flashcardList.getId());
 	}
 
+	@Test
+	public void deserializeWithoutIdFromJson() throws Exception {
+		FlashcardList fromJson = FlashcardListFixtures.partial();
+		final FlashcardList flashcardList = flashcardListWithoutId();
+
+		assertNull(fromJson.getId());
+		assertEquals(fromJson.getTitle(), flashcardList.getTitle());
+
+	}
+
 	private FlashcardList flashcardList() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
 		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
 
 		return new FlashcardList(1l, "abcd", sdf.parse("01/07/1986 12:00"));
 	}
+
+	private FlashcardList flashcardListWithoutId() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
+
+		return new FlashcardList(null, "abcd", sdf.parse("01/07/1986 12:00"));
+	}
+
 }
