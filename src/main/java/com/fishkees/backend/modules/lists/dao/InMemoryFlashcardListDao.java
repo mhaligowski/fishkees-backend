@@ -25,4 +25,9 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 		
 		return newList;
 	}
+
+	@Override
+	public FlashcardList findById(Long id) {
+		return storage.get(id);
+	}
 }

@@ -34,6 +34,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
+		when(dao.findById(12345l)).thenReturn(flashcardList1);
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
 		addResource(testObj);
@@ -58,6 +59,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 	public void testCreate() throws IOException {
 		// given
 		FlashcardList flashcardList = new FlashcardList(null, "abcd", new Date());
+		
+		// when
 		ClientResponse response = client().resource("/flashcardlists")
 				.type(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
@@ -67,5 +70,15 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(201, response.getStatus());
 		assertEquals("application/json", response.getHeaders().get("Content-Type").get(0));
 		assertEquals("/flashcardlists/12345", response.getHeaders().get("Location").get(0));
+	}
+	
+	@Test
+	public void testFind() {
+		// when
+		FlashcardList result = client().resource("/flashcardlists/12345").get(FlashcardList.class);
+		
+		assertEquals(flashcardList1.getId(), result.getId());
+		assertEquals(flashcardList1.getTitle(), result.getTitle());
+		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 	}
 }

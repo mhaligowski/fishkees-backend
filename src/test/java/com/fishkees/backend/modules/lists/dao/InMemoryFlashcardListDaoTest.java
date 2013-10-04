@@ -36,7 +36,6 @@ public class InMemoryFlashcardListDaoTest {
 		// then
 		assertEquals(lists, result);
 		verify(storage).all();
-
 	}
 	
 	@Test
@@ -63,5 +62,26 @@ public class InMemoryFlashcardListDaoTest {
 		assertEquals("abcd", newFl.getTitle());
 		
 		assertEquals(newFl, result);
+	}
+	
+	@Test
+	public void testFind() {
+		// given
+		List<FlashcardList> lists = FlashcardListFixtures.all();
+		when(storage.get(1l)).thenReturn(lists.get(0));
+		when(storage.get(2l)).thenReturn(lists.get(1));
+
+		// when
+		FlashcardList result1 = testObj.findById(1l);
+		FlashcardList result2 = testObj.findById(2l);
+
+		// then
+		assertEquals(1l, result1.getId().longValue());
+		assertEquals(2l, result2.getId().longValue());
+		assertEquals("Spanish for beginners", result1.getTitle());
+		assertEquals("Russian for intermediate", result2.getTitle());
+		
+		verify(storage).get(1l);
+		verify(storage).get(2l);
 	}
 }

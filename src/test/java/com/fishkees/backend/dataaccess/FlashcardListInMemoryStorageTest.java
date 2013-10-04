@@ -42,9 +42,7 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testGetAll() {
 		// given
-		storageMap.put(1l, new FlashcardList(1l, "a", new Date()));
-		storageMap.put(2l, new FlashcardList(2l, "bcde", new Date()));
-		storageMap.put(3l, new FlashcardList(3l, "c", new Date()));
+		fillStorage();
 
 		// when
 		List<FlashcardList> all = Lists.newArrayList(testObj.all());
@@ -56,6 +54,25 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3l, all.get(2).getId().longValue());
 	}
 
+	private void fillStorage() {
+		storageMap.put(1l, new FlashcardList(1l, "a", new Date()));
+		storageMap.put(2l, new FlashcardList(2l, "bcde", new Date()));
+		storageMap.put(3l, new FlashcardList(3l, "c", new Date()));
+	}
+
+	@Test
+	public void testFind() {
+		// given
+		fillStorage();
+		
+		// when
+		FlashcardList flashcardList = testObj.get(2l);
+		
+		// then
+		assertEquals(2l, flashcardList.getId().longValue());
+		assertEquals("bcde", flashcardList.getTitle());
+	}
+	
 	@Test
 	public void testRandomUUID() {
 		// when

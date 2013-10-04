@@ -32,7 +32,7 @@ public class FlashcardListResource {
 	@GET
 	@Path("/{listId}")
 	public FlashcardList find(@PathParam("listId") Long listId) {
-		return null;
+		return flashcardListDao.findById(listId);
 	}
 
 	@POST
