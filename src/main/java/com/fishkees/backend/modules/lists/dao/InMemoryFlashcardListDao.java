@@ -10,8 +10,18 @@ import com.google.common.collect.Lists;
 public class InMemoryFlashcardListDao implements FlashcardListDao {
 	@Inject
 	private FlashcardListInMemoryStorage storage;
-		
-	public List<FlashcardList> getAll() {
+
+	public List<FlashcardList> findAll() {
 		return Lists.newArrayList(storage.all());
+	}
+
+	@Override
+	public void create(FlashcardList flashcardList) {
+		Long newId = storage.getNewId();
+
+		FlashcardList newList = new FlashcardList(newId,
+				flashcardList.getTitle(), flashcardList.getCreateDate());
+
+		storage.put(newId, newList);
 	}
 }

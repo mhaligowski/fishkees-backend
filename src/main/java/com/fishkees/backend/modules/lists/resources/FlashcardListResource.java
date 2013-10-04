@@ -19,6 +19,6 @@ public class FlashcardListResource {
 	
 	@GET
 	public List<FlashcardList> getFlashcardLists() {
-		return flashcardListDao.getAll();
+		return flashcardListDao.findAll();
 	}
 }

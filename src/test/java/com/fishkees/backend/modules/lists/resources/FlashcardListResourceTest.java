@@ -30,14 +30,14 @@ public class FlashcardListResourceTest {
 	public void test_getAll() throws IOException {
 		// given
 		List<FlashcardList> lists = (List<FlashcardList>) fromJson(jsonFixture("fixtures/lists/all.json"), List.class);
-		when(flashcardListDao.getAll()).thenReturn(lists);
+		when(flashcardListDao.findAll()).thenReturn(lists);
 		
 		// when
 		List<FlashcardList> result = testObj.getFlashcardLists();
 		
 		// then
 		assertThat(result).containsAll(lists);
-		verify(flashcardListDao).getAll();
+		verify(flashcardListDao).findAll();
 	}
 	
 
