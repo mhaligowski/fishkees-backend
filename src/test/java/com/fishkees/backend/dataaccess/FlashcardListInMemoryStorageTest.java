@@ -80,6 +80,8 @@ public class FlashcardListInMemoryStorageTest {
 		Long long2 = testObj.getNewId();
 
 		assertNotEquals(long1, long2);
+		assertTrue(long1 > 0);
+		assertTrue(long2 > 0);
 	}
 
 }
