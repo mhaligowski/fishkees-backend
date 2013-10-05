@@ -8,7 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 
-public class FlashcardListFixtures {
+public final class FlashcardListFixtures {
 	public static List<FlashcardList> all() {
 		TypeReference<List<FlashcardList>> ref = new TypeReference<List<FlashcardList>>() {
 		};

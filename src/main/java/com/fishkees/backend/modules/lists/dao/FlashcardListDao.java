@@ -5,7 +5,7 @@ import java.util.List;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 
 public interface FlashcardListDao {
-	public List<FlashcardList> findAll();
-	public FlashcardList createNewFromObject(FlashcardList flashcardList);
-	public FlashcardList findById(Long id);
+	List<FlashcardList> findAll();
+	FlashcardList createNewFromObject(FlashcardList flashcardList);
+	FlashcardList findById(Long id);
 }

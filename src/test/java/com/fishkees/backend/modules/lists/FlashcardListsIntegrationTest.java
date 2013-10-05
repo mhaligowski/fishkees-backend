@@ -18,7 +18,7 @@ public class FlashcardListsIntegrationTest {
 	@Test
 	public void testGettingAllLists() {
 		// when
-		Injector testObj = Guice.createInjector(new ListsModule());
+		Injector testObj = Guice.createInjector(ListsModule.simpleModule());
 		loadFixtures(testObj);
 		FlashcardListResource resource = testObj
 				.getInstance(FlashcardListResource.class);
@@ -35,7 +35,7 @@ public class FlashcardListsIntegrationTest {
 
 	@Test
 	public void testStorageIsSingleton() {
-		Injector testObj = Guice.createInjector(new ListsModule());
+		Injector testObj = Guice.createInjector(ListsModule.simpleModule());
 		FlashcardListInMemoryStorage instance1 = testObj
 				.getInstance(FlashcardListInMemoryStorage.class);
 		FlashcardListInMemoryStorage instance2 = testObj
@@ -50,7 +50,7 @@ public class FlashcardListsIntegrationTest {
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardListsPath()).thenReturn(
 				"src/test/resources/fixtures/lists/all.json");
-		Injector testObj = Guice.createInjector(new ListsModule(config));
+		Injector testObj = Guice.createInjector(ListsModule.moduleWithFixture(config));
 
 		// when
 		List<FlashcardList> actual = testObj.getInstance(
@@ -71,7 +71,7 @@ public class FlashcardListsIntegrationTest {
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardListsPath()).thenReturn(
 				"nonExistingFile");
-		Injector testObj = Guice.createInjector(new ListsModule(config));
+		Injector testObj = Guice.createInjector(ListsModule.moduleWithFixture(config));
 
 		// when
 		testObj.getInstance(FlashcardListInMemoryStorage.class);

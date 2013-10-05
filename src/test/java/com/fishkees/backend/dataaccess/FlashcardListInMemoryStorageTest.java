@@ -23,7 +23,7 @@ public class FlashcardListInMemoryStorageTest {
 	private FlashcardListInMemoryStorage testObj;
 
 	@Spy
-	private Map<Long, FlashcardList> storageMap = Maps.newHashMap();
+	private final Map<Long, FlashcardList> storageMap = Maps.newHashMap();
 
 	@Test
 	public void testSavingAndRestoring() {

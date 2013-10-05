@@ -4,6 +4,7 @@ import static com.yammer.dropwizard.testing.JsonHelpers.*;
 import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.SimpleTimeZone;
 
 import org.junit.Test;
@@ -39,14 +40,14 @@ public class FlashcardListTest {
 	}
 
 	private FlashcardList flashcardList() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm", Locale.US);
 		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
 
 		return new FlashcardList(1l, "abcd", sdf.parse("01/07/1986 12:00"));
 	}
 
 	private FlashcardList flashcardListWithoutId() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm", Locale.US);
 		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
 
 		return new FlashcardList(null, "abcd", sdf.parse("01/07/1986 12:00"));

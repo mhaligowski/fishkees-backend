@@ -18,7 +18,7 @@ import com.yammer.dropwizard.config.Environment;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FishkeesServiceTest {
-	private FishkeesService testObj = new FishkeesService();
+	private final FishkeesService testObj = new FishkeesService();
 	
 	@Mock
 	private FishkeesConfiguration configuration;

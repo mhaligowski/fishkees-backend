@@ -10,10 +10,10 @@ import com.yammer.metrics.core.HealthCheck;
 public class PingHealthCheck extends HealthCheck {
 	private static final String HEALTHCHECK_NAME = "ping";
 
-	private String urlString;
-	private URLWrapper urlWrapper;
+	private final String urlString;
+	private final URLWrapper urlWrapper;
 
-	@Inject 
+	@Inject
 	public PingHealthCheck(@Named("url") String urlString, URLWrapper urlWrapper) {
 		super(HEALTHCHECK_NAME);
 		this.urlString = urlString;
@@ -24,8 +24,9 @@ public class PingHealthCheck extends HealthCheck {
 	protected Result check() {
 		try {
 			BufferedReader reader = urlWrapper.getReader(urlString);
-			while (reader.readLine() != null)
-				;
+			
+			String line = reader.readLine();
+			while (line != null) { line = reader.readLine(); }
 		} catch (Exception e) {
 			return Result.unhealthy(e);
 		}

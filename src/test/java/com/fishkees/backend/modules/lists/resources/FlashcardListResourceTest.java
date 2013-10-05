@@ -25,7 +25,7 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceTest extends ResourceTest {
-	private FlashcardList flashcardList1 = new FlashcardList(12345l, "abcd",
+	private final FlashcardList flashcardList1 = new FlashcardList(12345l, "abcd",
 			new Date());
 
 	@InjectMocks

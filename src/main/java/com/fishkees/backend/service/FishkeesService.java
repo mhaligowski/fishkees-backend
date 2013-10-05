@@ -44,7 +44,7 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 
 	private void setInjector(FishkeesConfiguration config) {
 		List<AbstractModule> modules = Lists.newLinkedList();
-		modules.add(new ListsModule(config.getFixturesConfiguration()));
+		modules.add(ListsModule.moduleWithFixture(config.getFixturesConfiguration()));
 		modules.add(new HealthChecksModule());
 		injector = Guice.createInjector(modules);
 	}
