@@ -16,7 +16,6 @@ import com.google.inject.Injector;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
-import com.yammer.dropwizard.config.FilterBuilder;
 
 public class FishkeesService extends Service<FishkeesConfiguration> {
 	private static final String APPLICATION_NAME = "fishkees";
