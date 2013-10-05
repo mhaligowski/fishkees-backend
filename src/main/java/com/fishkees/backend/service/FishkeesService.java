@@ -16,6 +16,7 @@ import com.google.inject.Injector;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.config.FilterBuilder;
 
 public class FishkeesService extends Service<FishkeesConfiguration> {
 	private static final String APPLICATION_NAME = "fishkees";
@@ -33,8 +34,9 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 	@Override
 	public void run(FishkeesConfiguration configuration, Environment environment)
 			throws Exception {
-		environment.addFilter(CrossOriginFilter.class, "/*");
-		
+		environment.addFilter(CrossOriginFilter.class, "/*").setInitParam(
+				"exposedHeaders", "Location");
+
 		setInjector(configuration);
 		environment.addResource(injector
 				.getInstance(FlashcardListResource.class));
@@ -44,7 +46,8 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 
 	private void setInjector(FishkeesConfiguration config) {
 		List<AbstractModule> modules = Lists.newLinkedList();
-		modules.add(ListsModule.moduleWithFixture(config.getFixturesConfiguration()));
+		modules.add(ListsModule.moduleWithFixture(config
+				.getFixturesConfiguration()));
 		modules.add(new HealthChecksModule());
 		injector = Guice.createInjector(modules);
 	}
