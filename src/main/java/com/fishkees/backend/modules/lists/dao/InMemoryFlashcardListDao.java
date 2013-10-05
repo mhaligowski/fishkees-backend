@@ -1,5 +1,6 @@
 package com.fishkees.backend.modules.lists.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 		Long newId = storage.getNewId();
 
 		FlashcardList newList = new FlashcardList(newId,
-				flashcardList.getTitle(), flashcardList.getCreateDate());
+				flashcardList.getTitle(), new Date());
 
 		storage.put(newId, newList);
 		

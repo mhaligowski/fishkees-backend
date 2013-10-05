@@ -3,7 +3,6 @@ package com.fishkees.backend.modules.lists.dao;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -41,27 +40,27 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testCreate() {
 		// given
-		FlashcardList fl = new FlashcardList(null, "abcd", new Date());
+		FlashcardList fl = new FlashcardList(null, "abcd", null);
 		
 		// when
-		FlashcardList result = testObj.createNewFromObject(fl);
+		FlashcardList resultFlashcardList = testObj.createNewFromObject(fl);
 		
 		// then
 		verify(storage).getNewId();
+
 		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
 		ArgumentCaptor<FlashcardList> listCaptor = ArgumentCaptor.forClass(FlashcardList.class);
 		
 		verify(storage).put(longCaptor.capture(), listCaptor.capture());
 		
-		
 		Long id = longCaptor.getValue();
+		FlashcardList newFlashcardListFromStorage = listCaptor.getValue();
+
 		assertNotNull(id);
-		
-		FlashcardList newFl = listCaptor.getValue();
-		assertEquals(id, newFl.getId());
-		assertEquals("abcd", newFl.getTitle());
-		
-		assertEquals(newFl, result);
+		assertEquals(id, newFlashcardListFromStorage.getId());
+		assertEquals("abcd", newFlashcardListFromStorage.getTitle());
+		assertEquals(newFlashcardListFromStorage, resultFlashcardList);
+		assertNotNull(resultFlashcardList.getCreateDate());
 	}
 	
 	@Test
