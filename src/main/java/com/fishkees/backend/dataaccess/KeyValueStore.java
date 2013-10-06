@@ -21,5 +21,6 @@ public abstract class KeyValueStore<K, V> {
 	}
 	
 	public abstract K getNewId();
-	
+
+	public abstract void reset();
 }
