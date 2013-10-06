@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.configuration.FishkeesConfiguration;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
+import com.fishkees.backend.task.ResetStorageTask;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
 import com.yammer.dropwizard.config.FilterBuilder;
@@ -47,6 +48,7 @@ public class FishkeesServiceTest {
 		verify(filterBuilder)
 				.setInitParam(eq("exposedHeaders"), eq("Location"));
 		verify(environment).addResource(any(FlashcardListResource.class));
+		verify(environment).addTask(any(ResetStorageTask.class));
 	}
 
 	@Test

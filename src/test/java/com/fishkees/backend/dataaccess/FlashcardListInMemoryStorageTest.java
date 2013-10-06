@@ -6,32 +6,35 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-@RunWith(MockitoJUnitRunner.class)
 public class FlashcardListInMemoryStorageTest {
-	@InjectMocks
 	private FlashcardListInMemoryStorage testObj;
+	private Map<Long, FlashcardList> storageMap;
 
-	@Spy
-	private final Map<Long, FlashcardList> storageMap = Maps.newHashMap();
-
+	@Before
+	public void setUp() {
+		this.storageMap = Maps.newHashMap();
+		this.testObj = new FlashcardListInMemoryStorage(storageMap);
+	}
+	
 	@Test
 	public void testSavingAndRestoring() {
+		// given
 		FlashcardList fl = new FlashcardList(1l, "abcd", new Date());
+		
+		// when
 		testObj.put(1l, fl);
 
-		assertEquals(1, storageMap.size());
-		assertEquals(fl, storageMap.get(1l));
+		// then
+		assertEquals(1, testObj.all().size());
+		assertEquals(fl, testObj.get(1l));
 	}
 
 	@Test
@@ -58,6 +61,7 @@ public class FlashcardListInMemoryStorageTest {
 		storageMap.put(1l, new FlashcardList(1l, "a", new Date()));
 		storageMap.put(2l, new FlashcardList(2l, "bcde", new Date()));
 		storageMap.put(3l, new FlashcardList(3l, "c", new Date()));
+		this.testObj = new FlashcardListInMemoryStorage(storageMap);
 	}
 
 	@Test
@@ -83,5 +87,23 @@ public class FlashcardListInMemoryStorageTest {
 		assertTrue(long1 > 0);
 		assertTrue(long2 > 0);
 	}
+
+	@Test
+	public void testReset() {
+		// given
+		fillStorage();
+		assertEquals(3, this.testObj.all().size());
+		
+		this.testObj.put(100L, new FlashcardList(1l, "qwer", new Date()));
+		assertEquals(4, this.testObj.all().size());
+		
+		// when
+		this.testObj.reset();
+		
+		// then
+		assertEquals(3,  this.testObj.all().size());
+		
+	}
+	
 
 }
