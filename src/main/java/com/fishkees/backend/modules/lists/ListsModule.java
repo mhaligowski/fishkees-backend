@@ -15,6 +15,7 @@ import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.dao.InMemoryFlashcardListDao;
+import com.fishkees.backend.task.ResetStorageTask;
 import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -42,6 +43,7 @@ public final class ListsModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(FlashcardListDao.class).to(InMemoryFlashcardListDao.class);
+		bind(ResetStorageTask.class);
 
 	}
 

@@ -9,6 +9,7 @@ import com.fishkees.backend.healthcheck.HealthChecksModule;
 import com.fishkees.backend.healthcheck.PingHealthCheck;
 import com.fishkees.backend.modules.lists.ListsModule;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
+import com.fishkees.backend.task.ResetStorageTask;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -41,6 +42,7 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 				.getInstance(FlashcardListResource.class));
 
 		environment.addHealthCheck(injector.getInstance(PingHealthCheck.class));
+		environment.addTask(injector.getInstance(ResetStorageTask.class));
 	}
 
 	private void setInjector(FishkeesConfiguration config) {

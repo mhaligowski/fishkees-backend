@@ -81,4 +81,5 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 	}
+	
 }
