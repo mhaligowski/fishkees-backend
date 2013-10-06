@@ -11,12 +11,11 @@ import com.google.common.collect.Maps;
 public class FlashcardListInMemoryStorage extends
 		KeyValueStore<Long, FlashcardList> {
 	
-	private Map<Long, FlashcardList> cachedMap;
+	private final Map<Long, FlashcardList> cachedMap;
 
 	public FlashcardListInMemoryStorage(Map<Long, FlashcardList> storageMap) {
 		this.map = storageMap;
 		this.cachedMap = ImmutableMap.copyOf(this.map);
-		reset();
 	}
 	
 	@Override
