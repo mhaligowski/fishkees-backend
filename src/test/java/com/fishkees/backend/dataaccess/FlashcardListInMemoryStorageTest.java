@@ -102,7 +102,35 @@ public class FlashcardListInMemoryStorageTest {
 		
 		// then
 		assertEquals(3,  this.testObj.all().size());
+	}
+	
+	@Test
+	public void testRemove_exists() {
+		// given
+		fillStorage();
+		assertEquals(3, this.testObj.all().size());
+
+		// when
+		FlashcardList removed = this.testObj.remove(3l);
 		
+		// then
+		assertEquals(2, this.testObj.all().size());
+		assertNotNull(removed);
+		assertEquals(3l, removed.getId().longValue());
+	}
+
+	@Test
+	public void testRemove_notExists() {
+		// given
+		fillStorage();
+		assertEquals(3,  this.testObj.all().size());
+		
+		// when
+		FlashcardList removed = this.testObj.remove(1000l);
+	
+		// then
+		assertEquals(3,  this.testObj.all().size());
+		assertNull(removed);
 	}
 	
 

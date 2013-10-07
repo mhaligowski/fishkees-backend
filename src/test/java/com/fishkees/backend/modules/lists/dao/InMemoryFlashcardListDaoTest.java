@@ -1,10 +1,13 @@
 package com.fishkees.backend.modules.lists.dao;
 
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -22,13 +25,30 @@ public class InMemoryFlashcardListDaoTest {
 
 	@Mock
 	FlashcardListInMemoryStorage storage;
+	
+	private List<FlashcardList> lists;
+	
+	@Before
+	public void setUp() {
+		lists = FlashcardListFixtures.all();
+
+		when(storage.all()).thenReturn(lists);
+		when(storage.get(1l)).thenReturn(lists.get(0));
+		when(storage.get(2l)).thenReturn(lists.get(1));
+		
+		when(storage.remove(1l)).thenReturn(lists.get(0));
+		when(storage.remove(2l)).thenReturn(lists.get(1));
+	}
+	
+	@After
+	public void tearDown() {
+		verifyNoMoreInteractions(storage);
+	}
 
 	@Test
 	public void testGetAll() throws Exception {
 		// given
-		List<FlashcardList> lists = FlashcardListFixtures.all();
-		when(storage.all()).thenReturn(lists);
-
+		
 		// when
 		List<FlashcardList> result = testObj.findAll();
 
@@ -65,11 +85,6 @@ public class InMemoryFlashcardListDaoTest {
 	
 	@Test
 	public void testFind() {
-		// given
-		List<FlashcardList> lists = FlashcardListFixtures.all();
-		when(storage.get(1l)).thenReturn(lists.get(0));
-		when(storage.get(2l)).thenReturn(lists.get(1));
-
 		// when
 		FlashcardList result1 = testObj.findById(1l);
 		FlashcardList result2 = testObj.findById(2l);
@@ -82,5 +97,27 @@ public class InMemoryFlashcardListDaoTest {
 		
 		verify(storage).get(1l);
 		verify(storage).get(2l);
+	}
+	
+	@Test
+	public void testRemove_existing() {
+		// when
+		FlashcardList removed = testObj.remove(1l);
+		
+		// then 
+		assertEquals(1L, removed.getId().longValue());
+		
+		verify(storage).remove(1l);
+	}
+	
+	@Test
+	public void testRemove_nonExisting() {
+		// when
+		FlashcardList removed = testObj.remove(1000l);
+		
+		// then
+		assertNull(removed);
+		
+		verify(storage).remove(1000l);
 	}
 }
