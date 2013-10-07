@@ -20,6 +20,10 @@ public abstract class KeyValueStore<K, V> {
 		return Lists.newArrayList(map.values());
 	}
 	
+	public V remove(K key) {
+		return map.remove(key);
+	}
+	
 	public abstract K getNewId();
 
 	public abstract void reset();
