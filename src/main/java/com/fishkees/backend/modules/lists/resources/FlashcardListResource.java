@@ -47,4 +47,14 @@ public class FlashcardListResource {
 		
 		return response;
 	}
+
+	public Response remove(Long id) {
+		FlashcardList removed = flashcardListDao.remove(id);
+		
+		if (removed == null) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+		
+		return Response.ok(removed).build();
+	}
 }
