@@ -1,5 +1,6 @@
 package com.fishkees.backend.modules.lists.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,8 +14,12 @@ public class FlashcardListInMemoryStorage extends
 	
 	private final Map<Long, FlashcardList> cachedMap;
 
-	public FlashcardListInMemoryStorage(Map<Long, FlashcardList> storageMap) {
-		this.map = storageMap;
+	public FlashcardListInMemoryStorage(FlashcardList... flashcardLists) {
+		this.map = new HashMap<>();
+		for (FlashcardList flashcardList : flashcardLists) {
+			this.map.put(flashcardList.getId(), flashcardList);
+		}
+		
 		this.cachedMap = ImmutableMap.copyOf(this.map);
 	}
 	
