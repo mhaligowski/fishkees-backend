@@ -20,9 +20,13 @@ public class ResetStorageTask extends Task {
 	@Override
 	public void execute(ImmutableMultimap<String, String> parameters,
 			PrintWriter output) throws Exception {
-		output.println("Resetting the storage");
+		int sizeBefore = storage.all().size();
+		output.println("Resetting the storage: " + sizeBefore);
+		
 		storage.reset();
-		output.println("Storage resetted");
+		
+		int sizeAfter = storage.all().size();
+		output.println("Storage resetted: " + sizeAfter);
 	}
 
 }
