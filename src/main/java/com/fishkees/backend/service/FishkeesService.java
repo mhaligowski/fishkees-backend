@@ -34,8 +34,12 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 	@Override
 	public void run(FishkeesConfiguration configuration, Environment environment)
 			throws Exception {
-		environment.addFilter(CrossOriginFilter.class, "/*").setInitParam(
-				"exposedHeaders", "Location");
+		environment
+				.addFilter(CrossOriginFilter.class, "/*")
+				.setInitParam(CrossOriginFilter.EXPOSED_HEADERS_PARAM,
+						"Location")
+				.setInitParam(CrossOriginFilter.ALLOWED_METHODS_PARAM,
+						"POST,GET,UPDATE,DELETE");
 
 		setInjector(configuration);
 		environment.addResource(injector
