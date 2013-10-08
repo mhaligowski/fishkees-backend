@@ -1,9 +1,11 @@
 package com.fishkees.backend.task;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.PrintWriter;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,11 @@ public class ResetStorageTaskTest {
 	@Mock
 	private PrintWriter printWriter;
 	
+	@After
+	public void tearDown() {
+		verifyNoMoreInteractions(storage, printWriter);
+	}
+	
 	@Test
 	public void testTaskExecution() throws Exception {
 		// when
@@ -31,6 +38,7 @@ public class ResetStorageTaskTest {
 		
 		// then
 		verify(printWriter, times(2)).println(anyString());
+		verify(storage, times(2)).all();
 		verify(storage).reset();
 	}
 

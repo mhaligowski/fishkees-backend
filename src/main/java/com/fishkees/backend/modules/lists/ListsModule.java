@@ -3,9 +3,7 @@ package com.fishkees.backend.modules.lists;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +14,6 @@ import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.dao.InMemoryFlashcardListDao;
 import com.fishkees.backend.task.ResetStorageTask;
-import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.yammer.dropwizard.json.ObjectMapperFactory;
@@ -25,7 +22,6 @@ public final class ListsModule extends AbstractModule {
 	private FixturesConfiguration config;
 
 	private ListsModule() {
-		
 	}
 
 	private ListsModule(FixturesConfiguration config) {
@@ -48,25 +44,18 @@ public final class ListsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named("storageMap")
-	Map<Long, FlashcardList> newMap() {
-		return Maps.newHashMap();
-	}
-
-	@Provides
 	@Singleton
-	FlashcardListInMemoryStorage flashcardListInMemoryStorage(
-			@Named("storageMap") Map<Long, FlashcardList> map) {
-		FlashcardListInMemoryStorage storage = new FlashcardListInMemoryStorage(
-				map);
-
+	FlashcardListInMemoryStorage flashcardListInMemoryStorage() {
+		FlashcardList[] array = new FlashcardList[0];
 		if (config != null) {
 			List<FlashcardList> fixture = loadFixture(config
 					.getFlashcardListsPath());
-			for (FlashcardList flashcardList : fixture) {
-				storage.put(flashcardList.getId(), flashcardList);
-			}
+
+			array = fixture.toArray(array);
 		}
+
+		FlashcardListInMemoryStorage storage = new FlashcardListInMemoryStorage(
+				array);
 
 		return storage;
 	}

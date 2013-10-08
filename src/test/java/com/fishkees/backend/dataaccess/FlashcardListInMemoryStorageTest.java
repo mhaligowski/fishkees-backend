@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,29 +11,30 @@ import org.junit.Test;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class FlashcardListInMemoryStorageTest {
 	private FlashcardListInMemoryStorage testObj;
-	private Map<Long, FlashcardList> storageMap;
 
 	@Before
 	public void setUp() {
-		this.storageMap = Maps.newHashMap();
-		this.testObj = new FlashcardListInMemoryStorage(storageMap);
+		FlashcardList fl1 = new FlashcardList(1l, "a", new Date());
+		FlashcardList fl2 = new FlashcardList(2l, "bcde", new Date());
+		FlashcardList fl3 = new FlashcardList(3l, "c", new Date());
+
+		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
 	}
 	
 	@Test
 	public void testSavingAndRestoring() {
 		// given
-		FlashcardList fl = new FlashcardList(1l, "abcd", new Date());
+		FlashcardList fl = new FlashcardList(15l, "abcd", new Date());
 		
 		// when
-		testObj.put(1l, fl);
+		testObj.put(fl.getId(), fl);
 
 		// then
-		assertEquals(1, testObj.all().size());
-		assertEquals(fl, testObj.get(1l));
+		assertEquals(4, testObj.all().size());
+		assertEquals(fl, testObj.get(15l));
 	}
 
 	@Test
@@ -58,10 +58,6 @@ public class FlashcardListInMemoryStorageTest {
 	}
 
 	private void fillStorage() {
-		storageMap.put(1l, new FlashcardList(1l, "a", new Date()));
-		storageMap.put(2l, new FlashcardList(2l, "bcde", new Date()));
-		storageMap.put(3l, new FlashcardList(3l, "c", new Date()));
-		this.testObj = new FlashcardListInMemoryStorage(storageMap);
 	}
 
 	@Test
