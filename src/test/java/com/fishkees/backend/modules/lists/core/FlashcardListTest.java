@@ -1,12 +1,8 @@
 package com.fishkees.backend.modules.lists.core;
 
-import static com.yammer.dropwizard.testing.JsonHelpers.*;
 import static org.junit.Assert.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
@@ -16,8 +12,8 @@ public class FlashcardListTest {
 	@Test
 	public void serializesToJson() throws Exception {
 		final FlashcardList flashcardList = flashcardList();
-		assertEquals(jsonFixture("fixtures/lists/single.json"),
-				asJson(flashcardList));
+		assertEquals(FlashcardListFixtures.single().getCreateDate(),
+				flashcardList.getCreateDate());
 	}
 
 	@Test
@@ -27,30 +23,28 @@ public class FlashcardListTest {
 
 		assertEquals(fromJson.getTitle(), flashcardList.getTitle());
 		assertEquals(fromJson.getId(), flashcardList.getId());
+		assertEquals(fromJson.getCreateDate(), flashcardList.getCreateDate());
 	}
 
 	@Test
 	public void deserializeWithoutIdFromJson() throws Exception {
-		FlashcardList fromJson = FlashcardListFixtures.partial();
+		final FlashcardList fromJson = FlashcardListFixtures.partial();
 		final FlashcardList flashcardList = flashcardListWithoutId();
 
 		assertNull(fromJson.getId());
 		assertEquals(fromJson.getTitle(), flashcardList.getTitle());
+		assertEquals(fromJson.getCreateDate(), flashcardList.getCreateDate());
 
 	}
 
 	private FlashcardList flashcardList() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm", Locale.US);
-		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
-
-		return new FlashcardList(1l, "abcd", sdf.parse("01/07/1986 12:00"));
+		DateTime dateTime = new DateTime("1986-07-01T12:00Z");
+		return new FlashcardList(1l, "abcd", dateTime.toDate());
 	}
 
 	private FlashcardList flashcardListWithoutId() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy kk:mm", Locale.US);
-		sdf.setTimeZone(new SimpleTimeZone(SimpleTimeZone.UTC_TIME, "UTC"));
-
-		return new FlashcardList(null, "abcd", sdf.parse("01/07/1986 12:00"));
+		DateTime dateTime = new DateTime("1986-07-01T12:00Z");
+		return new FlashcardList(null, "abcd", dateTime.toDate());
 	}
 
 }
