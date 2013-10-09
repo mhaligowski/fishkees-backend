@@ -44,9 +44,6 @@ public class FlashcardListInMemoryStorageTest {
 
 	@Test
 	public void testGetAll() {
-		// given
-		fillStorage();
-
 		// when
 		List<FlashcardList> all = Lists.newArrayList(testObj.all());
 
@@ -57,14 +54,8 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3l, all.get(2).getId().longValue());
 	}
 
-	private void fillStorage() {
-	}
-
 	@Test
 	public void testFind() {
-		// given
-		fillStorage();
-		
 		// when
 		FlashcardList flashcardList = testObj.get(2l);
 		
@@ -86,8 +77,6 @@ public class FlashcardListInMemoryStorageTest {
 
 	@Test
 	public void testReset() {
-		// given
-		fillStorage();
 		assertEquals(3, this.testObj.all().size());
 		
 		this.testObj.put(100L, new FlashcardList(1l, "qwer", new Date()));
@@ -103,7 +92,6 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testRemove_exists() {
 		// given
-		fillStorage();
 		assertEquals(3, this.testObj.all().size());
 
 		// when
@@ -118,7 +106,6 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testRemove_notExists() {
 		// given
-		fillStorage();
 		assertEquals(3,  this.testObj.all().size());
 		
 		// when
