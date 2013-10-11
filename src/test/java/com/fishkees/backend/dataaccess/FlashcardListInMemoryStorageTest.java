@@ -115,6 +115,36 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3,  this.testObj.all().size());
 		assertNull(removed);
 	}
+
+	@Test
+	public void testUpdate_exists() {
+		// given
+		FlashcardList fl = new FlashcardList(1L, "new title", new Date());
+		
+		// when
+		FlashcardList update = testObj.update(1l, fl);
+		
+		// then
+		assertNotNull(update);
+		
+		FlashcardList fromStorage = testObj.get(1l);
+		assertEquals("new title", fromStorage.getTitle());
+		assertEquals(1l, fromStorage.getId().longValue());
+	}
 	
+	@Test
+	public void testUpdate_not_exists() {
+		// given
+		FlashcardList fl = new FlashcardList(4L, "new title", new Date());
+		
+		// when
+		FlashcardList update = testObj.update(4l, fl);
+		
+		// then
+		assertNull(update);
+		
+		FlashcardList fromStorage = testObj.get(4l);
+		assertNull(fromStorage);
+	}
 
 }
