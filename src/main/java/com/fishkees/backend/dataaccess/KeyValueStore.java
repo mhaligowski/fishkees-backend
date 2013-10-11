@@ -24,7 +24,14 @@ public abstract class KeyValueStore<K, V> {
 		return map.remove(key);
 	}
 	
+	public V update(K key, V value) {
+		if (this.map.containsKey(key)) {
+			return map.put(key, value);
+		}
+		
+		return null;
+	};	
+	
 	public abstract K getNewId();
-
 	public abstract void reset();
 }

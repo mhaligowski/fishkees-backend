@@ -4,6 +4,7 @@ package com.fishkees.backend.modules.lists.dao;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -38,6 +39,7 @@ public class InMemoryFlashcardListDaoTest {
 		
 		when(storage.remove(1l)).thenReturn(lists.get(0));
 		when(storage.remove(2l)).thenReturn(lists.get(1));
+		
 	}
 	
 	@After
@@ -119,5 +121,31 @@ public class InMemoryFlashcardListDaoTest {
 		assertNull(removed);
 		
 		verify(storage).remove(1000l);
+	}
+	
+	@Test
+	public void testUpdate_nonExisting() {
+		// given
+		FlashcardList flashcardList = new FlashcardList(3l, "new title", new Date());
+
+		// when
+		FlashcardList update = testObj.update(flashcardList);
+		
+		// then
+		assertNull(update);
+		verify(storage).update(3l, flashcardList);
+	}
+	
+	@Test
+	public void testUpdate_existing() {
+		// given 
+		FlashcardList fl = new FlashcardList(1l, "new title", new Date());
+		when(storage.update(1l, fl)).thenReturn(fl);
+		
+		// when
+		FlashcardList updated = testObj.update(fl);
+		
+		assertEquals(fl, updated);
+		verify(storage).update(1l, fl);
 	}
 }
