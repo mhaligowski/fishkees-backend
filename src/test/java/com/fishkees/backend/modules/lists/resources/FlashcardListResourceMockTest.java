@@ -33,7 +33,7 @@ public class FlashcardListResourceMockTest {
 	public void teardDown() {
 		verifyNoMoreInteractions(flashcardListDao);
 	}
-	
+
 	@Test
 	public void test_getAll() throws IOException {
 		// given
@@ -67,45 +67,86 @@ public class FlashcardListResourceMockTest {
 		// given
 		FlashcardList listData = FlashcardListFixtures.partial();
 		FlashcardList newList = new FlashcardList(1L, "abcd", new Date());
-		when(flashcardListDao.createNewFromObject(listData)).thenReturn(newList);
-		
+		when(flashcardListDao.createNewFromObject(listData))
+				.thenReturn(newList);
+
 		// when
 		Response response = testObj.create(listData);
-		
+
 		// then
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
 		verify(flashcardListDao).createNewFromObject(listData);
 	}
-	
+
 	@Test
 	public void testRemove_existing() throws Exception {
 		// given
 		FlashcardList flashcardList = FlashcardListFixtures.single();
 		Long id = flashcardList.getId();
 		when(flashcardListDao.remove(id)).thenReturn(flashcardList);
-		
+
 		// when
 		Response response = testObj.remove(id);
-		
+
 		// then
 		assertNotNull(response);
 		assertEquals(200, response.getStatus());
 		assertEquals(flashcardList, response.getEntity());
-		
+
 		verify(flashcardListDao).remove(id);
 	}
-	
+
 	@Test
 	public void testRemove_nonExisting() throws Exception {
 		// when
 		Response response = testObj.remove(12345l);
+
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+
+		verify(flashcardListDao).remove(12345l);
+	}
+
+	@Test
+	public void testUpdate_conflicting() throws Exception {
+		// when
+		Response response = testObj.update(12345l, new FlashcardList(54321l,
+				null, null));
+		
+		// then
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+	}
+	
+	@Test
+	public void testUpdate_nonExisting() throws Exception {
+		// when
+		FlashcardList fl1 = new FlashcardList(12345l, null, null);
+		Response response = testObj.update(12345l, fl1);
 		
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
 		
-		verify(flashcardListDao).remove(12345l);
+		verify(flashcardListDao).update(fl1);
 	}
 	
+	@Test
+	public void testUpdate() throws Exception {
+		// when
+		FlashcardList fl1 = new FlashcardList(12345l, "abcd", new Date());
+		when(flashcardListDao.update(fl1)).thenReturn(fl1);
+
+		Response response = testObj.update(12345l, fl1);
+		
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		assertEquals(fl1, response.getEntity());
+		
+		verify(flashcardListDao).update(fl1);
+	}
+
 }

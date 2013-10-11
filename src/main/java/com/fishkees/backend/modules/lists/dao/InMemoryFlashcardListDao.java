@@ -36,4 +36,9 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 	public FlashcardList remove(Long id) {
 		return storage.remove(id);
 	}
+
+	@Override
+	public FlashcardList update(FlashcardList flashcardList) {
+		return null;
+	}
 }

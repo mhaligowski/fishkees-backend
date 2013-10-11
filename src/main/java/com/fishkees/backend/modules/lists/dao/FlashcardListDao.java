@@ -9,4 +9,5 @@ public interface FlashcardListDao {
 	FlashcardList createNewFromObject(FlashcardList flashcardList);
 	FlashcardList findById(Long id);
 	FlashcardList remove(Long id);
+	FlashcardList update(FlashcardList flashcardList);
 }
