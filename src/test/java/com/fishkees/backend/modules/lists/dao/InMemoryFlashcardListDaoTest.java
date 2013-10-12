@@ -34,11 +34,11 @@ public class InMemoryFlashcardListDaoTest {
 		lists = FlashcardListFixtures.all();
 
 		when(storage.all()).thenReturn(lists);
-		when(storage.get(1l)).thenReturn(lists.get(0));
-		when(storage.get(2l)).thenReturn(lists.get(1));
+		when(storage.get("1")).thenReturn(lists.get(0));
+		when(storage.get("2")).thenReturn(lists.get(1));
 		
-		when(storage.remove(1l)).thenReturn(lists.get(0));
-		when(storage.remove(2l)).thenReturn(lists.get(1));
+		when(storage.remove("1")).thenReturn(lists.get(0));
+		when(storage.remove("2")).thenReturn(lists.get(1));
 		
 	}
 	
@@ -63,23 +63,24 @@ public class InMemoryFlashcardListDaoTest {
 	public void testCreate() {
 		// given
 		FlashcardList fl = new FlashcardList(null, "abcd", null);
-		
+		when(storage.getNewId()).thenReturn("1");
+
 		// when
 		FlashcardList resultFlashcardList = testObj.createNewFromObject(fl);
 		
 		// then
 		verify(storage).getNewId();
 
-		ArgumentCaptor<Long> longCaptor = ArgumentCaptor.forClass(Long.class);
+		ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<FlashcardList> listCaptor = ArgumentCaptor.forClass(FlashcardList.class);
 		
-		verify(storage).put(longCaptor.capture(), listCaptor.capture());
+		verify(storage).put(stringCaptor.capture(), listCaptor.capture());
 		
-		Long id = longCaptor.getValue();
+		String id = stringCaptor.getValue();
 		FlashcardList newFlashcardListFromStorage = listCaptor.getValue();
 
 		assertNotNull(id);
-		assertEquals(id, newFlashcardListFromStorage.getId());
+		assertEquals(Long.valueOf(Long.parseLong(id)), newFlashcardListFromStorage.getId());
 		assertEquals("abcd", newFlashcardListFromStorage.getTitle());
 		assertEquals(newFlashcardListFromStorage, resultFlashcardList);
 		assertNotNull(resultFlashcardList.getCreateDate());
@@ -97,8 +98,8 @@ public class InMemoryFlashcardListDaoTest {
 		assertEquals("Spanish for beginners", result1.getTitle());
 		assertEquals("Russian for intermediate", result2.getTitle());
 		
-		verify(storage).get(1l);
-		verify(storage).get(2l);
+		verify(storage).get("1");
+		verify(storage).get("2");
 	}
 	
 	@Test
@@ -109,7 +110,7 @@ public class InMemoryFlashcardListDaoTest {
 		// then 
 		assertEquals(1L, removed.getId().longValue());
 		
-		verify(storage).remove(1l);
+		verify(storage).remove("1");
 	}
 	
 	@Test
@@ -120,7 +121,7 @@ public class InMemoryFlashcardListDaoTest {
 		// then
 		assertNull(removed);
 		
-		verify(storage).remove(1000l);
+		verify(storage).remove("1000");
 	}
 	
 	@Test
@@ -133,19 +134,19 @@ public class InMemoryFlashcardListDaoTest {
 		
 		// then
 		assertNull(update);
-		verify(storage).update(3l, flashcardList);
+		verify(storage).update("3", flashcardList);
 	}
 	
 	@Test
 	public void testUpdate_existing() {
 		// given 
 		FlashcardList fl = new FlashcardList(1l, "new title", new Date());
-		when(storage.update(1l, fl)).thenReturn(fl);
+		when(storage.update("1", fl)).thenReturn(fl);
 		
 		// when
 		FlashcardList updated = testObj.update(fl);
 		
 		assertEquals(fl, updated);
-		verify(storage).update(1l, fl);
+		verify(storage).update("1", fl);
 	}
 }

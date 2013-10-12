@@ -30,16 +30,16 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = new FlashcardList(15l, "abcd", new Date());
 		
 		// when
-		testObj.put(fl.getId(), fl);
+		testObj.put(fl.getId().toString(), fl);
 
 		// then
 		assertEquals(4, testObj.all().size());
-		assertEquals(fl, testObj.get(15l));
+		assertEquals(fl, testObj.get("15"));
 	}
 
 	@Test
 	public void testRestoringNonExistent() {
-		assertNull(testObj.get(0l));
+		assertNull(testObj.get("0"));
 	}
 
 	@Test
@@ -49,15 +49,15 @@ public class FlashcardListInMemoryStorageTest {
 
 		// then
 		assertEquals(3, all.size());
-		assertEquals(1l, all.get(0).getId().longValue());
+		assertEquals(3l, all.get(0).getId().longValue());
 		assertEquals(2l, all.get(1).getId().longValue());
-		assertEquals(3l, all.get(2).getId().longValue());
+		assertEquals(1l, all.get(2).getId().longValue());
 	}
 
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList flashcardList = testObj.get(2l);
+		FlashcardList flashcardList = testObj.get("2");
 		
 		// then
 		assertEquals(2l, flashcardList.getId().longValue());
@@ -67,19 +67,17 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testRandomUUID() {
 		// when
-		Long long1 = testObj.getNewId();
-		Long long2 = testObj.getNewId();
+		String string1 = testObj.getNewId();
+		String string2 = testObj.getNewId();
 
-		assertNotEquals(long1, long2);
-		assertTrue(long1 > 0);
-		assertTrue(long2 > 0);
+		assertNotEquals(string1, string2);
 	}
 
 	@Test
 	public void testReset() {
 		assertEquals(3, this.testObj.all().size());
 		
-		this.testObj.put(100L, new FlashcardList(1l, "qwer", new Date()));
+		this.testObj.put("100", new FlashcardList(100l, "qwer", new Date()));
 		assertEquals(4, this.testObj.all().size());
 		
 		// when
@@ -95,7 +93,7 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3, this.testObj.all().size());
 
 		// when
-		FlashcardList removed = this.testObj.remove(3l);
+		FlashcardList removed = this.testObj.remove("3");
 		
 		// then
 		assertEquals(2, this.testObj.all().size());
@@ -109,7 +107,7 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3,  this.testObj.all().size());
 		
 		// when
-		FlashcardList removed = this.testObj.remove(1000l);
+		FlashcardList removed = this.testObj.remove("1000");
 	
 		// then
 		assertEquals(3,  this.testObj.all().size());
@@ -122,12 +120,12 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = new FlashcardList(1L, "new title", new Date());
 		
 		// when
-		FlashcardList update = testObj.update(1l, fl);
+		FlashcardList update = testObj.update("1", fl);
 		
 		// then
 		assertNotNull(update);
 		
-		FlashcardList fromStorage = testObj.get(1l);
+		FlashcardList fromStorage = testObj.get("1");
 		assertEquals("new title", fromStorage.getTitle());
 		assertEquals(1l, fromStorage.getId().longValue());
 	}
@@ -138,12 +136,12 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = new FlashcardList(4L, "new title", new Date());
 		
 		// when
-		FlashcardList update = testObj.update(4l, fl);
+		FlashcardList update = testObj.update("4", fl);
 		
 		// then
 		assertNull(update);
 		
-		FlashcardList fromStorage = testObj.get(4l);
+		FlashcardList fromStorage = testObj.get("4");
 		assertNull(fromStorage);
 	}
 
