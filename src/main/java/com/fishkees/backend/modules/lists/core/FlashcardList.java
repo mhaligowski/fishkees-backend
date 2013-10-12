@@ -6,7 +6,7 @@ import com.yammer.dropwizard.json.JsonSnakeCase;
 
 @JsonSnakeCase
 public class FlashcardList {
-	private Long id;
+	private String id;
 	private String title;
 	private Date createDate;
 	
@@ -14,13 +14,13 @@ public class FlashcardList {
 	private FlashcardList() { }
 	
 	public FlashcardList(Long id, String title, Date createDate) {
-		this.id = id;
+		this.id = id == null ? null : id.toString();
 		this.title = title;
 		this.createDate = createDate;
 	}
 
 	public Long getId() {
-		return id;
+		return id == null ? null : Long.parseLong(id);
 	}
 
 	public String getTitle() {
