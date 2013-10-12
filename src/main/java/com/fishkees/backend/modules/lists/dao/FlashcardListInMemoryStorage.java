@@ -25,9 +25,7 @@ public class FlashcardListInMemoryStorage extends
 
 	@Override
 	public String getNewId() {
-		Long longValue = UUID.randomUUID().getLeastSignificantBits();
-
-		return Long.valueOf(Math.abs((long) longValue.intValue())).toString();
+		return UUID.randomUUID().toString();
 	}
 
 	@Override
