@@ -40,7 +40,7 @@ public class FlashcardListTest {
 	}
 
 	private FlashcardList flashcardList() throws Exception {
-		return new FlashcardList("1", "abcd", dateTime.toDate());
+		return new FlashcardList("someId1", "abcd", dateTime.toDate());
 	}
 
 	private FlashcardList flashcardListWithoutId() throws Exception {

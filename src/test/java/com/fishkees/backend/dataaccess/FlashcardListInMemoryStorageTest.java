@@ -13,13 +13,16 @@ import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.Lists;
 
 public class FlashcardListInMemoryStorageTest {
+	private static final String ID1 = "someId1";
+	private static final String ID2 = "someId2";
+	private static final String ID3 = "someId3";
 	private FlashcardListInMemoryStorage testObj;
 
 	@Before
 	public void setUp() {
-		FlashcardList fl1 = new FlashcardList("1", "a", new Date());
-		FlashcardList fl2 = new FlashcardList("2", "bcde", new Date());
-		FlashcardList fl3 = new FlashcardList("3", "c", new Date());
+		FlashcardList fl1 = new FlashcardList(ID1, "a", new Date());
+		FlashcardList fl2 = new FlashcardList(ID2, "bcde", new Date());
+		FlashcardList fl3 = new FlashcardList(ID3, "c", new Date());
 
 		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
 	}
@@ -49,18 +52,18 @@ public class FlashcardListInMemoryStorageTest {
 
 		// then
 		assertEquals(3, all.size());
-		assertEquals("3", all.get(0).getId());
-		assertEquals("2", all.get(1).getId());
-		assertEquals("1", all.get(2).getId());
+		assertEquals(ID3, all.get(0).getId());
+		assertEquals(ID1, all.get(1).getId());
+		assertEquals(ID2, all.get(2).getId());
 	}
 
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList flashcardList = testObj.get("2");
+		FlashcardList flashcardList = testObj.get(ID2);
 		
 		// then
-		assertEquals("2", flashcardList.getId());
+		assertEquals(ID2, flashcardList.getId());
 		assertEquals("bcde", flashcardList.getTitle());
 	}
 	
@@ -93,12 +96,12 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3, this.testObj.all().size());
 
 		// when
-		FlashcardList removed = this.testObj.remove("3");
+		FlashcardList removed = this.testObj.remove(ID3);
 		
 		// then
 		assertEquals(2, this.testObj.all().size());
 		assertNotNull(removed);
-		assertEquals("3", removed.getId());
+		assertEquals(ID3, removed.getId());
 	}
 
 	@Test
@@ -117,17 +120,17 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testUpdate_exists() {
 		// given
-		FlashcardList fl = new FlashcardList("1", "new title", new Date());
+		FlashcardList fl = new FlashcardList(ID1, "new title", new Date());
 		
 		// when
-		FlashcardList update = testObj.update("1", fl);
+		FlashcardList update = testObj.update(ID1, fl);
 		
 		// then
 		assertNotNull(update);
 		
-		FlashcardList fromStorage = testObj.get("1");
+		FlashcardList fromStorage = testObj.get(ID1);
 		assertEquals("new title", fromStorage.getTitle());
-		assertEquals("1", fromStorage.getId());
+		assertEquals(ID1, fromStorage.getId());
 	}
 	
 	@Test

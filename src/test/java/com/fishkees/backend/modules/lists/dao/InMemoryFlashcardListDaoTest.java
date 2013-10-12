@@ -21,6 +21,10 @@ import com.fishkees.backend.modules.lists.core.FlashcardList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InMemoryFlashcardListDaoTest {
+	private static final String ID1 = "someNiceId1";
+	private static final String ID2 = "someNiceId2";
+
+
 	@InjectMocks
 	private InMemoryFlashcardListDao testObj;
 
@@ -34,11 +38,11 @@ public class InMemoryFlashcardListDaoTest {
 		lists = FlashcardListFixtures.all();
 
 		when(storage.all()).thenReturn(lists);
-		when(storage.get("1")).thenReturn(lists.get(0));
-		when(storage.get("2")).thenReturn(lists.get(1));
+		when(storage.get(ID1)).thenReturn(lists.get(0));
+		when(storage.get(ID2)).thenReturn(lists.get(1));
 		
-		when(storage.remove("1")).thenReturn(lists.get(0));
-		when(storage.remove("2")).thenReturn(lists.get(1));
+		when(storage.remove(ID1)).thenReturn(lists.get(0));
+		when(storage.remove(ID2)).thenReturn(lists.get(1));
 		
 	}
 	
@@ -63,7 +67,7 @@ public class InMemoryFlashcardListDaoTest {
 	public void testCreate() {
 		// given
 		FlashcardList fl = new FlashcardList(null, "abcd", null);
-		when(storage.getNewId()).thenReturn("1");
+		when(storage.getNewId()).thenReturn(ID1);
 
 		// when
 		FlashcardList resultFlashcardList = testObj.createNewFromObject(fl);
@@ -89,28 +93,28 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList result1 = testObj.findById("1");
-		FlashcardList result2 = testObj.findById("2");
+		FlashcardList result1 = testObj.findById(ID1);
+		FlashcardList result2 = testObj.findById(ID2);
 
 		// then
-		assertEquals("1", result1.getId());
-		assertEquals("2", result2.getId());
+		assertEquals(ID1, result1.getId());
+		assertEquals(ID2, result2.getId());
 		assertEquals("Spanish for beginners", result1.getTitle());
 		assertEquals("Russian for intermediate", result2.getTitle());
 		
-		verify(storage).get("1");
-		verify(storage).get("2");
+		verify(storage).get(ID1);
+		verify(storage).get(ID2);
 	}
 	
 	@Test
 	public void testRemove_existing() {
 		// when
-		FlashcardList removed = testObj.remove("1");
+		FlashcardList removed = testObj.remove(ID1);
 		
 		// then 
-		assertEquals("1", removed.getId());
+		assertEquals(ID1, removed.getId());
 		
-		verify(storage).remove("1");
+		verify(storage).remove(ID1);
 	}
 	
 	@Test
@@ -140,13 +144,13 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testUpdate_existing() {
 		// given 
-		FlashcardList fl = new FlashcardList("1", "new title", new Date());
-		when(storage.update("1", fl)).thenReturn(fl);
+		FlashcardList fl = new FlashcardList(ID1, "new title", new Date());
+		when(storage.update(ID1, fl)).thenReturn(fl);
 		
 		// when
 		FlashcardList updated = testObj.update(fl);
 		
 		assertEquals(fl, updated);
-		verify(storage).update("1", fl);
+		verify(storage).update(ID1, fl);
 	}
 }

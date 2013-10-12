@@ -15,6 +15,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class FlashcardListsIntegrationTest {
+	private static final String ID1 = "someNiceId1";
+	private static final String ID2 = "someNiceId2";
+
 	@Test
 	public void testGettingAllLists() {
 		// when
@@ -25,12 +28,12 @@ public class FlashcardListsIntegrationTest {
 		List<FlashcardList> flashcardLists = resource.findAll();
 
 		assertEquals(2, flashcardLists.size());
-		assertEquals("2", flashcardLists.get(0).getId());
-		assertEquals("1", flashcardLists.get(1).getId());
+		assertEquals(ID1, flashcardLists.get(0).getId());
+		assertEquals(ID2, flashcardLists.get(1).getId());
 
-		assertEquals("Russian for intermediate", flashcardLists.get(0)
+		assertEquals("Russian for intermediate", flashcardLists.get(1)
 				.getTitle());
-		assertEquals("Spanish for beginners", flashcardLists.get(1).getTitle());
+		assertEquals("Spanish for beginners", flashcardLists.get(0).getTitle());
 	}
 
 	@Test
@@ -59,11 +62,11 @@ public class FlashcardListsIntegrationTest {
 
 		// then
 		assertEquals(2, actual.size());
-		assertEquals("1", actual.get(1).getId());
-		assertEquals("2", actual.get(0).getId());
+		assertEquals(ID1, actual.get(0).getId());
+		assertEquals(ID2, actual.get(1).getId());
 
-		assertEquals("Russian for intermediate", actual.get(0).getTitle());
-		assertEquals("Spanish for beginners", actual.get(1).getTitle());
+		assertEquals("Russian for intermediate", actual.get(1).getTitle());
+		assertEquals("Spanish for beginners", actual.get(0).getTitle());
 
 	}
 
