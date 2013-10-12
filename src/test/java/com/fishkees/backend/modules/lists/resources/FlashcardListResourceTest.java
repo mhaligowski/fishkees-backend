@@ -26,7 +26,7 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceTest extends ResourceTest {
-	private final FlashcardList flashcardList1 = new FlashcardList(12345l,
+	private final FlashcardList flashcardList1 = new FlashcardList("12345",
 			"abcd", new Date());
 
 	@InjectMocks
@@ -35,10 +35,10 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
-		when(dao.findById(12345l)).thenReturn(flashcardList1);
+		when(dao.findById("12345")).thenReturn(flashcardList1);
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
-		when(dao.remove(12345l)).thenReturn(flashcardList1);
+		when(dao.remove("12345")).thenReturn(flashcardList1);
 		addResource(testObj);
 	}
 
@@ -97,7 +97,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).findById(12345l);
+		verify(dao).findById("12345");
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).remove(12345l);
+		verify(dao).remove("12345");
 	}
 
 	@Test
@@ -123,13 +123,13 @@ public class FlashcardListResourceTest extends ResourceTest {
 		// then
 		assertEquals(404, response.getStatus());
 
-		verify(dao).remove(1l);
+		verify(dao).remove("1");
 	}
 
 	@Test
 	public void testUpdate_differentIds() {
 		// given
-		FlashcardList fl = new FlashcardList(54321l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
@@ -143,7 +143,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_nonExisting() {
 		// given
-		FlashcardList fl = new FlashcardList(54321l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
@@ -159,7 +159,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_existing() {
 		// given
-		FlashcardList fl = new FlashcardList(12345l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("12345", "updatedTitle", new Date());
 		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
 
 		// when

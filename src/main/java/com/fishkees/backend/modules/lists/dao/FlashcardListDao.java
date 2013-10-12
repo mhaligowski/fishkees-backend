@@ -7,7 +7,7 @@ import com.fishkees.backend.modules.lists.core.FlashcardList;
 public interface FlashcardListDao {
 	List<FlashcardList> findAll();
 	FlashcardList createNewFromObject(FlashcardList flashcardList);
-	FlashcardList findById(Long id);
-	FlashcardList remove(Long id);
+	FlashcardList findById(String id);
+	FlashcardList remove(String id);
 	FlashcardList update(FlashcardList flashcardList);
 }

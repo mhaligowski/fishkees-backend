@@ -33,7 +33,7 @@ public class FlashcardListResource {
 
 	@GET
 	@Path("/{listId}")
-	public FlashcardList find(@PathParam("listId") Long listId) {
+	public FlashcardList find(@PathParam("listId") String listId) {
 		return flashcardListDao.findById(listId);
 	}
 
@@ -51,7 +51,7 @@ public class FlashcardListResource {
 
 	@DELETE
 	@Path("/{listId}")
-	public Response remove(@PathParam("listId") Long id) {
+	public Response remove(@PathParam("listId") String id) {
 		FlashcardList removed = flashcardListDao.remove(id);
 		
 		if (removed == null) {
@@ -64,7 +64,7 @@ public class FlashcardListResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{listId}")
-	public Response update(@PathParam("listId") Long id, @Valid FlashcardList flashcardList) {
+	public Response update(@PathParam("listId") String id, @Valid FlashcardList flashcardList) {
 		if (!id.equals(flashcardList.getId())) {
 			return Response
 					.status(Response.Status.CONFLICT)

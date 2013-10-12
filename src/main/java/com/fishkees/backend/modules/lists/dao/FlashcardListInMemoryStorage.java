@@ -10,24 +10,22 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 public class FlashcardListInMemoryStorage extends
-		KeyValueStore<Long, FlashcardList> {
+		KeyValueStore<String, FlashcardList> {
 
-	private final Map<Long, FlashcardList> cachedMap;
+	private final Map<String, FlashcardList> cachedMap;
 
 	public FlashcardListInMemoryStorage(FlashcardList... flashcardLists) {
 		this.map = new HashMap<>();
 		for (FlashcardList flashcardList : flashcardLists) {
-			this.map.put(flashcardList.getId(), flashcardList);
+			this.map.put(flashcardList.getId().toString(), flashcardList);
 		}
 
 		this.cachedMap = ImmutableMap.copyOf(this.map);
 	}
 
 	@Override
-	public Long getNewId() {
-		Long longValue = UUID.randomUUID().getLeastSignificantBits();
-
-		return Math.abs((long) longValue.intValue());
+	public String getNewId() {
+		return UUID.randomUUID().toString();
 	}
 
 	@Override
