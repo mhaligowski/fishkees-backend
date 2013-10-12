@@ -35,10 +35,10 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
-		when(dao.findById(12345l)).thenReturn(flashcardList1);
+		when(dao.findById("12345")).thenReturn(flashcardList1);
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
-		when(dao.remove(12345l)).thenReturn(flashcardList1);
+		when(dao.remove("12345")).thenReturn(flashcardList1);
 		addResource(testObj);
 	}
 
@@ -97,7 +97,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).findById(12345l);
+		verify(dao).findById("12345");
 	}
 
 	@Test
@@ -111,7 +111,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).remove(12345l);
+		verify(dao).remove("12345");
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		// then
 		assertEquals(404, response.getStatus());
 
-		verify(dao).remove(1l);
+		verify(dao).remove("1");
 	}
 
 	@Test

@@ -19,8 +19,8 @@ public class FlashcardList {
 		this.createDate = createDate;
 	}
 
-	public Long getId() {
-		return id == null ? null : Long.parseLong(id);
+	public String getId() {
+		return id;
 	}
 
 	public String getTitle() {

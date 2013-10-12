@@ -25,8 +25,8 @@ public class FlashcardListsIntegrationTest {
 		List<FlashcardList> flashcardLists = resource.findAll();
 
 		assertEquals(2, flashcardLists.size());
-		assertEquals(new Long(2L), flashcardLists.get(0).getId());
-		assertEquals(new Long(1L), flashcardLists.get(1).getId());
+		assertEquals("2", flashcardLists.get(0).getId());
+		assertEquals("1", flashcardLists.get(1).getId());
 
 		assertEquals("Russian for intermediate", flashcardLists.get(0)
 				.getTitle());
@@ -59,8 +59,8 @@ public class FlashcardListsIntegrationTest {
 
 		// then
 		assertEquals(2, actual.size());
-		assertEquals(new Long(1L), actual.get(1).getId());
-		assertEquals(new Long(2L), actual.get(0).getId());
+		assertEquals("1", actual.get(1).getId());
+		assertEquals("2", actual.get(0).getId());
 
 		assertEquals("Russian for intermediate", actual.get(0).getTitle());
 		assertEquals("Spanish for beginners", actual.get(1).getTitle());

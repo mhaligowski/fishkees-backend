@@ -28,12 +28,12 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 	}
 
 	@Override
-	public FlashcardList findById(Long id) {
+	public FlashcardList findById(String id) {
 		return storage.get(id.toString());
 	}
 
 	@Override
-	public FlashcardList remove(Long id) {
+	public FlashcardList remove(String id) {
 		return storage.remove(id.toString());
 	}
 

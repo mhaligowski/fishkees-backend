@@ -49,9 +49,9 @@ public class FlashcardListInMemoryStorageTest {
 
 		// then
 		assertEquals(3, all.size());
-		assertEquals(3l, all.get(0).getId().longValue());
-		assertEquals(2l, all.get(1).getId().longValue());
-		assertEquals(1l, all.get(2).getId().longValue());
+		assertEquals("3", all.get(0).getId());
+		assertEquals("2", all.get(1).getId());
+		assertEquals("1", all.get(2).getId());
 	}
 
 	@Test
@@ -60,7 +60,7 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList flashcardList = testObj.get("2");
 		
 		// then
-		assertEquals(2l, flashcardList.getId().longValue());
+		assertEquals("2", flashcardList.getId());
 		assertEquals("bcde", flashcardList.getTitle());
 	}
 	
@@ -98,7 +98,7 @@ public class FlashcardListInMemoryStorageTest {
 		// then
 		assertEquals(2, this.testObj.all().size());
 		assertNotNull(removed);
-		assertEquals(3l, removed.getId().longValue());
+		assertEquals("3", removed.getId());
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class FlashcardListInMemoryStorageTest {
 		
 		FlashcardList fromStorage = testObj.get("1");
 		assertEquals("new title", fromStorage.getTitle());
-		assertEquals(1l, fromStorage.getId().longValue());
+		assertEquals("1", fromStorage.getId());
 	}
 	
 	@Test

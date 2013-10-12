@@ -80,7 +80,7 @@ public class InMemoryFlashcardListDaoTest {
 		FlashcardList newFlashcardListFromStorage = listCaptor.getValue();
 
 		assertNotNull(id);
-		assertEquals(Long.valueOf(Long.parseLong(id)), newFlashcardListFromStorage.getId());
+		assertEquals(id, newFlashcardListFromStorage.getId());
 		assertEquals("abcd", newFlashcardListFromStorage.getTitle());
 		assertEquals(newFlashcardListFromStorage, resultFlashcardList);
 		assertNotNull(resultFlashcardList.getCreateDate());
@@ -89,12 +89,12 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList result1 = testObj.findById(1l);
-		FlashcardList result2 = testObj.findById(2l);
+		FlashcardList result1 = testObj.findById("1");
+		FlashcardList result2 = testObj.findById("2");
 
 		// then
-		assertEquals(1l, result1.getId().longValue());
-		assertEquals(2l, result2.getId().longValue());
+		assertEquals("1", result1.getId());
+		assertEquals("2", result2.getId());
 		assertEquals("Spanish for beginners", result1.getTitle());
 		assertEquals("Russian for intermediate", result2.getTitle());
 		
@@ -105,10 +105,10 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testRemove_existing() {
 		// when
-		FlashcardList removed = testObj.remove(1l);
+		FlashcardList removed = testObj.remove("1");
 		
 		// then 
-		assertEquals(1L, removed.getId().longValue());
+		assertEquals("1", removed.getId());
 		
 		verify(storage).remove("1");
 	}
@@ -116,7 +116,7 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testRemove_nonExisting() {
 		// when
-		FlashcardList removed = testObj.remove(1000l);
+		FlashcardList removed = testObj.remove("1000");
 		
 		// then
 		assertNull(removed);

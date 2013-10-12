@@ -52,14 +52,14 @@ public class FlashcardListResourceMockTest {
 	public void test_Find() throws Exception {
 		// given
 		FlashcardList list = FlashcardListFixtures.single();
-		when(flashcardListDao.findById(1L)).thenReturn(list);
+		when(flashcardListDao.findById("1")).thenReturn(list);
 
 		// when
-		FlashcardList result = testObj.find(1L);
+		FlashcardList result = testObj.find("1");
 
 		// then
 		assertEquals(list, result);
-		verify(flashcardListDao).findById(1L);
+		verify(flashcardListDao).findById("1");
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class FlashcardListResourceMockTest {
 	public void testRemove_existing() throws Exception {
 		// given
 		FlashcardList flashcardList = FlashcardListFixtures.single();
-		Long id = flashcardList.getId();
+		String id = flashcardList.getId();
 		when(flashcardListDao.remove(id)).thenReturn(flashcardList);
 
 		// when
@@ -100,19 +100,19 @@ public class FlashcardListResourceMockTest {
 	@Test
 	public void testRemove_nonExisting() throws Exception {
 		// when
-		Response response = testObj.remove(12345l);
+		Response response = testObj.remove("12345");
 
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
 
-		verify(flashcardListDao).remove(12345l);
+		verify(flashcardListDao).remove("12345");
 	}
 
 	@Test
 	public void testUpdate_conflicting() throws Exception {
 		// when
-		Response response = testObj.update(12345l, new FlashcardList("54321",
+		Response response = testObj.update("12345", new FlashcardList("54321",
 				null, null));
 		
 		// then
@@ -124,7 +124,7 @@ public class FlashcardListResourceMockTest {
 	public void testUpdate_nonExisting() throws Exception {
 		// when
 		FlashcardList fl1 = new FlashcardList("12345", null, null);
-		Response response = testObj.update(12345l, fl1);
+		Response response = testObj.update("12345", fl1);
 		
 		// then
 		assertNotNull(response);
@@ -139,7 +139,7 @@ public class FlashcardListResourceMockTest {
 		FlashcardList fl1 = new FlashcardList("12345", "abcd", new Date());
 		when(flashcardListDao.update(fl1)).thenReturn(fl1);
 
-		Response response = testObj.update(12345l, fl1);
+		Response response = testObj.update("12345", fl1);
 		
 		// then
 		assertNotNull(response);
