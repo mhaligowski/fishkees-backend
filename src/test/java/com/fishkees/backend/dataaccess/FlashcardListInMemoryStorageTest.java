@@ -13,13 +13,16 @@ import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.Lists;
 
 public class FlashcardListInMemoryStorageTest {
+	private static final String ID1 = "someId1";
+	private static final String ID2 = "someId2";
+	private static final String ID3 = "someId3";
 	private FlashcardListInMemoryStorage testObj;
 
 	@Before
 	public void setUp() {
-		FlashcardList fl1 = new FlashcardList(1l, "a", new Date());
-		FlashcardList fl2 = new FlashcardList(2l, "bcde", new Date());
-		FlashcardList fl3 = new FlashcardList(3l, "c", new Date());
+		FlashcardList fl1 = new FlashcardList(ID1, "a", new Date());
+		FlashcardList fl2 = new FlashcardList(ID2, "bcde", new Date());
+		FlashcardList fl3 = new FlashcardList(ID3, "c", new Date());
 
 		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
 	}
@@ -27,19 +30,19 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testSavingAndRestoring() {
 		// given
-		FlashcardList fl = new FlashcardList(15l, "abcd", new Date());
+		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
 		
 		// when
-		testObj.put(fl.getId(), fl);
+		testObj.put(fl.getId().toString(), fl);
 
 		// then
 		assertEquals(4, testObj.all().size());
-		assertEquals(fl, testObj.get(15l));
+		assertEquals(fl, testObj.get("15"));
 	}
 
 	@Test
 	public void testRestoringNonExistent() {
-		assertNull(testObj.get(0l));
+		assertNull(testObj.get("0"));
 	}
 
 	@Test
@@ -49,37 +52,35 @@ public class FlashcardListInMemoryStorageTest {
 
 		// then
 		assertEquals(3, all.size());
-		assertEquals(1l, all.get(0).getId().longValue());
-		assertEquals(2l, all.get(1).getId().longValue());
-		assertEquals(3l, all.get(2).getId().longValue());
+		assertEquals(ID3, all.get(0).getId());
+		assertEquals(ID1, all.get(1).getId());
+		assertEquals(ID2, all.get(2).getId());
 	}
 
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList flashcardList = testObj.get(2l);
+		FlashcardList flashcardList = testObj.get(ID2);
 		
 		// then
-		assertEquals(2l, flashcardList.getId().longValue());
+		assertEquals(ID2, flashcardList.getId());
 		assertEquals("bcde", flashcardList.getTitle());
 	}
 	
 	@Test
 	public void testRandomUUID() {
 		// when
-		Long long1 = testObj.getNewId();
-		Long long2 = testObj.getNewId();
+		String string1 = testObj.getNewId();
+		String string2 = testObj.getNewId();
 
-		assertNotEquals(long1, long2);
-		assertTrue(long1 > 0);
-		assertTrue(long2 > 0);
+		assertNotEquals(string1, string2);
 	}
 
 	@Test
 	public void testReset() {
 		assertEquals(3, this.testObj.all().size());
 		
-		this.testObj.put(100L, new FlashcardList(1l, "qwer", new Date()));
+		this.testObj.put("100", new FlashcardList("100", "qwer", new Date()));
 		assertEquals(4, this.testObj.all().size());
 		
 		// when
@@ -95,12 +96,12 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3, this.testObj.all().size());
 
 		// when
-		FlashcardList removed = this.testObj.remove(3l);
+		FlashcardList removed = this.testObj.remove(ID3);
 		
 		// then
 		assertEquals(2, this.testObj.all().size());
 		assertNotNull(removed);
-		assertEquals(3l, removed.getId().longValue());
+		assertEquals(ID3, removed.getId());
 	}
 
 	@Test
@@ -109,7 +110,7 @@ public class FlashcardListInMemoryStorageTest {
 		assertEquals(3,  this.testObj.all().size());
 		
 		// when
-		FlashcardList removed = this.testObj.remove(1000l);
+		FlashcardList removed = this.testObj.remove("1000");
 	
 		// then
 		assertEquals(3,  this.testObj.all().size());
@@ -119,31 +120,31 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testUpdate_exists() {
 		// given
-		FlashcardList fl = new FlashcardList(1L, "new title", new Date());
+		FlashcardList fl = new FlashcardList(ID1, "new title", new Date());
 		
 		// when
-		FlashcardList update = testObj.update(1l, fl);
+		FlashcardList update = testObj.update(ID1, fl);
 		
 		// then
 		assertNotNull(update);
 		
-		FlashcardList fromStorage = testObj.get(1l);
+		FlashcardList fromStorage = testObj.get(ID1);
 		assertEquals("new title", fromStorage.getTitle());
-		assertEquals(1l, fromStorage.getId().longValue());
+		assertEquals(ID1, fromStorage.getId());
 	}
 	
 	@Test
 	public void testUpdate_not_exists() {
 		// given
-		FlashcardList fl = new FlashcardList(4L, "new title", new Date());
+		FlashcardList fl = new FlashcardList("4", "new title", new Date());
 		
 		// when
-		FlashcardList update = testObj.update(4l, fl);
+		FlashcardList update = testObj.update("4", fl);
 		
 		// then
 		assertNull(update);
 		
-		FlashcardList fromStorage = testObj.get(4l);
+		FlashcardList fromStorage = testObj.get("4");
 		assertNull(fromStorage);
 	}
 
