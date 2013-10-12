@@ -66,7 +66,7 @@ public class FlashcardListResourceMockTest {
 	public void test_Create() throws Exception {
 		// given
 		FlashcardList listData = FlashcardListFixtures.partial();
-		FlashcardList newList = new FlashcardList(1L, "abcd", new Date());
+		FlashcardList newList = new FlashcardList("1", "abcd", new Date());
 		when(flashcardListDao.createNewFromObject(listData))
 				.thenReturn(newList);
 
@@ -112,7 +112,7 @@ public class FlashcardListResourceMockTest {
 	@Test
 	public void testUpdate_conflicting() throws Exception {
 		// when
-		Response response = testObj.update(12345l, new FlashcardList(54321l,
+		Response response = testObj.update(12345l, new FlashcardList("54321",
 				null, null));
 		
 		// then
@@ -123,7 +123,7 @@ public class FlashcardListResourceMockTest {
 	@Test
 	public void testUpdate_nonExisting() throws Exception {
 		// when
-		FlashcardList fl1 = new FlashcardList(12345l, null, null);
+		FlashcardList fl1 = new FlashcardList("12345", null, null);
 		Response response = testObj.update(12345l, fl1);
 		
 		// then
@@ -136,7 +136,7 @@ public class FlashcardListResourceMockTest {
 	@Test
 	public void testUpdate() throws Exception {
 		// when
-		FlashcardList fl1 = new FlashcardList(12345l, "abcd", new Date());
+		FlashcardList fl1 = new FlashcardList("12345", "abcd", new Date());
 		when(flashcardListDao.update(fl1)).thenReturn(fl1);
 
 		Response response = testObj.update(12345l, fl1);

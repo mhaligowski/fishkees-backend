@@ -26,7 +26,7 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceTest extends ResourceTest {
-	private final FlashcardList flashcardList1 = new FlashcardList(12345l,
+	private final FlashcardList flashcardList1 = new FlashcardList("12345",
 			"abcd", new Date());
 
 	@InjectMocks
@@ -129,7 +129,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_differentIds() {
 		// given
-		FlashcardList fl = new FlashcardList(54321l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
@@ -143,7 +143,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_nonExisting() {
 		// given
-		FlashcardList fl = new FlashcardList(54321l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
@@ -159,7 +159,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_existing() {
 		// given
-		FlashcardList fl = new FlashcardList(12345l, "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("12345", "updatedTitle", new Date());
 		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
 
 		// when

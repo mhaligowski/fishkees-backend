@@ -13,8 +13,8 @@ public class FlashcardList {
 	@SuppressWarnings("unused")
 	private FlashcardList() { }
 	
-	public FlashcardList(Long id, String title, Date createDate) {
-		this.id = id == null ? null : id.toString();
+	public FlashcardList(String id, String title, Date createDate) {
+		this.id = id;
 		this.title = title;
 		this.createDate = createDate;
 	}

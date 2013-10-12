@@ -17,9 +17,9 @@ public class FlashcardListInMemoryStorageTest {
 
 	@Before
 	public void setUp() {
-		FlashcardList fl1 = new FlashcardList(1l, "a", new Date());
-		FlashcardList fl2 = new FlashcardList(2l, "bcde", new Date());
-		FlashcardList fl3 = new FlashcardList(3l, "c", new Date());
+		FlashcardList fl1 = new FlashcardList("1", "a", new Date());
+		FlashcardList fl2 = new FlashcardList("2", "bcde", new Date());
+		FlashcardList fl3 = new FlashcardList("3", "c", new Date());
 
 		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
 	}
@@ -27,7 +27,7 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testSavingAndRestoring() {
 		// given
-		FlashcardList fl = new FlashcardList(15l, "abcd", new Date());
+		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
 		
 		// when
 		testObj.put(fl.getId().toString(), fl);
@@ -77,7 +77,7 @@ public class FlashcardListInMemoryStorageTest {
 	public void testReset() {
 		assertEquals(3, this.testObj.all().size());
 		
-		this.testObj.put("100", new FlashcardList(100l, "qwer", new Date()));
+		this.testObj.put("100", new FlashcardList("100", "qwer", new Date()));
 		assertEquals(4, this.testObj.all().size());
 		
 		// when
@@ -117,7 +117,7 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testUpdate_exists() {
 		// given
-		FlashcardList fl = new FlashcardList(1L, "new title", new Date());
+		FlashcardList fl = new FlashcardList("1", "new title", new Date());
 		
 		// when
 		FlashcardList update = testObj.update("1", fl);
@@ -133,7 +133,7 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void testUpdate_not_exists() {
 		// given
-		FlashcardList fl = new FlashcardList(4L, "new title", new Date());
+		FlashcardList fl = new FlashcardList("4", "new title", new Date());
 		
 		// when
 		FlashcardList update = testObj.update("4", fl);

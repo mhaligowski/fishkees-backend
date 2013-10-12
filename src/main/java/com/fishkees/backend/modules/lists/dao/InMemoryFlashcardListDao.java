@@ -19,11 +19,11 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 	public FlashcardList createNewFromObject(FlashcardList flashcardList) {
 		String newId = storage.getNewId();
 
-		FlashcardList newList = new FlashcardList(Long.parseLong(newId),
+		FlashcardList newList = new FlashcardList(newId,
 				flashcardList.getTitle(), new Date());
 
 		storage.put(newId, newList);
-		
+
 		return newList;
 	}
 
@@ -31,7 +31,7 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 	public FlashcardList findById(Long id) {
 		return storage.get(id.toString());
 	}
-	
+
 	@Override
 	public FlashcardList remove(Long id) {
 		return storage.remove(id.toString());

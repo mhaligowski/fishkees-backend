@@ -127,7 +127,7 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testUpdate_nonExisting() {
 		// given
-		FlashcardList flashcardList = new FlashcardList(3l, "new title", new Date());
+		FlashcardList flashcardList = new FlashcardList("3", "new title", new Date());
 
 		// when
 		FlashcardList update = testObj.update(flashcardList);
@@ -140,7 +140,7 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void testUpdate_existing() {
 		// given 
-		FlashcardList fl = new FlashcardList(1l, "new title", new Date());
+		FlashcardList fl = new FlashcardList("1", "new title", new Date());
 		when(storage.update("1", fl)).thenReturn(fl);
 		
 		// when
