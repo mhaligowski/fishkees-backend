@@ -40,12 +40,15 @@ public class FlashcardListResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(@Valid FlashcardList flashcardList) {
-		final FlashcardList newFlashcardList = flashcardListDao.createNewFromObject(flashcardList);
-		
+		final FlashcardList newFlashcardList = flashcardListDao
+				.createNewFromObject(flashcardList);
+
 		UriBuilder builder = UriBuilder.fromPath("/{listId}");
 		URI uri = builder.build(newFlashcardList.getId());
-		Response response = Response.created(uri).build(); 
-		
+		Response response = Response.created(uri)
+									.entity(newFlashcardList)
+									.build();
+
 		return response;
 	}
 
@@ -53,31 +56,30 @@ public class FlashcardListResource {
 	@Path("/{listId}")
 	public Response remove(@PathParam("listId") String id) {
 		FlashcardList removed = flashcardListDao.remove(id);
-		
+
 		if (removed == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		
+
 		return Response.ok(removed).build();
 	}
-	
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{listId}")
-	public Response update(@PathParam("listId") String id, @Valid FlashcardList flashcardList) {
+	public Response update(@PathParam("listId") String id,
+			@Valid FlashcardList flashcardList) {
 		if (!id.equals(flashcardList.getId())) {
-			return Response
-					.status(Response.Status.CONFLICT)
-					.entity("Conflicting ids")
-					.build();
+			return Response.status(Response.Status.CONFLICT)
+					.entity("Conflicting ids").build();
 		}
-		
+
 		FlashcardList updated = flashcardListDao.update(flashcardList);
-		
+
 		if (updated == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		
-		return Response.ok(updated).build(); 
+
+		return Response.ok(updated).build();
 	}
 }
