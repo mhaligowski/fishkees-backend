@@ -72,8 +72,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists")
-										  .type(MediaType.APPLICATION_JSON)
-										  .post(ClientResponse.class, flashcardList);
+				.type(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class, flashcardList);
 
 		// then
 		assertNotNull(response);
@@ -83,14 +83,19 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals("/flashcardlists/12345",
 				response.getHeaders().get("Location").get(0));
 
+		FlashcardList entity = response.getEntity(FlashcardList.class);
+		assertEquals("12345", entity.getId());
+		assertEquals("abcd", entity.getTitle());
+		assertNotNull(entity.getCreateDate());
+
 		verify(dao).createNewFromObject(any(FlashcardList.class));
 	}
 
 	@Test
 	public void testFind() {
 		// when
-		FlashcardList result = client().resource("/flashcardlists/12345")
-									   .get(FlashcardList.class);
+		FlashcardList result = client().resource("/flashcardlists/12345").get(
+				FlashcardList.class);
 
 		// then
 		assertEquals(flashcardList1.getId(), result.getId());
@@ -104,7 +109,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	public void testRemove_existing() {
 		// when
 		FlashcardList result = client().resource("/flashcardlists/12345")
-									   .delete(FlashcardList.class);
+				.delete(FlashcardList.class);
 
 		// then
 		assertEquals(flashcardList1.getId(), result.getId());
@@ -118,7 +123,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	public void testRemove_nonexisting() {
 		// when
 		ClientResponse response = client().resource("/flashcardlists/1")
-										  .delete(ClientResponse.class);
+				.delete(ClientResponse.class);
 
 		// then
 		assertEquals(404, response.getStatus());
@@ -129,12 +134,12 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_differentIds() {
 		// given
-		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle",
+				new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
-										  .type(MediaType.APPLICATION_JSON)
-										  .put(ClientResponse.class, fl);
+				.type(MediaType.APPLICATION_JSON).put(ClientResponse.class, fl);
 
 		assertEquals(409, response.getStatus());
 		assertEquals("Conflicting ids", response.getEntity(String.class));
@@ -143,12 +148,12 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_nonExisting() {
 		// given
-		FlashcardList fl = new FlashcardList("54321", "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("54321", "updatedTitle",
+				new Date());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
-										  .type(MediaType.APPLICATION_JSON)
-										  .put(ClientResponse.class, fl);
+				.type(MediaType.APPLICATION_JSON).put(ClientResponse.class, fl);
 
 		// then
 		assertEquals(404, response.getStatus());
@@ -159,22 +164,22 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void testUpdate_existing() {
 		// given
-		FlashcardList fl = new FlashcardList("12345", "updatedTitle", new Date());
+		FlashcardList fl = new FlashcardList("12345", "updatedTitle",
+				new Date());
 		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
-										  .type(MediaType.APPLICATION_JSON)
-										  .put(ClientResponse.class, fl);
+				.type(MediaType.APPLICATION_JSON).put(ClientResponse.class, fl);
 
 		// then
 		assertEquals(200, response.getStatus());
-		
+
 		FlashcardList entity = response.getEntity(FlashcardList.class);
 		assertEquals(fl.getId(), entity.getId());
 		assertEquals(fl.getTitle(), entity.getTitle());
 		assertEquals(fl.getCreateDate(), entity.getCreateDate());
-		
+
 		verify(dao).update(any(FlashcardList.class));
 	}
 }
