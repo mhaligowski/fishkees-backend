@@ -36,13 +36,10 @@ public class FishkeesServiceTest {
 	@Mock
 	private FilterBuilder filterBuilder1;
 
-	@Mock
-	private FilterBuilder filterBuilder2;
-
 	@After
 	public void tearDown() {
 		verifyNoMoreInteractions(configuration, environment, bootstrap,
-				filterBuilder1, filterBuilder2);
+				filterBuilder1);
 	}
 
 	@Test
@@ -50,8 +47,6 @@ public class FishkeesServiceTest {
 		// given
 		when(environment.addFilter(eq(CrossOriginFilter.class), anyString()))
 				.thenReturn(filterBuilder1);
-		when(filterBuilder1.setInitParam(anyString(), anyString())).thenReturn(
-				filterBuilder2);
 
 		// when
 		testObj.run(configuration, environment);
@@ -59,13 +54,11 @@ public class FishkeesServiceTest {
 		// then
 		verify(environment).addFilter(eq(CrossOriginFilter.class), anyString());
 		verify(filterBuilder1).setInitParam(
-				eq(CrossOriginFilter.EXPOSED_HEADERS_PARAM), eq("Location"));
-		verify(filterBuilder2).setInitParam(
 				eq(CrossOriginFilter.ALLOWED_METHODS_PARAM),
 				eq("POST,GET,UPDATE,DELETE"));
 		verify(environment).addResource(any(FlashcardListResource.class));
 		verify(environment).addTask(any(ResetStorageTask.class));
-		
+
 		verify(configuration).getFixturesConfiguration();
 		verify(environment).addHealthCheck(any(PingHealthCheck.class));
 	}
