@@ -36,8 +36,6 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 			throws Exception {
 		environment
 				.addFilter(CrossOriginFilter.class, "/*")
-				.setInitParam(CrossOriginFilter.EXPOSED_HEADERS_PARAM,
-						"Location")
 				.setInitParam(CrossOriginFilter.ALLOWED_METHODS_PARAM,
 						"POST,GET,UPDATE,DELETE");
 
