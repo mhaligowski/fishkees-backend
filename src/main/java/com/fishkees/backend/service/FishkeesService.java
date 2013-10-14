@@ -37,7 +37,7 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 		environment
 				.addFilter(CrossOriginFilter.class, "/*")
 				.setInitParam(CrossOriginFilter.ALLOWED_METHODS_PARAM,
-						"POST,GET,UPDATE,DELETE");
+						"POST,GET,PUT,DELETE");
 
 		setInjector(configuration);
 		environment.addResource(injector

@@ -55,7 +55,7 @@ public class FishkeesServiceTest {
 		verify(environment).addFilter(eq(CrossOriginFilter.class), anyString());
 		verify(filterBuilder1).setInitParam(
 				eq(CrossOriginFilter.ALLOWED_METHODS_PARAM),
-				eq("POST,GET,UPDATE,DELETE"));
+				eq("POST,GET,PUT,DELETE"));
 		verify(environment).addResource(any(FlashcardListResource.class));
 		verify(environment).addTask(any(ResetStorageTask.class));
 
