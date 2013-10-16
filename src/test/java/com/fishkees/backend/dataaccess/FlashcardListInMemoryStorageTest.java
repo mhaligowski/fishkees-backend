@@ -128,6 +128,7 @@ public class FlashcardListInMemoryStorageTest {
 		// then
 		assertNotNull(update);
 		
+		assertEquals(fl, update);
 		FlashcardList fromStorage = testObj.get(ID1);
 		assertEquals("new title", fromStorage.getTitle());
 		assertEquals(ID1, fromStorage.getId());

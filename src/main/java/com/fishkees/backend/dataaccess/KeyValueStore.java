@@ -26,7 +26,8 @@ public abstract class KeyValueStore<K, V> {
 	
 	public V update(K key, V value) {
 		if (this.map.containsKey(key)) {
-			return map.put(key, value);
+			map.put(key, value);
+			return value;
 		}
 		
 		return null;

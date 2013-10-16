@@ -29,7 +29,7 @@ public class InMemoryFlashcardListDaoTest {
 	private InMemoryFlashcardListDao testObj;
 
 	@Mock
-	FlashcardListInMemoryStorage storage;
+	private FlashcardListInMemoryStorage storage;
 	
 	private List<FlashcardList> lists;
 	
@@ -150,6 +150,7 @@ public class InMemoryFlashcardListDaoTest {
 		// when
 		FlashcardList updated = testObj.update(fl);
 		
+		// then
 		assertEquals(fl, updated);
 		verify(storage).update(ID1, fl);
 	}
