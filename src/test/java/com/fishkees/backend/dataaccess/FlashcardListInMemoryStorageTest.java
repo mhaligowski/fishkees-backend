@@ -16,7 +16,7 @@ public class FlashcardListInMemoryStorageTest {
 	private static final String ID1 = "someId1";
 	private static final String ID2 = "someId2";
 	private static final String ID3 = "someId3";
-	private KeyValueStore<String, FlashcardList> testObj;
+	private FlashcardListInMemoryStorage testObj;
 
 	@Before
 	public void setUp() {
@@ -26,6 +26,18 @@ public class FlashcardListInMemoryStorageTest {
 		List<FlashcardList> inputList = Lists.newArrayList(fl1, fl2, fl3);
 		
 		this.testObj = new FlashcardListInMemoryStorage(inputList);
+	}
+
+	@Test
+	public void testGettingId() {
+		// given
+		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
+		
+		// when
+		String actual = testObj.getId(fl);
+		
+		// then
+		assertEquals("15", actual);
 	}
 	
 	@Test

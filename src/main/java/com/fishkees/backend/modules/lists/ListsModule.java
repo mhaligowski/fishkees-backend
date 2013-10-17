@@ -9,7 +9,6 @@ import javax.inject.Singleton;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fishkees.backend.configuration.FixturesConfiguration;
-import com.fishkees.backend.dataaccess.KeyValueStore;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
