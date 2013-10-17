@@ -9,11 +9,13 @@ import javax.inject.Singleton;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fishkees.backend.configuration.FixturesConfiguration;
+import com.fishkees.backend.dataaccess.KeyValueStore;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.dao.InMemoryFlashcardListDao;
 import com.fishkees.backend.task.ResetStorageTask;
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.yammer.dropwizard.json.ObjectMapperFactory;
@@ -46,18 +48,12 @@ public final class ListsModule extends AbstractModule {
 	@Provides
 	@Singleton
 	FlashcardListInMemoryStorage flashcardListInMemoryStorage() {
-		FlashcardList[] array = new FlashcardList[0];
+		List<FlashcardList> fixture = Lists.newArrayList();
 		if (config != null) {
-			List<FlashcardList> fixture = loadFixture(config
-					.getFlashcardListsPath());
-
-			array = fixture.toArray(array);
+			fixture = loadFixture(config.getFlashcardListsPath());
 		}
 
-		FlashcardListInMemoryStorage storage = new FlashcardListInMemoryStorage(
-				array);
-
-		return storage;
+		return new FlashcardListInMemoryStorage(fixture);
 	}
 
 	private List<FlashcardList> loadFixture(String path) {

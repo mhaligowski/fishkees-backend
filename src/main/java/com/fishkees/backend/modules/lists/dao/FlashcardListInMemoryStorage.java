@@ -1,35 +1,20 @@
 package com.fishkees.backend.modules.lists.dao;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
 
 import com.fishkees.backend.dataaccess.KeyValueStore;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 public class FlashcardListInMemoryStorage extends
 		KeyValueStore<String, FlashcardList> {
-
-	private final Map<String, FlashcardList> cachedMap;
-
-	public FlashcardListInMemoryStorage(FlashcardList... flashcardLists) {
-		this.map = new HashMap<>();
-		for (FlashcardList flashcardList : flashcardLists) {
-			this.map.put(flashcardList.getId().toString(), flashcardList);
-		}
-
-		this.cachedMap = ImmutableMap.copyOf(this.map);
+	
+	public FlashcardListInMemoryStorage(List<FlashcardList> initialValues) {
+		super(initialValues);
 	}
 
 	@Override
-	public String getNewId() {
-		return UUID.randomUUID().toString();
+	public String getId(FlashcardList value) {
+		return value.getId();
 	}
 
-	@Override
-	public void reset() {
-		this.map = Maps.newHashMap(cachedMap);
-	}
 }

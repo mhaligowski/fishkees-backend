@@ -16,15 +16,16 @@ public class FlashcardListInMemoryStorageTest {
 	private static final String ID1 = "someId1";
 	private static final String ID2 = "someId2";
 	private static final String ID3 = "someId3";
-	private FlashcardListInMemoryStorage testObj;
+	private KeyValueStore<String, FlashcardList> testObj;
 
 	@Before
 	public void setUp() {
 		FlashcardList fl1 = new FlashcardList(ID1, "a", new Date());
 		FlashcardList fl2 = new FlashcardList(ID2, "bcde", new Date());
 		FlashcardList fl3 = new FlashcardList(ID3, "c", new Date());
-
-		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
+		List<FlashcardList> inputList = Lists.newArrayList(fl1, fl2, fl3);
+		
+		this.testObj = new FlashcardListInMemoryStorage(inputList);
 	}
 	
 	@Test
