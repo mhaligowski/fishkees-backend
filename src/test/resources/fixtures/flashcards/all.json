@@ -1,0 +1,23 @@
+[
+	{
+		"id": "someId1",
+		"flashcard_list_id": "flashcardListId1",
+		"front": "front 1",
+		"back": "back 1",
+		"create_date": 520603200000
+	},
+	{
+		"id": "someId2",
+		"flashcard_list_id": "flashcardListId2",
+		"front": "front 2",
+		"back": "back 2",
+		"create_date": 520603200000
+	},
+	{
+		"id": "someId3",
+		"flashcard_list_id": "flashcardListId3",
+		"front": "front 3",
+		"back": "back 3",
+		"create_date": 520603200000
+	}	
+]

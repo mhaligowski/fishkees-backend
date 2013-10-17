@@ -25,8 +25,7 @@ public class PingHealthCheck extends HealthCheck {
 		try {
 			BufferedReader reader = urlWrapper.getReader(urlString);
 			
-			String line = reader.readLine();
-			while (line != null) { line = reader.readLine(); }
+			reader.readLine();
 		} catch (Exception e) {
 			return Result.unhealthy(e);
 		}

@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.fishkees.backend.configuration.FixturesConfiguration;
+import com.fishkees.backend.dataaccess.KeyValueStore;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
@@ -39,9 +40,9 @@ public class FlashcardListsIntegrationTest {
 	@Test
 	public void testStorageIsSingleton() {
 		Injector testObj = Guice.createInjector(ListsModule.simpleModule());
-		FlashcardListInMemoryStorage instance1 = testObj
+		KeyValueStore<String, FlashcardList> instance1 = testObj
 				.getInstance(FlashcardListInMemoryStorage.class);
-		FlashcardListInMemoryStorage instance2 = testObj
+		KeyValueStore<String, FlashcardList> instance2 = testObj
 				.getInstance(FlashcardListInMemoryStorage.class);
 
 		assertSame(instance1, instance2);
@@ -82,7 +83,7 @@ public class FlashcardListsIntegrationTest {
 	}
 
 	private void loadFixtures(Injector injector) {
-		FlashcardListInMemoryStorage storage = injector
+		KeyValueStore<String, FlashcardList> storage = injector
 				.getInstance(FlashcardListInMemoryStorage.class);
 
 		for (FlashcardList fl : FlashcardListFixtures.all()) {

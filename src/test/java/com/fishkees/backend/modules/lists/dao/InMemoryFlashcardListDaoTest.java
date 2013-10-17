@@ -24,7 +24,6 @@ public class InMemoryFlashcardListDaoTest {
 	private static final String ID1 = "someNiceId1";
 	private static final String ID2 = "someNiceId2";
 
-
 	@InjectMocks
 	private InMemoryFlashcardListDao testObj;
 

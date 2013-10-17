@@ -23,8 +23,21 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl1 = new FlashcardList(ID1, "a", new Date());
 		FlashcardList fl2 = new FlashcardList(ID2, "bcde", new Date());
 		FlashcardList fl3 = new FlashcardList(ID3, "c", new Date());
+		List<FlashcardList> inputList = Lists.newArrayList(fl1, fl2, fl3);
+		
+		this.testObj = new FlashcardListInMemoryStorage(inputList);
+	}
 
-		this.testObj = new FlashcardListInMemoryStorage(fl1, fl2, fl3);
+	@Test
+	public void testGettingId() {
+		// given
+		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
+		
+		// when
+		String actual = testObj.getId(fl);
+		
+		// then
+		assertEquals("15", actual);
 	}
 	
 	@Test
