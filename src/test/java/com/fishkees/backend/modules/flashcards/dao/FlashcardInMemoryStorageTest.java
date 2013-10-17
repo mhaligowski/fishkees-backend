@@ -1,4 +1,4 @@
-package com.fishkees.backend.modules.flashcards.core;
+package com.fishkees.backend.modules.flashcards.dao;
 
 import static org.junit.Assert.*;
 
@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fishkees.backend.modules.flashcards.core.Flashcard;
+import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
 import com.google.common.collect.Lists;
 
 public class FlashcardInMemoryStorageTest {

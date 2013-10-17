@@ -1,8 +1,9 @@
-package com.fishkees.backend.modules.flashcards.core;
+package com.fishkees.backend.modules.flashcards.dao;
 
 import java.util.List;
 
 import com.fishkees.backend.dataaccess.KeyValueStore;
+import com.fishkees.backend.modules.flashcards.core.Flashcard;
 
 public class FlashcardInMemoryStorage extends KeyValueStore<String, Flashcard>{
 
