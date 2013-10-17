@@ -27,7 +27,7 @@ public class FlashcardTest {
 		final Flashcard expected = flashcard();
 
 		// when
-		final Flashcard actualFromJson = FlashcardsFixtures.single();
+		final Flashcard actualFromJson = FlashcardFixtures.single();
 
 		// then
 		assertEquals(expected.getId(), actualFromJson.getId());
