@@ -75,5 +75,5 @@ public class FishkeesServiceTest {
 		verify(bootstrap).setName(argument.capture());
 		assertEquals("fishkees", argument.getValue());
 	}
-
+	
 }

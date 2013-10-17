@@ -1,4 +1,4 @@
-package com.fishkees.backend.modules.flashcards;
+package com.fishkees.backend.modules.flashcards.core;
 
 import java.util.Date;
 
