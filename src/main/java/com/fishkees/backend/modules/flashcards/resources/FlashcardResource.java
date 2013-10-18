@@ -48,8 +48,8 @@ public class FlashcardResource {
 		
 		final Flashcard newFlashcard = flashcardDao.createNewFromObject(flashcard);
 		
-		UriBuilder builder = UriBuilder.fromPath("/{listId}/flashcards/{cardId}");
-		URI uri = builder.build(listId, newFlashcard.getId());
+		UriBuilder builder = UriBuilder.fromPath("/{cardId}");
+		URI uri = builder.build(newFlashcard.getId());
 		
 		return Response.created(uri).entity(newFlashcard).build();
 	}

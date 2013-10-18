@@ -32,6 +32,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@InjectMocks
 	private FlashcardListResource testObj;
 
+	@Mock
+	private FlashcardListDao dao;
+
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
@@ -47,8 +50,6 @@ public class FlashcardListResourceTest extends ResourceTest {
 		verifyNoMoreInteractions(dao);
 	}
 
-	@Mock
-	private FlashcardListDao dao;
 
 	@Test
 	public void testGetFlashcardLists() {
