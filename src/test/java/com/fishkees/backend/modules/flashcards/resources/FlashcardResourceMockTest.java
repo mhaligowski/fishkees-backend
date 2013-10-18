@@ -67,4 +67,32 @@ public class FlashcardResourceMockTest {
 		verify(dao, never()).createNewFromObject(flashcard);
 	}
 
+	@Test
+	public void testFind_existing() {
+		// given
+		Flashcard flashcard = FlashcardFixtures.single();
+		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(flashcard);
+		
+		// when
+		Response response = testObj.find("flashcardListId1", "someId1");
+		
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		assertEquals(flashcard, response.getEntity());
+		
+		verify(dao).findByListIdAndId("flashcardListId1", "someId1");
+	}
+	
+	@Test
+	public void testFind_nonExisting() {
+		// when
+		Response response = testObj.find("otherList", "someId1");
+		
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+		
+		verify(dao).findByListIdAndId("otherList", "someId1");
+	}
 }
