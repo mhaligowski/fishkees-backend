@@ -55,11 +55,21 @@ public class FlashcardListResourceMockTest {
 		when(flashcardListDao.findById("1")).thenReturn(list);
 
 		// when
-		FlashcardList result = testObj.find("1");
+		Response result = testObj.find("1");
 
 		// then
-		assertEquals(list, result);
+		assertEquals(list, result.getEntity());
 		verify(flashcardListDao).findById("1");
+	}
+	
+	@Test
+	public void testFind_nonExisting() {
+		// when
+		Response result = testObj.find("nonExisting");
+
+		// then
+		assertEquals(404, result.getStatus());
+		verify(flashcardListDao).findById("nonExisting");
 	}
 
 	@Test

@@ -107,6 +107,18 @@ public class FlashcardListResourceTest extends ResourceTest {
 	}
 
 	@Test
+	public void testFind_nonExisting() {
+		// when
+		ClientResponse clientResponse = client().resource("/flashcardlists/nonExisting").get(ClientResponse.class);
+		
+		// then
+		assertNotNull(clientResponse);
+		assertEquals(404, clientResponse.getStatus());
+		
+		verify(dao).findById("nonExisting");
+	}
+	
+	@Test
 	public void testRemove_existing() {
 		// when
 		FlashcardList result = client().resource("/flashcardlists/12345")

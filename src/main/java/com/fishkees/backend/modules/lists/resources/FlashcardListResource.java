@@ -15,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
@@ -33,8 +34,14 @@ public class FlashcardListResource {
 
 	@GET
 	@Path("/{listId}")
-	public FlashcardList find(@PathParam("listId") String listId) {
-		return flashcardListDao.findById(listId);
+	public Response find(@PathParam("listId") String listId) {
+		 FlashcardList flashcardList = flashcardListDao.findById(listId);
+		 
+		 if (flashcardList == null) {
+			 return Response.status(Status.NOT_FOUND).build(); 
+		 } else{
+			 return Response.ok(flashcardList).build();
+		 }
 	}
 
 	@POST
