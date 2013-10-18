@@ -26,6 +26,21 @@ public final class FlashcardFixtures {
 		return result;
 	}
 
+	public static Flashcard partial() {
+		TypeReference<Flashcard> ref = new TypeReference<Flashcard>() {
+		};
+
+		Flashcard result;
+		try {
+			result = fromJson(jsonFixture("fixtures/flashcards/partial.json"),
+					ref);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result;
+	}
+
 	public static List<Flashcard> all() {
 		TypeReference<List<Flashcard>> ref = new TypeReference<List<Flashcard>>() {
 		};
