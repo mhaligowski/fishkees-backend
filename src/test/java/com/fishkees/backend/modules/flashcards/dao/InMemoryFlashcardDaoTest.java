@@ -161,5 +161,60 @@ public class InMemoryFlashcardDaoTest {
 		assertEquals(f, updated);
 		verify(storage).update(ID1, f);
 	}
+	
+	@Test
+	public void testFindAllByListId_found() {
+		// when
+		List<Flashcard> result = testObj.findAllByListId("flashcardListId1");
+		
+		// then
+		assertEquals(1, result.size());
+		assertEquals(flashcards.get(0), result.get(0));
+		
+		verify(storage).all();
+	}
 
+	@Test
+	public void testFindAllByListId_notFound() {
+		// when
+		List<Flashcard> result = testObj.findAllByListId("flashcardListId100");
+		
+		// then
+		assertEquals(0, result.size());
+		
+		verify(storage).all();
+	}
+	
+	@Test
+	public void testFindByListIdAndId_found() {
+		// when
+		Flashcard actual = testObj.findByListIdAndId("flashcardListId1", ID1);
+		
+		// then
+		assertEquals(flashcards.get(0), actual);
+		
+		verify(storage).get(ID1);
+	}
+
+	@Test
+	public void testFindByListIdAndId_notMatchingIds() {
+		// when
+		Flashcard actual = testObj.findByListIdAndId("flashcardListId2", ID1);
+		
+		// then
+		assertNull(actual);
+		
+		verify(storage).get(ID1);
+	}
+	
+	@Test
+	public void testFindByListIdAndId_notFound() {
+		// when
+		Flashcard actual = testObj.findByListIdAndId("flashcardListId2", "id2000");
+		
+		// then
+		assertNull(actual);
+		
+		verify(storage).get("id2000");
+	}
 }
