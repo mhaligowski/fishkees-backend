@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -17,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardResourceMockTest {
@@ -94,5 +96,44 @@ public class FlashcardResourceMockTest {
 		assertEquals(404, response.getStatus());
 		
 		verify(dao).findByListIdAndId("otherList", "someId1");
+	}
+	
+	@Test
+	public void testFindAll_existing() {
+		// given
+		Flashcard resultFlashcard = FlashcardFixtures.all().get(0);
+		when(dao.findAllByListId("flashcardListId1")).thenReturn(Lists.newArrayList(resultFlashcard));
+		
+		// when
+		Response response = testObj.findAll("flashcardListId1");
+		
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+
+		@SuppressWarnings("unchecked")
+		List<Flashcard> entity = (List<Flashcard>) response.getEntity();
+		assertEquals(1, entity.size());
+		assertEquals(resultFlashcard.getId(), entity.get(0).getId());
+		assertEquals(resultFlashcard.getFlashcardListId(), entity.get(0).getFlashcardListId());
+		assertEquals(resultFlashcard.getFront(), entity.get(0).getFront());
+		assertEquals(resultFlashcard.getBack(), entity.get(0).getBack());
+		
+		verify(dao).findAllByListId("flashcardListId1");
+	}
+	
+	@Test
+	public void testFindAll_notExisting() {
+		// given
+		when(dao.findAllByListId(anyString())).thenReturn(null);
+		
+		// when
+		Response response = testObj.findAll("flashcardListId1000000");
+		
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+		
+		verify(dao).findAllByListId("flashcardListId1000000");
 	}
 }

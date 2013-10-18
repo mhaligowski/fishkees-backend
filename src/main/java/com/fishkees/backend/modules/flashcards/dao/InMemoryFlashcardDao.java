@@ -7,6 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
+import com.fishkees.backend.modules.lists.core.FlashcardList;
+import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -16,6 +18,9 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	@Inject
 	private FlashcardInMemoryStorage storage;
 
+	@Inject
+	private FlashcardListDao listDao;
+	
 	@Override
 	public List<Flashcard> findAll() {
 		return Lists.newArrayList(storage.all());
@@ -51,6 +56,11 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 
 	@Override
 	public List<Flashcard> findAllByListId(final String listId) {
+		FlashcardList flashcardList = listDao.findById(listId);
+		if (flashcardList == null) {
+			return null;
+		}
+		
 		List<Flashcard> all = storage.all();
 
 		Collection<Flashcard> filtered = Collections2.filter(all,

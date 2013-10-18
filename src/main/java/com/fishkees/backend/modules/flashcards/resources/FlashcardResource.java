@@ -18,7 +18,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
-import com.google.common.collect.Lists;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/flashcardlists/{listId}/flashcards")
@@ -27,16 +26,23 @@ public class FlashcardResource {
 	private FlashcardDao flashcardDao;
 
 	@GET
-	public List<Flashcard> findAll(@PathParam("listId") String listId) {
-		return Lists.newArrayList();
+	public Response findAll(@PathParam("listId") String listId) {
+		List<Flashcard> flashcards = flashcardDao.findAllByListId(listId);
+
+		if (flashcards == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		} else {
+			return Response.ok(flashcards).build();
+		}
 	}
 
 	@GET
 	@Path("/{flashcardId}")
 	public Response find(@PathParam("listId") String listId,
 			@PathParam("flashcardId") String flashcardId) {
-		Flashcard flashcard = flashcardDao.findByListIdAndId(listId, flashcardId);
-		
+		Flashcard flashcard = flashcardDao.findByListIdAndId(listId,
+				flashcardId);
+
 		if (flashcard == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		} else {
@@ -52,12 +58,13 @@ public class FlashcardResource {
 			return Response.status(Response.Status.CONFLICT)
 					.entity("Conflicting listIds").build();
 		}
-		
-		final Flashcard newFlashcard = flashcardDao.createNewFromObject(flashcard);
-		
+
+		final Flashcard newFlashcard = flashcardDao
+				.createNewFromObject(flashcard);
+
 		UriBuilder builder = UriBuilder.fromPath("/{cardId}");
 		URI uri = builder.build(newFlashcard.getId());
-		
+
 		return Response.created(uri).entity(newFlashcard).build();
 	}
 

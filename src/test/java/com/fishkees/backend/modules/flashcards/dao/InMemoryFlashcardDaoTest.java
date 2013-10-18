@@ -1,6 +1,7 @@
 package com.fishkees.backend.modules.flashcards.dao;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Date;
@@ -17,6 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardFixtures;
+import com.fishkees.backend.modules.lists.core.FlashcardList;
+import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InMemoryFlashcardDaoTest {
@@ -29,6 +32,9 @@ public class InMemoryFlashcardDaoTest {
 
 	@Mock
 	private FlashcardInMemoryStorage storage;
+
+	@Mock
+	private FlashcardListDao listDao;
 
 	private List<Flashcard> flashcards;
 
@@ -49,7 +55,7 @@ public class InMemoryFlashcardDaoTest {
 
 	@After
 	public void tearDown() {
-		verifyNoMoreInteractions(storage);
+		verifyNoMoreInteractions(storage, listDao);
 	}
 
 	@Test
@@ -161,38 +167,63 @@ public class InMemoryFlashcardDaoTest {
 		assertEquals(f, updated);
 		verify(storage).update(ID1, f);
 	}
-	
+
 	@Test
 	public void testFindAllByListId_found() {
+		// given
+		when(listDao.findById("flashcardListId1")).thenReturn(
+				mock(FlashcardList.class));
+		
 		// when
 		List<Flashcard> result = testObj.findAllByListId("flashcardListId1");
-		
+
 		// then
 		assertEquals(1, result.size());
 		assertEquals(flashcards.get(0), result.get(0));
-		
+
 		verify(storage).all();
+		verify(listDao).findById("flashcardListId1");
+	}
+
+	@Test
+	public void testFindAllBylistId_noList() {
+		// given
+		when(listDao.findById(anyString())).thenReturn(null);
+
+		// when
+		List<Flashcard> result = testObj.findAllByListId("flashcardListId100");
+
+		// then
+		assertNull(result);
+		
+		verify(listDao).findById("flashcardListId100");
+		verify(storage, never()).get(anyString());
 	}
 
 	@Test
 	public void testFindAllByListId_notFound() {
+		// given
+		when(listDao.findById(anyString())).thenReturn(
+				mock(FlashcardList.class));
+
 		// when
 		List<Flashcard> result = testObj.findAllByListId("flashcardListId100");
-		
+
 		// then
 		assertEquals(0, result.size());
-		
+
 		verify(storage).all();
+		verify(listDao).findById("flashcardListId100");
 	}
-	
+
 	@Test
 	public void testFindByListIdAndId_found() {
 		// when
 		Flashcard actual = testObj.findByListIdAndId("flashcardListId1", ID1);
-		
+
 		// then
 		assertEquals(flashcards.get(0), actual);
-		
+
 		verify(storage).get(ID1);
 	}
 
@@ -200,21 +231,22 @@ public class InMemoryFlashcardDaoTest {
 	public void testFindByListIdAndId_notMatchingIds() {
 		// when
 		Flashcard actual = testObj.findByListIdAndId("flashcardListId2", ID1);
-		
+
 		// then
 		assertNull(actual);
-		
+
 		verify(storage).get(ID1);
 	}
-	
+
 	@Test
 	public void testFindByListIdAndId_notFound() {
 		// when
-		Flashcard actual = testObj.findByListIdAndId("flashcardListId2", "id2000");
-		
+		Flashcard actual = testObj.findByListIdAndId("flashcardListId2",
+				"id2000");
+
 		// then
 		assertNull(actual);
-		
+
 		verify(storage).get("id2000");
 	}
 }

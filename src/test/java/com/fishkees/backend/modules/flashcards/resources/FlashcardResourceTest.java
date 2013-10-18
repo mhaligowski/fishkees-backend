@@ -1,6 +1,7 @@
 package com.fishkees.backend.modules.flashcards.resources;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Date;
@@ -18,7 +19,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.GenericType;
 import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,12 +34,12 @@ public class FlashcardResourceTest extends ResourceTest {
 	private FlashcardDao dao;
 
 	private List<Flashcard> flashcards;
-	
+
 	@Override
 	protected void setUpResources() throws Exception {
 		flashcards = FlashcardFixtures.all();
 		when(dao.findAll()).thenReturn(flashcards);
-		
+
 		addResource(testObj);
 	}
 
@@ -92,25 +95,28 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void testFindOne_nonExisting() {
 		// when
-		ClientResponse clientResponse = client().resource("/flashcardlists/otherListId/flashcards/someId1")
-				.get(ClientResponse.class);
-		
+		ClientResponse clientResponse = client().resource(
+				"/flashcardlists/otherListId/flashcards/someId1").get(
+				ClientResponse.class);
+
 		// then
 		assertNotNull(clientResponse);
 		assertEquals(404, clientResponse.getStatus());
-		
+
 		verify(dao).findByListIdAndId("otherListId", "someId1");
 	}
 
 	@Test
 	public void testFindOne_existing() {
 		// given
-		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(flashcards.get(0));
-		
+		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
+				flashcards.get(0));
+
 		// when
-		ClientResponse clientResponse = client().resource("/flashcardlists/flashcardListId1/flashcards/someId1")
-				.get(ClientResponse.class);
-		
+		ClientResponse clientResponse = client().resource(
+				"/flashcardlists/flashcardListId1/flashcards/someId1").get(
+				ClientResponse.class);
+
 		// then
 		assertNotNull(clientResponse);
 		assertEquals(200, clientResponse.getStatus());
@@ -121,8 +127,73 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(expected.getCreateDate(), entity.getCreateDate());
 		assertEquals(expected.getFront(), entity.getFront());
 		assertEquals(expected.getBack(), entity.getBack());
-		
+
 		verify(dao).findByListIdAndId("flashcardListId1", "someId1");
+	}
+
+	@Test
+	public void testFindAll_emptyCollection() {
+		// when
+		ClientResponse response = client().resource(
+				"/flashcardlists/flashcardListId1000/flashcards").get(
+				ClientResponse.class);
+
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+
+		verify(dao).findAllByListId("flashcardListId1000");
+		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {};
+		List<Flashcard> entity = response.getEntity(type);
+		
+		assertEquals(0, entity.size());
+
+	}
+
+	@Test
+	public void testFindAll_existing() {
+		// given
+		Flashcard expectedFlashcard = flashcards.get(0);
+		when(dao.findAllByListId("flashcardListId1")).thenReturn(
+				Lists.newArrayList(expectedFlashcard));
+
+		// when
+		ClientResponse response = client().resource(
+				"/flashcardlists/flashcardListId1/flashcards").get(
+				ClientResponse.class);
+
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+
+		verify(dao).findAllByListId("flashcardListId1");
+		
+		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {};
+		List<Flashcard> entity = response.getEntity(type);
+		
+		assertEquals(1, entity.size());
+		assertEquals(expectedFlashcard.getId(), entity.get(0).getId());
+		assertEquals(expectedFlashcard.getCreateDate(), entity.get(0).getCreateDate());
+		assertEquals(expectedFlashcard.getFront(), entity.get(0).getFront());
+		assertEquals(expectedFlashcard.getBack(), entity.get(0).getBack());
+
+	}
+
+	@Test
+	public void testFindAll_noSuchList() {
+		// given
+		when(dao.findAllByListId("otherList")).thenReturn(null);
+
+		// when
+		ClientResponse response = client().resource(
+				"/flashcardlists/otherList/flashcards/").get(
+				ClientResponse.class);
+
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+
+		verify(dao).findAllByListId("otherList");
 	}
 
 }
