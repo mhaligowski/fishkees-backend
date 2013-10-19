@@ -32,6 +32,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@InjectMocks
 	private FlashcardListResource testObj;
 
+	@Mock
+	private FlashcardListDao dao;
+
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
@@ -47,8 +50,6 @@ public class FlashcardListResourceTest extends ResourceTest {
 		verifyNoMoreInteractions(dao);
 	}
 
-	@Mock
-	private FlashcardListDao dao;
 
 	@Test
 	public void testGetFlashcardLists() {
@@ -105,6 +106,18 @@ public class FlashcardListResourceTest extends ResourceTest {
 		verify(dao).findById("12345");
 	}
 
+	@Test
+	public void testFind_nonExisting() {
+		// when
+		ClientResponse clientResponse = client().resource("/flashcardlists/nonExisting").get(ClientResponse.class);
+		
+		// then
+		assertNotNull(clientResponse);
+		assertEquals(404, clientResponse.getStatus());
+		
+		verify(dao).findById("nonExisting");
+	}
+	
 	@Test
 	public void testRemove_existing() {
 		// when
