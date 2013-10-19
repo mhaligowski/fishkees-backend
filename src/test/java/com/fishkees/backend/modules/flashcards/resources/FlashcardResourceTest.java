@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.yammer.dropwizard.testing.ResourceTest;
+import com.yammer.dropwizard.validation.InvalidEntityException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardResourceTest extends ResourceTest {
@@ -92,6 +93,19 @@ public class FlashcardResourceTest extends ResourceTest {
 		verify(dao, never()).createNewFromObject(any(Flashcard.class));
 	}
 
+	@Test(expected = InvalidEntityException.class)
+	public void testCreate_invalidObject() {
+		// given
+		Flashcard flashcard = new Flashcard("someId", null, "newFront",
+				"newBack", new Date());
+
+		// when
+		client().resource("/flashcardlists/otherListId/flashcards")
+				.type(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class, flashcard);
+
+	}
+
 	@Test
 	public void testFindOne_nonExisting() {
 		// when
@@ -143,11 +157,11 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(200, response.getStatus());
 
 		verify(dao).findAllByListId("flashcardListId1000");
-		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {};
+		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {
+		};
 		List<Flashcard> entity = response.getEntity(type);
-		
-		assertEquals(0, entity.size());
 
+		assertEquals(0, entity.size());
 	}
 
 	@Test
@@ -167,13 +181,15 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(200, response.getStatus());
 
 		verify(dao).findAllByListId("flashcardListId1");
-		
-		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {};
+
+		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {
+		};
 		List<Flashcard> entity = response.getEntity(type);
-		
+
 		assertEquals(1, entity.size());
 		assertEquals(expectedFlashcard.getId(), entity.get(0).getId());
-		assertEquals(expectedFlashcard.getCreateDate(), entity.get(0).getCreateDate());
+		assertEquals(expectedFlashcard.getCreateDate(), entity.get(0)
+				.getCreateDate());
 		assertEquals(expectedFlashcard.getFront(), entity.get(0).getFront());
 		assertEquals(expectedFlashcard.getBack(), entity.get(0).getBack());
 
@@ -196,4 +212,107 @@ public class FlashcardResourceTest extends ResourceTest {
 		verify(dao).findAllByListId("otherList");
 	}
 
+	@Test
+	public void testUpdate_OK() {
+		// given
+		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
+				"updated front", "updated back", new Date());
+		when(dao.update(any(Flashcard.class))).thenReturn(toUpdate);
+
+		// when
+		ClientResponse response = client()
+				.resource("/flashcardlists/flashcardListId/flashcards/someId")
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, toUpdate);
+
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+
+		Flashcard updated = response.getEntity(Flashcard.class);
+		assertEquals(toUpdate.getId(), updated.getId());
+		assertEquals(toUpdate.getFlashcardListId(),
+				updated.getFlashcardListId());
+		assertEquals(toUpdate.getFront(), updated.getFront());
+		assertEquals(toUpdate.getBack(), updated.getBack());
+
+		// verify
+		verify(dao).update(any(Flashcard.class));
+	}
+
+	@Test
+	public void testUpdate_conflictingLists() {
+		// given
+		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
+				"updated front", "updated back", new Date());
+
+		// when
+		ClientResponse response = client()
+				.resource(
+						"/flashcardlists/otherFlashcardList/flashcards/someId")
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, toUpdate);
+
+		// then
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+
+		// verify
+		verify(dao, never()).update(any(Flashcard.class));
+	}
+
+	@Test
+	public void testUpdate_conflictingIds() {
+
+		// given
+		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
+				"updated front", "updated back", new Date());
+
+		// when
+		ClientResponse response = client()
+				.resource("/flashcardlists/flashcardListId/flashcards/otherId")
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, toUpdate);
+
+		// then
+		assertNotNull(response);
+		assertEquals(409, response.getStatus());
+
+		// verify
+		verify(dao, never()).update(any(Flashcard.class));
+	}
+
+	@Test(expected = InvalidEntityException.class)
+	public void testUpdate_invalidObject() {
+		// given
+		Flashcard toUpdate = new Flashcard("someId", null, "updated front",
+				"updated back", new Date());
+
+		// when
+		client().resource("/flashcardlists/flashcardListId/flashcards/someId")
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, toUpdate);
+
+	}
+
+	@Test
+	public void testUpdate_notFound() {
+		// given
+		Flashcard toUpdate = new Flashcard("notFoundId", "flashcardListId",
+				"updated front", "updated back", new Date());
+
+		// when
+		ClientResponse response = client()
+				.resource(
+						"/flashcardlists/flashcardListId/flashcards/notFoundId")
+				.type(MediaType.APPLICATION_JSON)
+				.put(ClientResponse.class, toUpdate);
+
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+
+		// verify
+		verify(dao).update(any(Flashcard.class));
+	}
 }

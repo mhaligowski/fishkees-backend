@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +23,8 @@ import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/flashcardlists/{listId}/flashcards")
 public class FlashcardResource {
+	private static final String CONFLICT_ID = "Flashcard id from URL does not match the one from body";
+	private static final String CONFLICT_LIST = "The flashcard list id from URL does not match the one from entity";
 	@Inject
 	private FlashcardDao flashcardDao;
 
@@ -68,4 +71,27 @@ public class FlashcardResource {
 		return Response.created(uri).entity(newFlashcard).build();
 	}
 
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/{flashcardId}")
+	public Response update(@PathParam("listId") String listId,
+			@PathParam("flashcardId") String flashcardId,
+			@Valid Flashcard toUpdate) {
+		if (!listId.equals(toUpdate.getFlashcardListId())) {
+			return Response.status(Status.CONFLICT).entity(CONFLICT_LIST)
+					.build();
+		}
+
+		if (!flashcardId.equals(toUpdate.getId())) {
+			return Response.status(Status.CONFLICT).entity(CONFLICT_ID).build();
+		}
+
+		Flashcard updated = flashcardDao.update(toUpdate);
+
+		if (updated == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+
+		return Response.ok(updated).build();
+	}
 }
