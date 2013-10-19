@@ -48,6 +48,16 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	public Flashcard remove(String id) {
 		return storage.remove(id.toString());
 	}
+	
+	@Override
+	public Flashcard removeByListIdAndId(String listId, String flashcardId) {
+		Flashcard flashcard = findByListIdAndId(listId, flashcardId);
+		if (flashcard == null) {
+			return null;
+		}
+		
+		return storage.remove(flashcardId);
+	}
 
 	@Override
 	public Flashcard update(Flashcard flashcard) {

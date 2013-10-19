@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -93,5 +94,18 @@ public class FlashcardResource {
 		}
 
 		return Response.ok(updated).build();
+	}
+
+	@DELETE
+	@Path("/{flashcardId}")
+	public Response remove(@PathParam("listId") String listId,
+			@PathParam("flashcardId") String flashcardId) {
+		Flashcard removed = flashcardDao.removeByListIdAndId(listId, flashcardId);
+
+		if (removed == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+
+		return Response.ok(removed).build();
 	}
 }

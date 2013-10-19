@@ -315,4 +315,43 @@ public class FlashcardResourceTest extends ResourceTest {
 		// verify
 		verify(dao).update(any(Flashcard.class));
 	}
+
+	@Test
+	public void testRemove_removeOK() {
+		// given
+		Flashcard single = FlashcardFixtures.single();
+		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(single);
+
+		// when
+		ClientResponse response = client().resource("/flashcardlists/flashcardListId/flashcards/someId")
+				.delete(ClientResponse.class);
+		
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		
+		Flashcard entity = response.getEntity(Flashcard.class);
+		assertNotNull(entity);
+		assertEquals("someId", entity.getId());
+		assertEquals("flashcardListId", entity.getFlashcardListId());
+		
+		// verify
+		verify(dao).removeByListIdAndId("flashcardListId", "someId");
+		
+	}
+
+	@Test
+	public void testRemove_DaoReturnsNull() {
+		// when
+		ClientResponse response = client().resource("/flashcardlists/flashcardListId/flashcards/someId")
+				.delete(ClientResponse.class);
+		
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+		
+		// verify
+		verify(dao).removeByListIdAndId("flashcardListId", "someId");
+	}
+
 }

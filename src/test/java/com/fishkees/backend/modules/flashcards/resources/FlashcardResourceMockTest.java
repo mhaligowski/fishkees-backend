@@ -86,7 +86,7 @@ public class FlashcardResourceMockTest {
 
 		verify(dao).findByListIdAndId("flashcardListId1", "someId1");
 	}
-	
+
 	@Test
 	public void testFind_nonExisting() {
 		// when
@@ -143,17 +143,19 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void testUpdate_OK() {
 		// given
-		Flashcard updated = new Flashcard("someId1", "flashcardListId", "updated front", "updated back", new Date());
+		Flashcard updated = new Flashcard("someId1", "flashcardListId",
+				"updated front", "updated back", new Date());
 		when(dao.update(updated)).thenReturn(updated);
-		
+
 		// when
-		Response response = testObj.update("flashcardListId", "someId1", updated);
-		
+		Response response = testObj.update("flashcardListId", "someId1",
+				updated);
+
 		// then
 		assertNotNull(response);
 		assertEquals(200, response.getStatus());
 		assertEquals(updated, response.getEntity());
-		
+
 		verify(dao).update(updated);
 	}
 
@@ -161,29 +163,30 @@ public class FlashcardResourceMockTest {
 	public void testUpdate_conflictingLists() {
 		// given
 		Flashcard toUpdate = FlashcardFixtures.single();
-		
+
 		// when
 		Response response = testObj.update("otherList", "someId1", toUpdate);
-		
+
 		// then
 		assertNotNull(response);
 		assertEquals(409, response.getStatus());
-		
+
 		verify(dao, never()).update(toUpdate);
 	}
-	
+
 	@Test
 	public void testUpdate_conflictingFlashcards() {
 		// given
 		Flashcard toUpdate = FlashcardFixtures.single();
-		
+
 		// when
-		Response response = testObj.update("flashcardListId", "otherFlashcardId", toUpdate);
-		
+		Response response = testObj.update("flashcardListId",
+				"otherFlashcardId", toUpdate);
+
 		// then
 		assertNotNull(response);
 		assertEquals(409, response.getStatus());
-		
+
 		// verify
 		verify(dao, never()).update(toUpdate);
 	}
@@ -194,22 +197,46 @@ public class FlashcardResourceMockTest {
 		Flashcard flashcard = FlashcardFixtures.single();
 
 		// when
-		Response response = testObj.update("flashcardListId", "someId", flashcard);
-		
+		Response response = testObj.update("flashcardListId", "someId",
+				flashcard);
+
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
-		
+
 		verify(dao).update(flashcard);
 	}
-	
+
 	@Test
 	public void testRemove_OK() {
+		// given
+		Flashcard flashcardToRemove = FlashcardFixtures.single();
+		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(
+				flashcardToRemove);
 
+		// when
+		Response response = testObj.remove("flashcardListId", "someId");
+
+		// then
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		assertEquals(flashcardToRemove, response.getEntity());
+
+		// verify
+		verify(dao).removeByListIdAndId("flashcardListId", "someId");
 	}
 
 	@Test
-	public void testRemove_Fail() {
+	public void testRemove_daoReturnsNull() {
+		// when
+		Response response = testObj.remove("otherListId", "someId");
 
+		// then
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+
+		// verify
+		verify(dao).removeByListIdAndId("otherListId", "someId");
 	}
+
 }

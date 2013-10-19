@@ -249,4 +249,31 @@ public class InMemoryFlashcardDaoTest {
 
 		verify(storage).get("id2000");
 	}
+	
+	@Test
+	public void testRemoveByListIdAndId_existingObject() {
+		// when
+		Flashcard flashcard = testObj.removeByListIdAndId("flashcardListId1", ID1);
+		
+		// then
+		assertNotNull(flashcard);
+		
+		// verify
+		verify(storage).get(ID1);
+		verify(storage).remove(ID1);
+	}
+	
+	@Test
+	public void testRemoveByListIdAnd_notExistingObject() {
+		// when
+		Flashcard flashcard = testObj.removeByListIdAndId("flashcardListId11000", ID1);
+		
+		// then
+		assertNull(flashcard);
+		
+		// verify
+		verify(storage).get(ID1);
+		verify(storage, never()).remove(ID1);
+	}
+
 }
