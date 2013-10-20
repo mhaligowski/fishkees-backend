@@ -52,4 +52,16 @@ public class FlashcardsIntegrationTest {
 		assertEquals("someId2", actual.get(2).getId());
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void testStorageFixtureLoading_exception() {
+		// given
+		FixturesConfiguration config = mock(FixturesConfiguration.class);
+		when(config.getFlashcardsPath()).thenReturn("nonExistingPath.json");
+		Injector testObj = Guice.createInjector(ListsModule.simpleModule(),
+				FlashcardsModule.moduleWithFixture(config));
+
+		// when
+		testObj.getInstance(FlashcardInMemoryStorage.class).all();
+	}
+
 }

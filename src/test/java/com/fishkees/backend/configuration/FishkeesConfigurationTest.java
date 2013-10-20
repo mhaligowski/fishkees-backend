@@ -19,6 +19,8 @@ public class FishkeesConfigurationTest {
 		assertNotNull(testObj);
 		assertEquals(12345, testObj.getHttpConfiguration().getPort());
 		assertEquals(54321, testObj.getHttpConfiguration().getAdminPort());
+		assertEquals("../fixtures/flashcards.json", testObj
+				.getFixturesConfiguration().getFlashcardsPath());
 		assertEquals("../fixtures/flashcardlists.json", testObj
 				.getFixturesConfiguration().getFlashcardListsPath());
 	}

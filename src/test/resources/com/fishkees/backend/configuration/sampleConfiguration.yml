@@ -3,3 +3,4 @@ http:
   adminPort: 54321
 fixtures:
   flashcardListsPath: ../fixtures/flashcardlists.json
+  flashcardsPath: ../fixtures/flashcards.json
