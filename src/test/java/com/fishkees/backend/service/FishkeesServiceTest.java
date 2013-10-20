@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.configuration.FishkeesConfiguration;
 import com.fishkees.backend.healthcheck.PingHealthCheck;
+import com.fishkees.backend.modules.flashcards.resources.FlashcardResource;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
 import com.fishkees.backend.task.ResetStorageTask;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -56,7 +57,12 @@ public class FishkeesServiceTest {
 		verify(filterBuilder1).setInitParam(
 				eq(CrossOriginFilter.ALLOWED_METHODS_PARAM),
 				eq("POST,GET,PUT,DELETE"));
-		verify(environment).addResource(any(FlashcardListResource.class));
+		
+		ArgumentCaptor<Object> ac = ArgumentCaptor.forClass(Object.class);
+		verify(environment, times(2)).addResource(ac.capture());
+		assertTrue(ac.getAllValues().get(0) instanceof FlashcardListResource);
+		assertTrue(ac.getAllValues().get(1) instanceof FlashcardResource);
+		
 		verify(environment).addTask(any(ResetStorageTask.class));
 
 		verify(configuration).getFixturesConfiguration();

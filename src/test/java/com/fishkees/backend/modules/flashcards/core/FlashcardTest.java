@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
+
 public class FlashcardTest {
 	private final DateTime dateTime = new DateTime("1986-07-01T12:00Z");
 

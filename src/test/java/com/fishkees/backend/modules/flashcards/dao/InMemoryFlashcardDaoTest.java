@@ -16,8 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
-import com.fishkees.backend.modules.flashcards.core.FlashcardFixtures;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 
