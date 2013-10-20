@@ -1,11 +1,11 @@
 [
     {
-        "id": 1,
+        "id": "someFlashcardListId1",
         "title": "Spanish for beginners",
         "create_date": 1379617022000
     },
     {
-        "id": 2,
+        "id": "someFlashcardListId2",
         "title": "Russian for intermediate",
         "create_date": 1339347167000
     }
