@@ -1,4 +1,4 @@
-package com.fishkees.backend.modules.flashcards.core;
+package com.fishkees.backend.modules.flashcards;
 
 import static com.yammer.dropwizard.testing.JsonHelpers.*;
 
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fishkees.backend.modules.flashcards.core.Flashcard;
 
 public final class FlashcardFixtures {
 	private FlashcardFixtures() {
