@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,14 +22,17 @@ public class ResetStorageTaskTest {
 	private ResetStorageTask testObj;
 	
 	@Mock
-	private FlashcardListInMemoryStorage storage;
+	private FlashcardListInMemoryStorage flashcardListStorage;
 	
 	@Mock
 	private PrintWriter printWriter;
 	
+	@Mock
+	private FlashcardInMemoryStorage flashcardStorage;
+	
 	@After
 	public void tearDown() {
-		verifyNoMoreInteractions(storage, printWriter);
+		verifyNoMoreInteractions(flashcardListStorage, flashcardStorage, printWriter);
 	}
 	
 	@Test
@@ -37,9 +41,13 @@ public class ResetStorageTaskTest {
 		testObj.execute(null, printWriter);
 		
 		// then
-		verify(printWriter, times(2)).println(anyString());
-		verify(storage, times(2)).all();
-		verify(storage).reset();
+		verify(printWriter, times(4)).format(anyString(), anyInt());
+		
+		verify(flashcardStorage, times(2)).all();
+		verify(flashcardStorage).reset();
+		
+		verify(flashcardListStorage, times(2)).all();
+		verify(flashcardListStorage).reset();
 	}
 
 }
