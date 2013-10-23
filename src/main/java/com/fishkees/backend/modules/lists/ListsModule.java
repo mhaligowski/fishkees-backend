@@ -19,9 +19,10 @@ import com.google.inject.Provides;
 import com.yammer.dropwizard.json.ObjectMapperFactory;
 
 public final class ListsModule extends AbstractModule {
-	private FixturesConfiguration config;
+	private final FixturesConfiguration config;
 
 	private ListsModule() {
+		config = null;
 	}
 
 	private ListsModule(FixturesConfiguration config) {

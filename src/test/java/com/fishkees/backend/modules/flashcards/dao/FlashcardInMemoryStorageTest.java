@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
-import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
 import com.google.common.collect.Lists;
 
 public class FlashcardInMemoryStorageTest {

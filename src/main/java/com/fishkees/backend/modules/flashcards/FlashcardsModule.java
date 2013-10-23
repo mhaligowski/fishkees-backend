@@ -17,10 +17,14 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.yammer.dropwizard.json.ObjectMapperFactory;
 
-public class FlashcardsModule extends AbstractModule {
+public final class FlashcardsModule extends AbstractModule {
 
-	private FixturesConfiguration config;
+	private final FixturesConfiguration config;
 
+	private FlashcardsModule() {
+		config = null;
+	}
+	
 	private FlashcardsModule(FixturesConfiguration config) {
 		this.config = config;
 	}
@@ -35,17 +39,17 @@ public class FlashcardsModule extends AbstractModule {
 	FlashcardInMemoryStorage storage() {
 		List<Flashcard> fixtures = null;
 		
-		if (this.config != null) {
-			fixtures = loadFixture(config.getFlashcardsPath());
-		} else {
+		if (this.config == null) {
 			fixtures = Lists.newArrayList();
+		} else {
+			fixtures = loadFixture(config.getFlashcardsPath());
 		}
 			
 		return new FlashcardInMemoryStorage(fixtures);
 	}
 
 	public static FlashcardsModule simpleModule() {
-		return new FlashcardsModule(null);
+		return new FlashcardsModule();
 	}
 
 	public static FlashcardsModule moduleWithFixture(
