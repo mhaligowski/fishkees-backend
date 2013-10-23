@@ -63,6 +63,7 @@ public class FishkeesServiceTest {
 		assertTrue(ac.getAllValues().get(0) instanceof FlashcardListResource);
 		assertTrue(ac.getAllValues().get(1) instanceof FlashcardResource);
 		
+		// verify
 		verify(environment).addTask(any(ResetStorageTask.class));
 
 		verify(configuration).getFixturesConfiguration();

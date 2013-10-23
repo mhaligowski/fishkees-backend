@@ -13,6 +13,7 @@ import com.fishkees.backend.modules.flashcards.resources.FlashcardResource;
 import com.fishkees.backend.modules.lists.ListsModule;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
 import com.fishkees.backend.task.ResetStorageTask;
+import com.fishkees.backend.task.TasksModule;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -59,6 +60,7 @@ public class FishkeesService extends Service<FishkeesConfiguration> {
 		modules.add(ListsModule.moduleWithFixture(fixConf));
 		modules.add(FlashcardsModule.moduleWithFixture(fixConf));
 		modules.add(new HealthChecksModule());
+		modules.add(new TasksModule());
 		return Guice.createInjector(modules);
 	}
 }

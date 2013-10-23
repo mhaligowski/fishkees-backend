@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import javax.inject.Inject;
 
+import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.ImmutableMultimap;
 import com.yammer.dropwizard.tasks.Task;
@@ -11,7 +12,10 @@ import com.yammer.dropwizard.tasks.Task;
 public class ResetStorageTask extends Task {
 
 	@Inject
-	private FlashcardListInMemoryStorage storage;
+	private FlashcardListInMemoryStorage flashcardListStorage;
+	
+	@Inject
+	private FlashcardInMemoryStorage flashcardStorage;
 	
 	public ResetStorageTask() {
 		super("resetStorage");
@@ -20,13 +24,20 @@ public class ResetStorageTask extends Task {
 	@Override
 	public void execute(ImmutableMultimap<String, String> parameters,
 			PrintWriter output) throws Exception {
-		int sizeBefore = storage.all().size();
-		output.println("Resetting the storage: " + sizeBefore);
-		
-		storage.reset();
-		
-		int sizeAfter = storage.all().size();
-		output.println("Storage resetted: " + sizeAfter);
+		printSize(output);
+		doResetStorages();
+		printSize(output);
 	}
 
+	private void printSize(PrintWriter output) {
+		int listSizeAfter = flashcardListStorage.all().size();
+		int flashcardSizeAfter = flashcardStorage.all().size();
+		output.format("Lists storage resetted: %d\n", listSizeAfter);
+		output.format("Flashcards storage resetted: %d\n", flashcardSizeAfter);
+	}
+
+	private void doResetStorages() {
+		flashcardListStorage.reset();
+		flashcardStorage.reset();
+	}
 }
