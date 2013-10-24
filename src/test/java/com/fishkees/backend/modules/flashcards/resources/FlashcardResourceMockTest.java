@@ -35,7 +35,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void test_createProperly() {
+	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = new Flashcard("someId", "someListId",
@@ -55,7 +55,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void test_createImproperly() {
+	public void should_return_409_when_trying_to_create_with_mismatching_ids() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 
@@ -70,7 +70,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testFind_existing() {
+	public void should_return_200_with_object_for_proper_search() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.single();
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
@@ -88,7 +88,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testFind_nonExisting() {
+	public void should_return_404_for_nonexisting_flashcard() {
 		// when
 		Response response = testObj.find("otherList", "someId1");
 
@@ -100,7 +100,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testFindAll_existing() {
+	public void should_return_all_the_objects_with_identical_data() {
 		// given
 		Flashcard resultFlashcard = FlashcardFixtures.all().get(0);
 		when(dao.findAllByListId("flashcardListId1")).thenReturn(
@@ -126,7 +126,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testFindAll_notExisting() {
+	public void should_return_404_for_nonexisting_list() {
 		// given
 		when(dao.findAllByListId(anyString())).thenReturn(null);
 
@@ -141,7 +141,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testUpdate_OK() {
+	public void should_return_200_with_updated_object_when_update_is_successful() {
 		// given
 		Flashcard updated = new Flashcard("someId1", "flashcardListId",
 				"updated front", "updated back", new Date());
@@ -160,7 +160,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testUpdate_conflictingLists() {
+	public void should_return_409_for_update_with_mismatching_list_ids() {
 		// given
 		Flashcard toUpdate = FlashcardFixtures.single();
 
@@ -175,7 +175,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testUpdate_conflictingFlashcards() {
+	public void should_return_409_for_update_with_mismatching_flashcard_ids() {
 		// given
 		Flashcard toUpdate = FlashcardFixtures.single();
 
@@ -192,7 +192,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testUpdate_notExisting() {
+	public void should_return_404_when_updating_non_existing_list() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.single();
 
@@ -208,7 +208,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testRemove_OK() {
+	public void should_return_200_when_removing_went_ok() {
 		// given
 		Flashcard flashcardToRemove = FlashcardFixtures.single();
 		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(
@@ -227,7 +227,7 @@ public class FlashcardResourceMockTest {
 	}
 
 	@Test
-	public void testRemove_daoReturnsNull() {
+	public void should_return_404_when_either_list_or_flashcard_was_not_found() {
 		// when
 		Response response = testObj.remove("otherListId", "someId");
 

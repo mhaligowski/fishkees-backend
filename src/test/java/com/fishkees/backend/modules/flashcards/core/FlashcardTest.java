@@ -12,7 +12,7 @@ public class FlashcardTest {
 	private final DateTime dateTime = new DateTime("1986-07-01T12:00Z");
 
 	@Test
-	public void serializeToJson() throws Exception {
+	public void should_serialize_to_expected() throws Exception {
 		// given
 		final String expectedFromFile = jsonFixture("fixtures/flashcards/single.json");
 
@@ -24,7 +24,7 @@ public class FlashcardTest {
 	}
 
 	@Test
-	public void deserializeFromJson() throws Exception {
+	public void should_remain_after_deserialization() throws Exception {
 		// given
 		final Flashcard expected = flashcard();
 

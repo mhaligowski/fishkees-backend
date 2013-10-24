@@ -1,5 +1,6 @@
 package com.fishkees.backend.modules.flashcards.resources;
 
+import static org.fest.assertions.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -50,7 +51,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testCreate_properly() {
+	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = new Flashcard("someId", "someListId",
@@ -76,7 +77,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testCreate_improperly() {
+	public void should_return_409_when_trying_to_create_with_mismatching_ids() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 
@@ -94,7 +95,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test(expected = InvalidEntityException.class)
-	public void testCreate_invalidObject() {
+	public void should_throw_exception_when_the_incoming_entity_is_invalid() {
 		// given
 		Flashcard flashcard = new Flashcard("someId", null, "newFront",
 				"newBack", new Date());
@@ -107,7 +108,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testFindOne_nonExisting() {
+	public void should_return_404_when_findin_non_existing() {
 		// when
 		ClientResponse clientResponse = client().resource(
 				"/flashcardlists/otherListId/flashcards/someId1").get(
@@ -121,7 +122,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testFindOne_existing() {
+	public void should_return_the_proper_element() {
 		// given
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
 				flashcards.get(0));
@@ -146,7 +147,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testFindAll_emptyCollection() {
+	public void should_return_empty_collection_when_looking_for_existing_list() {
 		// when
 		ClientResponse response = client().resource(
 				"/flashcardlists/flashcardListId1000/flashcards").get(
@@ -159,13 +160,12 @@ public class FlashcardResourceTest extends ResourceTest {
 		verify(dao).findAllByListId("flashcardListId1000");
 		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {
 		};
-		List<Flashcard> entity = response.getEntity(type);
+		assertThat(response.getEntity(type)).isEmpty();;
 
-		assertEquals(0, entity.size());
 	}
 
 	@Test
-	public void testFindAll_existing() {
+	public void should_return_list_of_flashcard_when_calling_existing_list_id() {
 		// given
 		Flashcard expectedFlashcard = flashcards.get(0);
 		when(dao.findAllByListId("flashcardListId1")).thenReturn(
@@ -196,7 +196,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testFindAll_noSuchList() {
+	public void should_return_404_when_looking_for_flashcards_from_nonexisting_list() {
 		// given
 		when(dao.findAllByListId("otherList")).thenReturn(null);
 
@@ -213,7 +213,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_OK() {
+	public void should_return_200_and_object_when_updating_properly() {
 		// given
 		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
 				"updated front", "updated back", new Date());
@@ -241,7 +241,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_conflictingLists() {
+	public void should_return_409_when_mismatching_ids() {
 		// given
 		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
 				"updated front", "updated back", new Date());
@@ -262,7 +262,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_conflictingIds() {
+	public void should_return_409_when_mismathing_flashcard_ids() {
 
 		// given
 		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
@@ -283,7 +283,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test(expected = InvalidEntityException.class)
-	public void testUpdate_invalidObject() {
+	public void should_throw_exception_when_the_incoming_entity_is_invalid_in_update() {
 		// given
 		Flashcard toUpdate = new Flashcard("someId", null, "updated front",
 				"updated back", new Date());
@@ -296,7 +296,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_notFound() {
+	public void should_return_404_when_updating_non_existing() {
 		// given
 		Flashcard toUpdate = new Flashcard("notFoundId", "flashcardListId",
 				"updated front", "updated back", new Date());
@@ -317,39 +317,42 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testRemove_removeOK() {
+	public void should_return_200_and_removed_object_if_removing_is_successful() {
 		// given
 		Flashcard single = FlashcardFixtures.single();
-		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(single);
+		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(
+				single);
 
 		// when
-		ClientResponse response = client().resource("/flashcardlists/flashcardListId/flashcards/someId")
-				.delete(ClientResponse.class);
-		
+		ClientResponse response = client().resource(
+				"/flashcardlists/flashcardListId/flashcards/someId").delete(
+				ClientResponse.class);
+
 		// then
 		assertNotNull(response);
 		assertEquals(200, response.getStatus());
-		
+
 		Flashcard entity = response.getEntity(Flashcard.class);
 		assertNotNull(entity);
 		assertEquals("someId", entity.getId());
 		assertEquals("flashcardListId", entity.getFlashcardListId());
-		
+
 		// verify
 		verify(dao).removeByListIdAndId("flashcardListId", "someId");
-		
+
 	}
 
 	@Test
-	public void testRemove_DaoReturnsNull() {
+	public void should_return_404_when_not_existing_list_or_flashcard() {
 		// when
-		ClientResponse response = client().resource("/flashcardlists/flashcardListId/flashcards/someId")
-				.delete(ClientResponse.class);
-		
+		ClientResponse response = client().resource(
+				"/flashcardlists/flashcardListId/flashcards/someId").delete(
+				ClientResponse.class);
+
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
-		
+
 		// verify
 		verify(dao).removeByListIdAndId("flashcardListId", "someId");
 	}
