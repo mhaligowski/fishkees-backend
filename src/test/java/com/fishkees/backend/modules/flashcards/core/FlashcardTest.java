@@ -33,15 +33,19 @@ public class FlashcardTest {
 
 		// then
 		assertEquals(expected.getId(), actualFromJson.getId());
-		assertEquals(expected.getFlashcardListId(), actualFromJson.getFlashcardListId());
+		assertEquals(expected.getFlashcardListId(),
+				actualFromJson.getFlashcardListId());
 		assertEquals(expected.getBack(), actualFromJson.getBack());
 		assertEquals(expected.getFront(), actualFromJson.getFront());
 		assertEquals(expected.getCreateDate(), actualFromJson.getCreateDate());
-		
+
 	}
 
 	private Flashcard flashcard() {
-		return new Flashcard("someId", "flashcardListId", "front text",
-				"back text", dateTime.toDate());
+		return FlashcardTestBuilder.withId("someId")
+				.withParent("flashcardListId")
+				.withValues("front text", "back text")
+				.createdOn(dateTime.toDate()).build();
+
 	}
 }

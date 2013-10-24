@@ -3,7 +3,7 @@ package com.fishkees.backend.modules.flashcards.core;
 import java.util.Date;
 import java.util.UUID;
 
-public final class FlashcardBuilder {
+public final class FlashcardTestBuilder {
 
 	private String id;
 	private String flashcardListId;
@@ -11,34 +11,28 @@ public final class FlashcardBuilder {
 	private String front;
 	private Date createDate = new Date();
 	
-	private FlashcardBuilder() { }
+	private FlashcardTestBuilder(String id) { this.id = id; }
 	
-	public static FlashcardBuilder nullFlashcard() {
-		return new FlashcardBuilder();
+	public static FlashcardTestBuilder withRandomId() {
+		return new FlashcardTestBuilder(UUID.randomUUID().toString());
+	}
+
+	public static FlashcardTestBuilder withId(String id) {
+		return new FlashcardTestBuilder(id);
 	}
 	
-	public FlashcardBuilder withRandomId() {
-		this.id = UUID.randomUUID().toString();
-		return this;
-	}
-	
-	public FlashcardBuilder withId(String id) {
-		this.id = id;
-		return this;
-	}
-	
-	public FlashcardBuilder withParent(String flashcardListId) {
+	public FlashcardTestBuilder withParent(String flashcardListId) {
 		this.flashcardListId = flashcardListId;
 		return this;
 	}
 	
-	public FlashcardBuilder withValues(String front, String back) {
+	public FlashcardTestBuilder withValues(String front, String back) {
 		this.front = front;
 		this.back = back;
 		return this;
 	}
 	
-	public FlashcardBuilder createdOn(Date date) {
+	public FlashcardTestBuilder createdOn(Date date) {
 		this.createDate = date;
 		return this;
 	}
