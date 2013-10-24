@@ -12,7 +12,7 @@ public class FlashcardTest {
 	private final DateTime dateTime = new DateTime("1986-07-01T12:00Z");
 
 	@Test
-	public void serializeToJson() throws Exception {
+	public void should_serialize_to_expected() throws Exception {
 		// given
 		final String expectedFromFile = jsonFixture("fixtures/flashcards/single.json");
 
@@ -24,7 +24,7 @@ public class FlashcardTest {
 	}
 
 	@Test
-	public void deserializeFromJson() throws Exception {
+	public void should_remain_after_deserialization() throws Exception {
 		// given
 		final Flashcard expected = flashcard();
 
@@ -33,15 +33,19 @@ public class FlashcardTest {
 
 		// then
 		assertEquals(expected.getId(), actualFromJson.getId());
-		assertEquals(expected.getFlashcardListId(), actualFromJson.getFlashcardListId());
+		assertEquals(expected.getFlashcardListId(),
+				actualFromJson.getFlashcardListId());
 		assertEquals(expected.getBack(), actualFromJson.getBack());
 		assertEquals(expected.getFront(), actualFromJson.getFront());
 		assertEquals(expected.getCreateDate(), actualFromJson.getCreateDate());
-		
+
 	}
 
 	private Flashcard flashcard() {
-		return new Flashcard("someId", "flashcardListId", "front text",
-				"back text", dateTime.toDate());
+		return FlashcardTestBuilder.withId("someId")
+				.withParent("flashcardListId")
+				.withValues("front text", "back text")
+				.createdOn(dateTime.toDate()).build();
+
 	}
 }

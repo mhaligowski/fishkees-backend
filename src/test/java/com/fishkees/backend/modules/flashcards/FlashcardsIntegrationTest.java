@@ -17,7 +17,7 @@ import com.google.inject.Injector;
 public class FlashcardsIntegrationTest {
 
 	@Test
-	public void testStorageIsSingleton() {
+	public void should_get_the_same_storage_each_time() {
 		// given
 		Injector injector = Guice.createInjector(ListsModule.simpleModule(),
 				FlashcardsModule.simpleModule());
@@ -33,7 +33,7 @@ public class FlashcardsIntegrationTest {
 	}
 
 	@Test
-	public void testStorageFixtureLoading() {
+	public void should_return_expected_values_for_fixture() {
 		// given
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardsPath()).thenReturn(
@@ -53,7 +53,7 @@ public class FlashcardsIntegrationTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testStorageFixtureLoading_exception() {
+	public void should_throw_runtime_exception_when_trying_to_load_not_existing_fixture() {
 		// given
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardsPath()).thenReturn("nonExistingPath.json");
