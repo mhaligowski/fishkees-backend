@@ -55,14 +55,14 @@ public class FlashcardResourceTest extends ResourceTest {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = newFlashcardWithId("someId")
-				.withParent("someListId").withValues("front text", "back text")
+				.withParent("flashcardListId").withValues("front text", "back text")
 				.build();
 		when(dao.createNewFromObject(any(Flashcard.class)))
 				.thenReturn(expected);
 
 		// when
 		ClientResponse response = client()
-				.resource("/flashcardlists/someListId/flashcards")
+				.resource("/flashcardlists/flashcardListId/flashcards")
 				.type(MediaType.APPLICATION_JSON)
 				.post(ClientResponse.class, flashcard);
 
@@ -71,7 +71,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(201, response.getStatus());
 		assertEquals("application/json",
 				response.getHeaders().get("Content-Type").get(0));
-		assertEquals("/flashcardlists/someListId/flashcards/someId", response
+		assertEquals("/flashcardlists/flashcardListId/flashcards/someId", response
 				.getHeaders().get("Location").get(0));
 
 		verify(dao).createNewFromObject(any(Flashcard.class));

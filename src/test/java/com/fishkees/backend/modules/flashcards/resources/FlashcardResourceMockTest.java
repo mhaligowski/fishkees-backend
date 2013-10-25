@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,17 +19,31 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
+import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardResourceMockTest {
 
+	private static final String DEFAULT_BACK = "back text";
+	private static final String DEFAULT_FRONT = "front text";
+	private static final String DEFAULT_ID = "someId";
+	private static final String DEFAULT_PARENT_ID = "flashcardListId";
+
 	@InjectMocks
 	private FlashcardResource testObj;
 
 	@Mock
 	private FlashcardDao dao;
+
+	private FlashcardTestBuilder flashcardBuilder;
+
+	@Before
+	public void setUp() {
+		flashcardBuilder = newFlashcardWithId(DEFAULT_ID).withParent(
+				DEFAULT_PARENT_ID).withValues(DEFAULT_FRONT, DEFAULT_BACK);
+	}
 
 	@After
 	public void tearDown() {
@@ -39,13 +54,11 @@ public class FlashcardResourceMockTest {
 	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
-		Flashcard expected = newFlashcardWithId("someId")
-				.withParent("someListId").withValues("front text", "back text")
-				.build();
+		Flashcard expected = flashcardBuilder.build();
 		when(dao.createNewFromObject(flashcard)).thenReturn(expected);
 
 		// when
-		Response response = testObj.create("someListId", flashcard);
+		Response response = testObj.create(DEFAULT_PARENT_ID, flashcard);
 
 		// then
 		assertNotNull(response);
@@ -145,13 +158,12 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_200_with_updated_object_when_update_is_successful() {
 		// given
-		Flashcard updated = newFlashcardWithId("someId1")
-				.withParent("flashcardListId")
-				.withValues("updated front", "updated back").build();
+		Flashcard updated = flashcardBuilder.withValues("updated front",
+				"updated back").build();
 		when(dao.update(updated)).thenReturn(updated);
 
 		// when
-		Response response = testObj.update("flashcardListId", "someId1",
+		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,
 				updated);
 
 		// then
@@ -168,7 +180,7 @@ public class FlashcardResourceMockTest {
 		Flashcard toUpdate = FlashcardFixtures.single();
 
 		// when
-		Response response = testObj.update("otherList", "someId1", toUpdate);
+		Response response = testObj.update("otherList", DEFAULT_ID, toUpdate);
 
 		// then
 		assertNotNull(response);
@@ -183,7 +195,7 @@ public class FlashcardResourceMockTest {
 		Flashcard toUpdate = FlashcardFixtures.single();
 
 		// when
-		Response response = testObj.update("flashcardListId",
+		Response response = testObj.update(DEFAULT_PARENT_ID,
 				"otherFlashcardId", toUpdate);
 
 		// then
@@ -200,7 +212,7 @@ public class FlashcardResourceMockTest {
 		Flashcard flashcard = FlashcardFixtures.single();
 
 		// when
-		Response response = testObj.update("flashcardListId", "someId",
+		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,
 				flashcard);
 
 		// then
@@ -214,11 +226,11 @@ public class FlashcardResourceMockTest {
 	public void should_return_200_when_removing_went_ok() {
 		// given
 		Flashcard flashcardToRemove = FlashcardFixtures.single();
-		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(
-				flashcardToRemove);
+		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
+				.thenReturn(flashcardToRemove);
 
 		// when
-		Response response = testObj.remove("flashcardListId", "someId");
+		Response response = testObj.remove(DEFAULT_PARENT_ID, DEFAULT_ID);
 
 		// then
 		assertNotNull(response);
@@ -226,20 +238,20 @@ public class FlashcardResourceMockTest {
 		assertEquals(flashcardToRemove, response.getEntity());
 
 		// verify
-		verify(dao).removeByListIdAndId("flashcardListId", "someId");
+		verify(dao).removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID);
 	}
 
 	@Test
 	public void should_return_404_when_either_list_or_flashcard_was_not_found() {
 		// when
-		Response response = testObj.remove("otherListId", "someId");
+		Response response = testObj.remove("otherListId", DEFAULT_ID);
 
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
 
 		// verify
-		verify(dao).removeByListIdAndId("otherListId", "someId");
+		verify(dao).removeByListIdAndId("otherListId", DEFAULT_ID);
 	}
 
 }

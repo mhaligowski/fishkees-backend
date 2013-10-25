@@ -1,5 +1,5 @@
 {
-	"flashcard_list_id": "someListId",
+	"flashcard_list_id": "flashcardListId",
 	"front": "front text",
 	"back": "back text"
 }
