@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
+import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
@@ -29,6 +31,11 @@ import com.yammer.dropwizard.validation.InvalidEntityException;
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardResourceTest extends ResourceTest {
 
+	private static final String DEFAULT_BACK = "back text";
+	private static final String DEFAULT_FRONT = "front text";
+	private static final String DEFAULT_PARENT_ID = "flashcardListId";
+	private static final String DEFAULT_ID = "someId";
+
 	@InjectMocks
 	private FlashcardResource testObj;
 
@@ -36,6 +43,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	private FlashcardDao dao;
 
 	private List<Flashcard> flashcards;
+	private FlashcardTestBuilder flashcardBuilder;
 
 	@Override
 	protected void setUpResources() throws Exception {
@@ -43,6 +51,12 @@ public class FlashcardResourceTest extends ResourceTest {
 		when(dao.findAll()).thenReturn(flashcards);
 
 		addResource(testObj);
+	}
+
+	@Before
+	public void setUp() {
+		flashcardBuilder = newFlashcardWithId(DEFAULT_ID).withParent(
+				DEFAULT_PARENT_ID).withValues(DEFAULT_FRONT, DEFAULT_BACK);
 	}
 
 	@After
@@ -54,9 +68,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
-		Flashcard expected = newFlashcardWithId("someId")
-				.withParent("flashcardListId").withValues("front text", "back text")
-				.build();
+		Flashcard expected = flashcardBuilder.build();
 		when(dao.createNewFromObject(any(Flashcard.class)))
 				.thenReturn(expected);
 
@@ -71,8 +83,8 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(201, response.getStatus());
 		assertEquals("application/json",
 				response.getHeaders().get("Content-Type").get(0));
-		assertEquals("/flashcardlists/flashcardListId/flashcards/someId", response
-				.getHeaders().get("Location").get(0));
+		assertEquals("/flashcardlists/flashcardListId/flashcards/someId",
+				response.getHeaders().get("Location").get(0));
 
 		verify(dao).createNewFromObject(any(Flashcard.class));
 	}
@@ -96,10 +108,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test(expected = InvalidEntityException.class)
-	public void should_throw_exception_when_the_incoming_entity_is_invalid() {
+	public void should_throw_exception_when_the_incoming_entity_has_no_parent() {
 		// given
-		Flashcard flashcard = newFlashcardWithId("someId").withValues(
-				"newFront", "newBack").build();
+		Flashcard flashcard = flashcardBuilder.withParent(null).build();
 
 		// when
 		client().resource("/flashcardlists/otherListId/flashcards")
@@ -217,9 +228,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_200_and_object_when_updating_properly() {
 		// given
-		Flashcard toUpdate = newFlashcardWithId("someId")
-				.withParent("flashcardListId")
-				.withValues("update front", "updated back").build();
+		Flashcard toUpdate = flashcardBuilder.withValues("update front",
+				"updated back").build();
 		when(dao.update(any(Flashcard.class))).thenReturn(toUpdate);
 
 		// when
@@ -246,9 +256,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_409_when_mismatching_ids() {
 		// given
-		Flashcard toUpdate = newFlashcardWithId("someId")
-				.withParent("flashcardListId")
-				.withValues("updated front", "updated back").build();
+		Flashcard toUpdate = flashcardBuilder.withValues("updated front",
+				"updated back").build();
 
 		// when
 		ClientResponse response = client()
@@ -269,9 +278,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_409_when_mismathing_flashcard_ids() {
 
 		// given
-		Flashcard toUpdate = newFlashcardWithId("someId")
-				.withParent("flashcardListId")
-				.withValues("updated front", "updated back").build();
+		Flashcard toUpdate = flashcardBuilder.withValues("updated front",
+				"updated back").build();
 
 		// when
 		ClientResponse response = client()
@@ -290,7 +298,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test(expected = InvalidEntityException.class)
 	public void should_throw_exception_when_the_incoming_entity_is_invalid_in_update() {
 		// given
-		Flashcard toUpdate = newFlashcardWithId("someId").withParent(null)
+		Flashcard toUpdate = flashcardBuilder.withParent(null)
 				.withValues("updated front", "updated back").build();
 
 		// when
@@ -303,8 +311,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_updating_non_existing() {
 		// given
-		Flashcard toUpdate = newFlashcardWithId("notFoundId")
-				.withParent("flashcardListId")
+		Flashcard toUpdate = flashcardBuilder.updateId("notFoundId")
 				.withValues("updated front", "updated back").build();
 
 		// when
@@ -316,7 +323,8 @@ public class FlashcardResourceTest extends ResourceTest {
 
 		// then
 		assertNotNull(response);
-		assertEquals(404, response.getStatus());
+		assertEquals(response.getEntity(String.class), 404,
+				response.getStatus());
 
 		// verify
 		verify(dao).update(any(Flashcard.class));
@@ -326,8 +334,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_200_and_removed_object_if_removing_is_successful() {
 		// given
 		Flashcard single = FlashcardFixtures.single();
-		when(dao.removeByListIdAndId("flashcardListId", "someId")).thenReturn(
-				single);
+		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
+				.thenReturn(single);
 
 		// when
 		ClientResponse response = client().resource(
@@ -340,11 +348,11 @@ public class FlashcardResourceTest extends ResourceTest {
 
 		Flashcard entity = response.getEntity(Flashcard.class);
 		assertNotNull(entity);
-		assertEquals("someId", entity.getId());
-		assertEquals("flashcardListId", entity.getFlashcardListId());
+		assertEquals(DEFAULT_ID, entity.getId());
+		assertEquals(DEFAULT_PARENT_ID, entity.getFlashcardListId());
 
 		// verify
-		verify(dao).removeByListIdAndId("flashcardListId", "someId");
+		verify(dao).removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID);
 
 	}
 
@@ -360,7 +368,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		assertEquals(404, response.getStatus());
 
 		// verify
-		verify(dao).removeByListIdAndId("flashcardListId", "someId");
+		verify(dao).removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID);
 	}
 
 }

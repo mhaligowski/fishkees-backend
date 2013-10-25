@@ -36,6 +36,11 @@ public final class FlashcardTestBuilder {
 		this.createDate = date;
 		return this;
 	}
+
+	public FlashcardTestBuilder updateId(String newId) {
+		this.id = newId;
+		return this;
+	}
 	
 	public Flashcard build() {
 		return new Flashcard(id, flashcardListId, front, back, createDate);
