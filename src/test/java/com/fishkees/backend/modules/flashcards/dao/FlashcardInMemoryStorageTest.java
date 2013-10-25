@@ -17,11 +17,11 @@ public class FlashcardInMemoryStorageTest {
 	private static final String ID2 = "fId2";
 	private static final String ID3 = "fId3";
 	private FlashcardInMemoryStorage testObj;
-	private final Flashcard f1 = FlashcardTestBuilder.withId(ID1)
+	private final Flashcard f1 = FlashcardTestBuilder.newFlashcardWithId(ID1)
 			.withParent("FL1").withValues("front 1", "back 1").build();;
-	private Flashcard f2 = FlashcardTestBuilder.withId(ID2).withParent("FL2")
+	private Flashcard f2 = FlashcardTestBuilder.newFlashcardWithId(ID2).withParent("FL2")
 			.withValues("front 2", "back 2").build();
-	private Flashcard f3 = FlashcardTestBuilder.withId(ID3).withParent("FL3")
+	private Flashcard f3 = FlashcardTestBuilder.newFlashcardWithId(ID3).withParent("FL3")
 			.withValues("front 3", "back 3").build();
 
 	@Before
@@ -33,7 +33,7 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_return_flashcard_id() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId("12345").build();
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId("12345").build();
 
 		// when
 		String actual = testObj.getId(f);
@@ -45,7 +45,7 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_save_new_flashcard() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId("15").build();
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId("15").build();
 
 		// when
 		testObj.put(f.getId(), f);
@@ -91,7 +91,7 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_restore_the_initial_state() {
 		// given
-		Flashcard n = FlashcardTestBuilder.withId("100")
+		Flashcard n = FlashcardTestBuilder.newFlashcardWithId("100")
 				.withParent("other list")
 				.withValues("other front", "other back").build();
 		this.testObj.put("100", n);
@@ -128,7 +128,7 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_update_the_flashcard_and_return_when_stored() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId(ID1)
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(ID1)
 				.withParent("updatedListId")
 				.withValues("updated front", "updated back").build();
 
@@ -146,7 +146,7 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_do_nothing_when_updating_non_existing() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId("4")
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId("4")
 				.withValues("updated front", "updated back")
 				.withParent("updatedList").build();
 

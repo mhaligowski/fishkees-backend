@@ -1,9 +1,10 @@
 package com.fishkees.backend.modules.flashcards.resources;
 
+import static com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder.*;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -38,8 +39,9 @@ public class FlashcardResourceMockTest {
 	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
-		Flashcard expected = new Flashcard("someId", "someListId",
-				"front text", "back text", new Date());
+		Flashcard expected = newFlashcardWithId("someId")
+				.withParent("someListId").withValues("front text", "back text")
+				.build();
 		when(dao.createNewFromObject(flashcard)).thenReturn(expected);
 
 		// when
@@ -143,8 +145,9 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_200_with_updated_object_when_update_is_successful() {
 		// given
-		Flashcard updated = new Flashcard("someId1", "flashcardListId",
-				"updated front", "updated back", new Date());
+		Flashcard updated = newFlashcardWithId("someId1")
+				.withParent("flashcardListId")
+				.withValues("updated front", "updated back").build();
 		when(dao.update(updated)).thenReturn(updated);
 
 		// when

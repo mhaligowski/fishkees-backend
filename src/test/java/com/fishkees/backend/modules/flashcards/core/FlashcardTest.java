@@ -42,7 +42,7 @@ public class FlashcardTest {
 	}
 
 	private Flashcard flashcard() {
-		return FlashcardTestBuilder.withId("someId")
+		return FlashcardTestBuilder.newFlashcardWithId("someId")
 				.withParent("flashcardListId")
 				.withValues("front text", "back text")
 				.createdOn(dateTime.toDate()).build();

@@ -1,11 +1,11 @@
 package com.fishkees.backend.modules.flashcards.resources;
 
+import static com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder.*;
 import static org.fest.assertions.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -54,8 +54,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_201_after_properly_creating() {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
-		Flashcard expected = new Flashcard("someId", "someListId",
-				"front text", "back text", new Date());
+		Flashcard expected = newFlashcardWithId("someId")
+				.withParent("someListId").withValues("front text", "back text")
+				.build();
 		when(dao.createNewFromObject(any(Flashcard.class)))
 				.thenReturn(expected);
 
@@ -97,8 +98,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test(expected = InvalidEntityException.class)
 	public void should_throw_exception_when_the_incoming_entity_is_invalid() {
 		// given
-		Flashcard flashcard = new Flashcard("someId", null, "newFront",
-				"newBack", new Date());
+		Flashcard flashcard = newFlashcardWithId("someId").withValues(
+				"newFront", "newBack").build();
 
 		// when
 		client().resource("/flashcardlists/otherListId/flashcards")
@@ -160,7 +161,8 @@ public class FlashcardResourceTest extends ResourceTest {
 		verify(dao).findAllByListId("flashcardListId1000");
 		GenericType<List<Flashcard>> type = new GenericType<List<Flashcard>>() {
 		};
-		assertThat(response.getEntity(type)).isEmpty();;
+		assertThat(response.getEntity(type)).isEmpty();
+		;
 
 	}
 
@@ -215,8 +217,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_200_and_object_when_updating_properly() {
 		// given
-		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
-				"updated front", "updated back", new Date());
+		Flashcard toUpdate = newFlashcardWithId("someId")
+				.withParent("flashcardListId")
+				.withValues("update front", "updated back").build();
 		when(dao.update(any(Flashcard.class))).thenReturn(toUpdate);
 
 		// when
@@ -243,8 +246,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_409_when_mismatching_ids() {
 		// given
-		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
-				"updated front", "updated back", new Date());
+		Flashcard toUpdate = newFlashcardWithId("someId")
+				.withParent("flashcardListId")
+				.withValues("updated front", "updated back").build();
 
 		// when
 		ClientResponse response = client()
@@ -265,8 +269,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_409_when_mismathing_flashcard_ids() {
 
 		// given
-		Flashcard toUpdate = new Flashcard("someId", "flashcardListId",
-				"updated front", "updated back", new Date());
+		Flashcard toUpdate = newFlashcardWithId("someId")
+				.withParent("flashcardListId")
+				.withValues("updated front", "updated back").build();
 
 		// when
 		ClientResponse response = client()
@@ -285,8 +290,8 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test(expected = InvalidEntityException.class)
 	public void should_throw_exception_when_the_incoming_entity_is_invalid_in_update() {
 		// given
-		Flashcard toUpdate = new Flashcard("someId", null, "updated front",
-				"updated back", new Date());
+		Flashcard toUpdate = newFlashcardWithId("someId").withParent(null)
+				.withValues("updated front", "updated back").build();
 
 		// when
 		client().resource("/flashcardlists/flashcardListId/flashcards/someId")
@@ -298,8 +303,9 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_updating_non_existing() {
 		// given
-		Flashcard toUpdate = new Flashcard("notFoundId", "flashcardListId",
-				"updated front", "updated back", new Date());
+		Flashcard toUpdate = newFlashcardWithId("notFoundId")
+				.withParent("flashcardListId")
+				.withValues("updated front", "updated back").build();
 
 		// when
 		ClientResponse response = client()

@@ -71,7 +71,7 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_store_new_flashcard_from_partial() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId(null)
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(null)
 				.withParent("flashcardListId1").withValues("front 1", "back 1")
 				.build();
 		when(storage.getNewId()).thenReturn(ID1);
@@ -139,7 +139,7 @@ public class InMemoryFlashcardDaoTest {
 	public void should_return_null_if_updating_non_existing() {
 		// given
 		String NON_EXISTING = "10";
-		Flashcard f = FlashcardTestBuilder.withId(NON_EXISTING).build();
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(NON_EXISTING).build();
 
 		// when
 		Flashcard update = testObj.update(f);
@@ -152,7 +152,7 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_updated_value() {
 		// given
-		Flashcard f = FlashcardTestBuilder.withId(ID1)
+		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(ID1)
 				.withParent("flashcardList1").withValues("front 1", "back 1")
 				.build();
 		when(storage.update(ID1, f)).thenReturn(f);

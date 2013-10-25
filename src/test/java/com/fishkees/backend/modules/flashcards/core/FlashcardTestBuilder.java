@@ -13,11 +13,11 @@ public final class FlashcardTestBuilder {
 	
 	private FlashcardTestBuilder(String id) { this.id = id; }
 	
-	public static FlashcardTestBuilder withRandomId() {
+	public static FlashcardTestBuilder newFlashcardWithRandomId() {
 		return new FlashcardTestBuilder(UUID.randomUUID().toString());
 	}
 
-	public static FlashcardTestBuilder withId(String id) {
+	public static FlashcardTestBuilder newFlashcardWithId(String id) {
 		return new FlashcardTestBuilder(id);
 	}
 	
