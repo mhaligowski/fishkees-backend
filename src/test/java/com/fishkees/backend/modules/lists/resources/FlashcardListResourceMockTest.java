@@ -1,11 +1,11 @@
 package com.fishkees.backend.modules.lists.resources;
 
+import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
 import static org.fest.assertions.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -23,6 +23,9 @@ import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceMockTest {
+	private static final String ID1 = "1";
+	private static final String NONEXISTING = "nonexisting";
+
 	@InjectMocks
 	private FlashcardListResource testObj;
 
@@ -30,12 +33,12 @@ public class FlashcardListResourceMockTest {
 	private FlashcardListDao flashcardListDao;
 
 	@After
-	public void teardDown() {
+	public void tearDown() {
 		verifyNoMoreInteractions(flashcardListDao);
 	}
 
 	@Test
-	public void test_getAll() throws IOException {
+	public void should_return_the_list() throws IOException {
 		// given
 		List<FlashcardList> lists = FlashcardListFixtures.all();
 		when(flashcardListDao.findAll()).thenReturn(lists);
@@ -49,34 +52,34 @@ public class FlashcardListResourceMockTest {
 	}
 
 	@Test
-	public void test_Find() throws Exception {
+	public void should_return_the_appropriate_list() throws Exception {
 		// given
 		FlashcardList list = FlashcardListFixtures.single();
-		when(flashcardListDao.findById("1")).thenReturn(list);
+		when(flashcardListDao.findById(ID1)).thenReturn(list);
 
 		// when
-		Response result = testObj.find("1");
+		Response result = testObj.find(ID1);
 
 		// then
 		assertEquals(list, result.getEntity());
-		verify(flashcardListDao).findById("1");
+		verify(flashcardListDao).findById(ID1);
 	}
-	
+
 	@Test
-	public void testFind_nonExisting() {
+	public void should_result_with_404_when_nonexisting() {
 		// when
-		Response result = testObj.find("nonExisting");
+		Response result = testObj.find(NONEXISTING);
 
 		// then
 		assertEquals(404, result.getStatus());
-		verify(flashcardListDao).findById("nonExisting");
+		verify(flashcardListDao).findById(NONEXISTING);
 	}
 
 	@Test
-	public void test_Create() throws Exception {
+	public void should_return_200_with_object_when_creating() throws Exception {
 		// given
 		FlashcardList listData = FlashcardListFixtures.partial();
-		FlashcardList newList = new FlashcardList("1", "abcd", new Date());
+		FlashcardList newList = newListWithId(ID1).withTitle("abcd").build();
 		when(flashcardListDao.createNewFromObject(listData))
 				.thenReturn(newList);
 
@@ -90,7 +93,7 @@ public class FlashcardListResourceMockTest {
 	}
 
 	@Test
-	public void testRemove_existing() throws Exception {
+	public void should_return_200_with_removed_object() throws Exception {
 		// given
 		FlashcardList flashcardList = FlashcardListFixtures.single();
 		String id = flashcardList.getId();
@@ -108,54 +111,54 @@ public class FlashcardListResourceMockTest {
 	}
 
 	@Test
-	public void testRemove_nonExisting() throws Exception {
+	public void should_return_404_when_returning_nonexisting() throws Exception {
 		// when
-		Response response = testObj.remove("12345");
+		Response response = testObj.remove(NONEXISTING);
 
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
 
-		verify(flashcardListDao).remove("12345");
+		verify(flashcardListDao).remove(NONEXISTING);
 	}
 
 	@Test
-	public void testUpdate_conflicting() throws Exception {
+	public void should_return_409_when_updating_with_conflicting_ids() throws Exception {
 		// when
-		Response response = testObj.update("12345", new FlashcardList("54321",
-				null, null));
-		
+		String OTHER_ID = "54321";
+		Response response = testObj.update(ID1, newListWithId(OTHER_ID).build());
+
 		// then
 		assertNotNull(response);
 		assertEquals(409, response.getStatus());
 	}
-	
+
 	@Test
-	public void testUpdate_nonExisting() throws Exception {
+	public void should_return_404_when_updating_nonexisting_list() throws Exception {
 		// when
-		FlashcardList fl1 = new FlashcardList("12345", null, null);
-		Response response = testObj.update("12345", fl1);
-		
+		FlashcardList fl1 = newListWithId(ID1).build();
+		Response response = testObj.update(ID1, fl1);
+
 		// then
 		assertNotNull(response);
 		assertEquals(404, response.getStatus());
-		
+
 		verify(flashcardListDao).update(fl1);
 	}
-	
+
 	@Test
-	public void testUpdate() throws Exception {
+	public void should_return_200_when_updating_properlu() throws Exception {
 		// when
-		FlashcardList fl1 = new FlashcardList("12345", "abcd", new Date());
+		FlashcardList fl1 = newListWithId(ID1).withTitle("abcd").build();
 		when(flashcardListDao.update(fl1)).thenReturn(fl1);
 
-		Response response = testObj.update("12345", fl1);
-		
+		Response response = testObj.update(ID1, fl1);
+
 		// then
 		assertNotNull(response);
 		assertEquals(200, response.getStatus());
 		assertEquals(fl1, response.getEntity());
-		
+
 		verify(flashcardListDao).update(fl1);
 	}
 
