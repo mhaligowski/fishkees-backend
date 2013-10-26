@@ -1,8 +1,9 @@
 package com.fishkees.backend.dataaccess;
 
+import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
+import static org.fest.assertions.api.Assertions.*;
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -13,75 +14,76 @@ import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
 import com.google.common.collect.Lists;
 
 public class FlashcardListInMemoryStorageTest {
+	private static final String TITLE3 = "c";
+	private static final String TITLE2 = "bcde";
+	private static final String TITLE1 = "a";
 	private static final String ID1 = "someId1";
 	private static final String ID2 = "someId2";
 	private static final String ID3 = "someId3";
 	private FlashcardListInMemoryStorage testObj;
+	private FlashcardList fl1;
+	private FlashcardList fl2;
+	private FlashcardList fl3;
 
 	@Before
 	public void setUp() {
-		FlashcardList fl1 = new FlashcardList(ID1, "a", new Date());
-		FlashcardList fl2 = new FlashcardList(ID2, "bcde", new Date());
-		FlashcardList fl3 = new FlashcardList(ID3, "c", new Date());
+		fl1 = newListWithId(ID1).withTitle(TITLE1).build();
+		fl2 = newListWithId(ID2).withTitle(TITLE2).build();
+		fl3 = newListWithId(ID3).withTitle(TITLE3).build();
 		List<FlashcardList> inputList = Lists.newArrayList(fl1, fl2, fl3);
-		
+
 		this.testObj = new FlashcardListInMemoryStorage(inputList);
 	}
 
 	@Test
-	public void testGettingId() {
-		// given
-		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
-		
+	public void should_return_id_from_flashcard_list() {
 		// when
-		String actual = testObj.getId(fl);
-		
-		// then
-		assertEquals("15", actual);
-	}
-	
-	@Test
-	public void testSavingAndRestoring() {
-		// given
-		FlashcardList fl = new FlashcardList("15", "abcd", new Date());
-		
-		// when
-		testObj.put(fl.getId().toString(), fl);
+		String actual = testObj.getId(fl1);
 
 		// then
-		assertEquals(4, testObj.all().size());
-		assertEquals(fl, testObj.get("15"));
+		assertEquals(ID1, actual);
 	}
 
 	@Test
-	public void testRestoringNonExistent() {
-		assertNull(testObj.get("0"));
+	public void should_contain_new_flashcardlist_after_putting() {
+		// given
+		FlashcardList newFl = newListWithRandomId().build();
+
+		// when
+		testObj.put(newFl.getId(), newFl);
+
+		// then
+		assertThat(testObj.all()).containsOnly(fl1, fl2, fl3, newFl);
+		assertEquals(newFl, testObj.get(newFl.getId()));
 	}
 
 	@Test
-	public void testGetAll() {
+	public void should_return_null_when_finding_nonexisting() {
+		String NONEXISTING_ID = "0";
+		assertNull(testObj.get(NONEXISTING_ID));
+	}
+
+	@Test
+	public void should_return_list_with_all() {
 		// when
 		List<FlashcardList> all = Lists.newArrayList(testObj.all());
 
 		// then
-		assertEquals(3, all.size());
-		assertEquals(ID3, all.get(0).getId());
-		assertEquals(ID1, all.get(1).getId());
-		assertEquals(ID2, all.get(2).getId());
+		assertThat(all).containsOnly(fl1, fl2, fl3);
 	}
 
 	@Test
-	public void testFind() {
+	public void should_return_proper_one_when_querying() {
 		// when
 		FlashcardList flashcardList = testObj.get(ID2);
-		
+
 		// then
 		assertEquals(ID2, flashcardList.getId());
-		assertEquals("bcde", flashcardList.getTitle());
+		assertEquals(TITLE2, flashcardList.getTitle());
 	}
-	
+
 	@Test
-	public void testRandomUUID() {
+	public void should_return_different_ids_every_time() {
 		// when
 		String string1 = testObj.getNewId();
 		String string2 = testObj.getNewId();
@@ -90,76 +92,65 @@ public class FlashcardListInMemoryStorageTest {
 	}
 
 	@Test
-	public void testReset() {
-		assertEquals(3, this.testObj.all().size());
-		
-		this.testObj.put("100", new FlashcardList("100", "qwer", new Date()));
-		assertEquals(4, this.testObj.all().size());
-		
+	public void should_have_the_same_elements_after_reset() {
+		// given
+		String NEW_ID = "100";
+		FlashcardList newFlashcardList = newListWithId(NEW_ID).build(); 
+
 		// when
+		this.testObj.put(NEW_ID, newFlashcardList);
 		this.testObj.reset();
-		
-		// then
-		assertEquals(3,  this.testObj.all().size());
-	}
-	
-	@Test
-	public void testRemove_exists() {
-		// given
-		assertEquals(3, this.testObj.all().size());
 
-		// when
-		FlashcardList removed = this.testObj.remove(ID3);
-		
 		// then
-		assertEquals(2, this.testObj.all().size());
-		assertNotNull(removed);
-		assertEquals(ID3, removed.getId());
+		assertThat(testObj.all()).containsOnly(fl1, fl2, fl3);
 	}
 
 	@Test
-	public void testRemove_notExists() {
-		// given
-		assertEquals(3,  this.testObj.all().size());
-		
+	public void should_return_removed_item_when_item_exists() {
 		// when
-		FlashcardList removed = this.testObj.remove("1000");
-	
+		FlashcardList removed = this.testObj.remove(ID2);
+
 		// then
-		assertEquals(3,  this.testObj.all().size());
+		assertThat(this.testObj.all()).containsOnly(fl1, fl3);
+		assertEquals(fl2, removed);
+	}
+
+	@Test
+	public void should_return_null_when_removing_nonexisting() {
+		// when
+		String NONEXISTING = "1000";
+		FlashcardList removed = this.testObj.remove(NONEXISTING);
+
+		// then
+		assertThat(this.testObj.all()).containsOnly(fl1, fl2, fl3);
 		assertNull(removed);
 	}
 
 	@Test
-	public void testUpdate_exists() {
+	public void should_return_updated_item() {
 		// given
-		FlashcardList fl = new FlashcardList(ID1, "new title", new Date());
-		
+		FlashcardList fl = newListWithId(ID1).build(); 
+
 		// when
 		FlashcardList update = testObj.update(ID1, fl);
-		
+
 		// then
-		assertNotNull(update);
-		
 		assertEquals(fl, update);
-		FlashcardList fromStorage = testObj.get(ID1);
-		assertEquals("new title", fromStorage.getTitle());
-		assertEquals(ID1, fromStorage.getId());
+		assertThat(this.testObj.all()).containsOnly(fl, fl2, fl3);
 	}
-	
+
 	@Test
-	public void testUpdate_not_exists() {
+	public void should_return_null_when_updateing_non_existing() {
 		// given
-		FlashcardList fl = new FlashcardList("4", "new title", new Date());
-		
+		String NONEXISTING = "nonexisting";
+		FlashcardList fl = newListWithId(NONEXISTING).build(); 
+
 		// when
-		FlashcardList update = testObj.update("4", fl);
-		
+		FlashcardList update = testObj.update(NONEXISTING, fl);
+
 		// then
 		assertNull(update);
-		
-		FlashcardList fromStorage = testObj.get("4");
-		assertNull(fromStorage);
+		assertThat(this.testObj.all()).containsOnly(fl1, fl2, fl3);
 	}
 
 }
