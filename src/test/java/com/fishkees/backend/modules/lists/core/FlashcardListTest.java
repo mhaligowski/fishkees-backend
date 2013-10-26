@@ -1,5 +1,6 @@
 package com.fishkees.backend.modules.lists.core;
 
+import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
 import static com.yammer.dropwizard.testing.JsonHelpers.*;
 import static org.junit.Assert.*;
 
@@ -12,14 +13,14 @@ public class FlashcardListTest {
 	private final DateTime dateTime = new DateTime("1986-07-01T12:00Z");
 
 	@Test
-	public void serializesToJson() throws Exception {
+	public void should_serialize_to_expected_file() throws Exception {
 		final String flashcardList = asJson(flashcardList());
-		final String fixture = jsonFixture("fixtures/lists/single.json"); 
+		final String fixture = jsonFixture("fixtures/lists/single.json");
 		assertEquals(flashcardList, fixture);
 	}
 
 	@Test
-	public void deserializesFromJson() throws Exception {
+	public void should_deserialize_from_file_to_expected_object() throws Exception {
 		FlashcardList fromJson = FlashcardListFixtures.single();
 		final FlashcardList flashcardList = flashcardList();
 
@@ -40,11 +41,13 @@ public class FlashcardListTest {
 	}
 
 	private FlashcardList flashcardList() throws Exception {
-		return new FlashcardList("someId1", "abcd", dateTime.toDate());
+		return newListWithId("someId1").withTitle("abcd")
+				.withCreateDate(dateTime.toDate()).build();
 	}
 
 	private FlashcardList flashcardListWithoutId() throws Exception {
-		return new FlashcardList(null, "abcd", dateTime.toDate());
+		return newListWithId(null).withTitle("abcd")
+				.withCreateDate(dateTime.toDate()).build();
 	}
 
 }

@@ -26,6 +26,11 @@ public class FlashcardListTestBuilder {
 		return this;
 	}
 
+	public FlashcardListTestBuilder withCreateDate(Date date) {
+		this.createDate = date;
+		return this;
+	}
+	
 	public FlashcardList build() {
 		return new FlashcardList(this.id, this.title, this.createDate);
 	}
