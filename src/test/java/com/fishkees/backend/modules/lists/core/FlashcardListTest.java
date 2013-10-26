@@ -30,7 +30,7 @@ public class FlashcardListTest {
 	}
 
 	@Test
-	public void deserializeWithoutIdFromJson() throws Exception {
+	public void should_deserialize_partial_succesfully() throws Exception {
 		final FlashcardList fromJson = FlashcardListFixtures.partial();
 		final FlashcardList flashcardList = flashcardListWithoutId();
 

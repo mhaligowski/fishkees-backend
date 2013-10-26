@@ -20,7 +20,7 @@ public class FlashcardListsIntegrationTest {
 	private static final String ID2 = "someNiceId2";
 
 	@Test
-	public void testGettingAllLists() {
+	public void should_return_objects_after_loading() {
 		// when
 		Injector testObj = Guice.createInjector(ListsModule.simpleModule());
 		loadFixtures(testObj);
@@ -38,7 +38,7 @@ public class FlashcardListsIntegrationTest {
 	}
 
 	@Test
-	public void testStorageIsSingleton() {
+	public void should_return_the_same_storage_each_time() {
 		Injector testObj = Guice.createInjector(ListsModule.simpleModule());
 		KeyValueStore<String, FlashcardList> instance1 = testObj
 				.getInstance(FlashcardListInMemoryStorage.class);
@@ -49,7 +49,7 @@ public class FlashcardListsIntegrationTest {
 	}
 
 	@Test
-	public void testStorageFixtureLoading() {
+	public void should_load_fixture_when_loading_storage_with_fixture() {
 		// given
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardListsPath()).thenReturn(
@@ -72,7 +72,7 @@ public class FlashcardListsIntegrationTest {
 	}
 
 	@Test(expected = RuntimeException.class)
-	public void testStorageFixtureLoading_nonExisting() {
+	public void should_throw_exception_when_not_finding_fixture() {
 		FixturesConfiguration config = mock(FixturesConfiguration.class);
 		when(config.getFlashcardListsPath()).thenReturn("nonExistingFile");
 		Injector testObj = Guice.createInjector(ListsModule

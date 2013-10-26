@@ -1,11 +1,11 @@
 package com.fishkees.backend.modules.lists.resources;
 
+import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.core.MediaType;
@@ -26,8 +26,11 @@ import com.yammer.dropwizard.testing.ResourceTest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceTest extends ResourceTest {
-	private final FlashcardList flashcardList1 = new FlashcardList("12345",
-			"abcd", new Date());
+	private static final String TITLE1 = "abcd";
+	private static final String ID1 = "12345";
+
+	private final FlashcardList flashcardList1 = newListWithId(ID1)
+			.withTitle(TITLE1).build();
 
 	@InjectMocks
 	private FlashcardListResource testObj;
@@ -38,10 +41,10 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
-		when(dao.findById("12345")).thenReturn(flashcardList1);
+		when(dao.findById(ID1)).thenReturn(flashcardList1);
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
-		when(dao.remove("12345")).thenReturn(flashcardList1);
+		when(dao.remove(ID1)).thenReturn(flashcardList1);
 		addResource(testObj);
 	}
 
@@ -50,14 +53,14 @@ public class FlashcardListResourceTest extends ResourceTest {
 		verifyNoMoreInteractions(dao);
 	}
 
-
 	@Test
-	public void testGetFlashcardLists() {
+	public void should_return_appropriate_flashcard_list() {
 		// when
 		GenericType<List<FlashcardList>> type = new GenericType<List<FlashcardList>>() {
 		};
 		List<FlashcardList> list = client().resource("/flashcardlists").get(
 				type);
+
 		// then
 		assertEquals(1, list.size());
 		assertEquals(flashcardList1.getId(), list.get(0).getId());
@@ -66,10 +69,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testCreate() throws IOException {
+	public void should_return_200_with_object_when_creating() throws IOException {
 		// given
-		FlashcardList flashcardList = new FlashcardList(null, "abcd",
-				new Date());
+		FlashcardList flashcardList = newListWithId(null).withTitle(TITLE1).build(); 
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists")
@@ -85,15 +87,15 @@ public class FlashcardListResourceTest extends ResourceTest {
 				response.getHeaders().get("Location").get(0));
 
 		FlashcardList entity = response.getEntity(FlashcardList.class);
-		assertEquals("12345", entity.getId());
-		assertEquals("abcd", entity.getTitle());
+		assertEquals(ID1, entity.getId());
+		assertEquals(TITLE1, entity.getTitle());
 		assertNotNull(entity.getCreateDate());
 
 		verify(dao).createNewFromObject(any(FlashcardList.class));
 	}
 
 	@Test
-	public void testFind() {
+	public void should_return_200_and_object_when_finding_one() {
 		// when
 		FlashcardList result = client().resource("/flashcardlists/12345").get(
 				FlashcardList.class);
@@ -103,23 +105,24 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).findById("12345");
+		verify(dao).findById(ID1);
 	}
 
 	@Test
-	public void testFind_nonExisting() {
+	public void should_return_404_when_finding_non_existing() {
 		// when
-		ClientResponse clientResponse = client().resource("/flashcardlists/nonExisting").get(ClientResponse.class);
-		
+		ClientResponse clientResponse = client().resource(
+				"/flashcardlists/nonExisting").get(ClientResponse.class);
+
 		// then
 		assertNotNull(clientResponse);
 		assertEquals(404, clientResponse.getStatus());
-		
+
 		verify(dao).findById("nonExisting");
 	}
-	
+
 	@Test
-	public void testRemove_existing() {
+	public void should_return_200_and_object_when_removing_object() {
 		// when
 		FlashcardList result = client().resource("/flashcardlists/12345")
 				.delete(FlashcardList.class);
@@ -129,26 +132,25 @@ public class FlashcardListResourceTest extends ResourceTest {
 		assertEquals(flashcardList1.getTitle(), result.getTitle());
 		assertEquals(flashcardList1.getCreateDate(), result.getCreateDate());
 
-		verify(dao).remove("12345");
+		verify(dao).remove(ID1);
 	}
 
 	@Test
-	public void testRemove_nonexisting() {
+	public void should_return_404_when_removing_nonexisting() {
 		// when
-		ClientResponse response = client().resource("/flashcardlists/1")
+		ClientResponse response = client().resource("/flashcardlists/nonexisting")
 				.delete(ClientResponse.class);
 
 		// then
 		assertEquals(404, response.getStatus());
 
-		verify(dao).remove("1");
+		verify(dao).remove("nonexisting");
 	}
 
 	@Test
-	public void testUpdate_differentIds() {
+	public void should_return_409_when_updating_conflicting_ids() {
 		// given
-		FlashcardList fl = new FlashcardList("54321", "updatedTitle",
-				new Date());
+		FlashcardList fl = newListWithId("conflicting").withTitle("updated").build(); 
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
@@ -159,10 +161,10 @@ public class FlashcardListResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_nonExisting() {
+	public void should_return_404_when_updating_nonexisting() {
 		// given
-		FlashcardList fl = new FlashcardList("54321", "updatedTitle",
-				new Date());
+		String NONEXISTING = "54321";
+		FlashcardList fl = newListWithId(NONEXISTING).withTitle("updated").build(); 
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
@@ -175,10 +177,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void testUpdate_existing() {
+	public void should_return_200_when_succesful_update() {
 		// given
-		FlashcardList fl = new FlashcardList("12345", "updatedTitle",
-				new Date());
+		FlashcardList fl = newListWithId(ID1).withTitle("updated").build(); 
 		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
 
 		// when
