@@ -44,7 +44,7 @@ public class FishkeesServiceTest {
 	}
 
 	@Test
-	public void testRun() throws Exception {
+	public void should_connect_all_the_resources_and_tasks() throws Exception {
 		// given
 		when(environment.addFilter(eq(CrossOriginFilter.class), anyString()))
 				.thenReturn(filterBuilder1);
@@ -71,7 +71,7 @@ public class FishkeesServiceTest {
 	}
 
 	@Test
-	public void testInitialization() throws Exception {
+	public void should_give_proper_names() throws Exception {
 		// given
 		ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
 
