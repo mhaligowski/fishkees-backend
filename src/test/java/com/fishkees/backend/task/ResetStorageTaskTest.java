@@ -36,7 +36,7 @@ public class ResetStorageTaskTest {
 	}
 	
 	@Test
-	public void testTaskExecution() throws Exception {
+	public void should_call_reset_for_two_storages() throws Exception {
 		// when
 		testObj.execute(null, printWriter);
 		

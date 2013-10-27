@@ -14,7 +14,7 @@ import com.yammer.dropwizard.validation.Validator;
 public class FishkeesConfigurationTest {
 
 	@Test
-	public void testConfigurationLoading() throws Exception {
+	public void should_load_configuration_properly() throws Exception {
 		FishkeesConfiguration testObj = parseConfiguration("sampleConfiguration.yml");
 		assertNotNull(testObj);
 		assertEquals(12345, testObj.getHttpConfiguration().getPort());
