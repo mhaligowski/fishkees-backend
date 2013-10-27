@@ -64,13 +64,13 @@ public class FlashcardResource {
 					.entity("Conflicting listIds").build();
 		}
 
-		final Flashcard newFlashcard = flashcardDao
+		final Optional<Flashcard> newFlashcard = flashcardDao
 				.createNewFromObject(flashcard);
 
 		UriBuilder builder = UriBuilder.fromPath("/{cardId}");
-		URI uri = builder.build(newFlashcard.getId());
+		URI uri = builder.build(newFlashcard.get().getId());
 
-		return Response.created(uri).entity(newFlashcard).build();
+		return Response.created(uri).entity(newFlashcard.get()).build();
 	}
 
 	@PUT

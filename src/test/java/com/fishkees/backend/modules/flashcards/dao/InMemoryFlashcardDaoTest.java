@@ -77,7 +77,7 @@ public class InMemoryFlashcardDaoTest {
 		when(storage.getNewId()).thenReturn(ID1);
 
 		// when
-		Flashcard resultFlashcard = testObj.createNewFromObject(f);
+		Optional<Flashcard> resultFlashcard = testObj.createNewFromObject(f);
 
 		// then
 		verify(storage).getNewId();
@@ -96,8 +96,8 @@ public class InMemoryFlashcardDaoTest {
 		assertEquals(id, newFlashcardFromStorage.getId());
 		assertEquals("flashcardListId1",
 				newFlashcardFromStorage.getFlashcardListId());
-		assertEquals(newFlashcardFromStorage, resultFlashcard);
-		assertNotNull(resultFlashcard.getCreateDate());
+		assertEquals(newFlashcardFromStorage, resultFlashcard.get());
+		assertNotNull(resultFlashcard.get().getCreateDate());
 	}
 
 	@Test

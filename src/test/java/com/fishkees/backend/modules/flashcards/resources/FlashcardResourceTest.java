@@ -71,7 +71,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = flashcardBuilder.build();
 		when(dao.createNewFromObject(any(Flashcard.class)))
-				.thenReturn(expected);
+				.thenReturn(Optional.of(expected));
 
 		// when
 		ClientResponse response = client()

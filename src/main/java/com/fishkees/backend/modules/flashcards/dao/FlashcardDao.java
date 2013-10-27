@@ -10,7 +10,7 @@ public interface FlashcardDao {
 	List<Flashcard> findAllByListId(String listId);
 	Optional<Flashcard> findById(String id);
 	Optional<Flashcard> findByListIdAndId(String listId, String id);
-	Flashcard createNewFromObject(Flashcard flashcard);
+	Optional<Flashcard> createNewFromObject(Flashcard flashcard);
 	Optional<Flashcard> remove(String id);
 	Optional<Flashcard> removeByListIdAndId(String listId, String flashcardId);
 	Optional<Flashcard> update(Flashcard flashcard);

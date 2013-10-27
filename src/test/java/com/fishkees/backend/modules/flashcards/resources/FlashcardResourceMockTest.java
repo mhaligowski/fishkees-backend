@@ -56,7 +56,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = flashcardBuilder.build();
-		when(dao.createNewFromObject(flashcard)).thenReturn(expected);
+		when(dao.createNewFromObject(flashcard)).thenReturn(Optional.of(expected));
 
 		// when
 		Response response = testObj.create(DEFAULT_PARENT_ID, flashcard);

@@ -28,7 +28,7 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	}
 
 	@Override
-	public Flashcard createNewFromObject(Flashcard flashcard) {
+	public Optional<Flashcard> createNewFromObject(Flashcard flashcard) {
 		String newId = storage.getNewId();
 
 		Flashcard newList = new Flashcard(newId,
@@ -37,7 +37,7 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 
 		storage.put(newId, newList);
 
-		return newList;
+		return Optional.of(newList);
 	}
 
 	@Override
