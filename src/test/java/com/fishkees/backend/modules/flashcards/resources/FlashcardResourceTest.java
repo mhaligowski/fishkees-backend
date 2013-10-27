@@ -22,6 +22,7 @@ import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
@@ -120,7 +121,11 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void should_return_404_when_findin_non_existing() {
+	public void should_return_404_when_finding_non_existing() {
+		// given
+		when(dao.findByListIdAndId("otherListId", "someId1")).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		ClientResponse clientResponse = client().resource(
 				"/flashcardlists/otherListId/flashcards/someId1").get(
@@ -137,7 +142,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_the_proper_element() {
 		// given
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
-				flashcards.get(0));
+				Optional.of(flashcards.get(0)));
 
 		// when
 		ClientResponse clientResponse = client().resource(

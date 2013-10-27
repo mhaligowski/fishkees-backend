@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -40,7 +41,7 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	}
 
 	@Override
-	public Flashcard findById(String id) {
+	public Optional<Flashcard> findById(String id) {
 		return storage.get(id.toString());
 	}
 
@@ -51,8 +52,8 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	
 	@Override
 	public Flashcard removeByListIdAndId(String listId, String flashcardId) {
-		Flashcard flashcard = findByListIdAndId(listId, flashcardId);
-		if (flashcard == null) {
+		Optional<Flashcard> flashcard = findByListIdAndId(listId, flashcardId);
+		if (!flashcard.isPresent()) {
 			return null;
 		}
 		
@@ -66,8 +67,8 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 
 	@Override
 	public List<Flashcard> findAllByListId(final String listId) {
-		FlashcardList flashcardList = listDao.findById(listId);
-		if (flashcardList == null) {
+		Optional<FlashcardList> flashcardList = listDao.findById(listId);
+		if (!flashcardList.isPresent()) {
 			return null;
 		}
 		
@@ -85,17 +86,18 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	}
 
 	@Override
-	public Flashcard findByListIdAndId(String listId, String id) {
-		Flashcard flashcard = storage.get(id);
+	public Optional<Flashcard> findByListIdAndId(String listId, String id) {
+		Optional<Flashcard> flashcard = storage.get(id);
 		
-		if (flashcard == null) {
-			return null;
+		if (!flashcard.isPresent()) {
+			return Optional.absent();
 		}
 		
-		if (listId.equals(flashcard.getFlashcardListId())) {
+		String flashcardListId = flashcard.get().getFlashcardListId();
+		if (listId.equals(flashcardListId)) {
 			return flashcard;
 		} else {
-			return null;
+			return Optional.absent();
 		}
 	}
 

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 public class FlashcardInMemoryStorageTest {
@@ -52,12 +53,12 @@ public class FlashcardInMemoryStorageTest {
 
 		// then
 		assertEquals(4, testObj.all().size());
-		assertEquals(f, testObj.get("15"));
+		assertEquals(f, testObj.get("15").get());
 	}
 
 	@Test
 	public void should_return_null_when_getting_for_non_existing_id() {
-		assertNull(testObj.get("0"));
+		assertFalse(testObj.get("0").isPresent());
 	}
 
 	@Test
@@ -72,10 +73,10 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_find_the_proper_element() {
 		// when
-		Flashcard f = testObj.get(ID2);
+		Optional<Flashcard> f = testObj.get(ID2);
 
 		// then
-		assertEquals(f, f2);
+		assertEquals(f2, f.get());
 	}
 
 	@Test
@@ -139,7 +140,7 @@ public class FlashcardInMemoryStorageTest {
 		assertNotNull(update);
 		assertEquals(f, update);
 
-		Flashcard fromStorage = testObj.get(ID1);
+		Flashcard fromStorage = testObj.get(ID1).get();
 		assertEquals(fromStorage, update);
 	}
 
@@ -156,8 +157,8 @@ public class FlashcardInMemoryStorageTest {
 		// then
 		assertNull(update);
 
-		Flashcard fromStorage = testObj.get("4");
-		assertNull(fromStorage);
+		Optional<Flashcard> fromStorage = testObj.get("4");
+		assertFalse(fromStorage.isPresent());
 	}
 
 }

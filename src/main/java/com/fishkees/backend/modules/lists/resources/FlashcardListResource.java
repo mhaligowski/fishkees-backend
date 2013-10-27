@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
+import com.google.common.base.Optional;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/flashcardlists")
@@ -35,12 +36,12 @@ public class FlashcardListResource {
 	@GET
 	@Path("/{listId}")
 	public Response find(@PathParam("listId") String listId) {
-		 FlashcardList flashcardList = flashcardListDao.findById(listId);
+		 Optional<FlashcardList> flashcardList = flashcardListDao.findById(listId);
 		 
-		 if (flashcardList == null) {
-			 return Response.status(Status.NOT_FOUND).build(); 
+		 if (flashcardList.isPresent()) {
+			 return Response.ok(flashcardList.get()).build();
 		 } else{
-			 return Response.ok(flashcardList).build();
+			 return Response.status(Status.NOT_FOUND).build(); 
 		 }
 	}
 

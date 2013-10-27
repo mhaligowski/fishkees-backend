@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -26,8 +27,8 @@ public abstract class KeyValueStore<K, V> {
 		map.put(key, value);
 	}
 
-	public V get(K key) {
-		return map.get(key);
+	public Optional<V> get(K key) {
+		return Optional.fromNullable(map.get(key));
 	}
 
 	public List<V> all() {

@@ -21,6 +21,7 @@ import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -89,7 +90,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcard = FlashcardFixtures.single();
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
-				flashcard);
+				Optional.of(flashcard));
 
 		// when
 		Response response = testObj.find("flashcardListId1", "someId1");
@@ -104,6 +105,10 @@ public class FlashcardResourceMockTest {
 
 	@Test
 	public void should_return_404_for_nonexisting_flashcard() {
+		// given
+		when(dao.findByListIdAndId("otherList", "someId1")).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		Response response = testObj.find("otherList", "someId1");
 

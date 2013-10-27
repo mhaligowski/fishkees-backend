@@ -17,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder;
+import com.google.common.base.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InMemoryFlashcardListDaoTest {
@@ -37,8 +38,8 @@ public class InMemoryFlashcardListDaoTest {
 		lists = FlashcardListFixtures.all();
 
 		when(storage.all()).thenReturn(lists);
-		when(storage.get(ID1)).thenReturn(lists.get(0));
-		when(storage.get(ID2)).thenReturn(lists.get(1));
+		when(storage.get(ID1)).thenReturn(Optional.of(lists.get(0)));
+		when(storage.get(ID2)).thenReturn(Optional.of(lists.get(1)));
 
 		when(storage.remove(ID1)).thenReturn(lists.get(0));
 		when(storage.remove(ID2)).thenReturn(lists.get(1));
@@ -92,8 +93,8 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_return_appropriate_objects_when_calling_find() {
 		// when
-		FlashcardList result1 = testObj.findById(ID1);
-		FlashcardList result2 = testObj.findById(ID2);
+		FlashcardList result1 = testObj.findById(ID1).get();
+		FlashcardList result2 = testObj.findById(ID2).get();
 
 		// then
 		assertEquals(ID1, result1.getId());

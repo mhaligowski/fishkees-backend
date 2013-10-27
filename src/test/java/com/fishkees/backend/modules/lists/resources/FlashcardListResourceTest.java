@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
@@ -29,8 +30,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 	private static final String TITLE1 = "abcd";
 	private static final String ID1 = "12345";
 
-	private final FlashcardList flashcardList1 = newListWithId(ID1)
-			.withTitle(TITLE1).build();
+	private final FlashcardList flashcardList1 = newListWithId(ID1).withTitle(
+			TITLE1).build();
 
 	@InjectMocks
 	private FlashcardListResource testObj;
@@ -41,7 +42,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Override
 	protected void setUpResources() throws Exception {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
-		when(dao.findById(ID1)).thenReturn(flashcardList1);
+		when(dao.findById(ID1)).thenReturn(Optional.of(flashcardList1));
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
 		when(dao.remove(ID1)).thenReturn(flashcardList1);
@@ -69,9 +70,11 @@ public class FlashcardListResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void should_return_200_with_object_when_creating() throws IOException {
+	public void should_return_200_with_object_when_creating()
+			throws IOException {
 		// given
-		FlashcardList flashcardList = newListWithId(null).withTitle(TITLE1).build(); 
+		FlashcardList flashcardList = newListWithId(null).withTitle(TITLE1)
+				.build();
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists")
@@ -110,6 +113,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 
 	@Test
 	public void should_return_404_when_finding_non_existing() {
+		// given
+		when(dao.findById("nonExisting")).thenReturn(Optional.<FlashcardList>absent());
+			
 		// when
 		ClientResponse clientResponse = client().resource(
 				"/flashcardlists/nonExisting").get(ClientResponse.class);
@@ -138,8 +144,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_removing_nonexisting() {
 		// when
-		ClientResponse response = client().resource("/flashcardlists/nonexisting")
-				.delete(ClientResponse.class);
+		ClientResponse response = client().resource(
+				"/flashcardlists/nonexisting").delete(ClientResponse.class);
 
 		// then
 		assertEquals(404, response.getStatus());
@@ -150,7 +156,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_409_when_updating_conflicting_ids() {
 		// given
-		FlashcardList fl = newListWithId("conflicting").withTitle("updated").build(); 
+		FlashcardList fl = newListWithId("conflicting").withTitle("updated")
+				.build();
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")
@@ -164,7 +171,8 @@ public class FlashcardListResourceTest extends ResourceTest {
 	public void should_return_404_when_updating_nonexisting() {
 		// given
 		String NONEXISTING = "54321";
-		FlashcardList fl = newListWithId(NONEXISTING).withTitle("updated").build(); 
+		FlashcardList fl = newListWithId(NONEXISTING).withTitle("updated")
+				.build();
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
@@ -179,7 +187,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_200_when_succesful_update() {
 		// given
-		FlashcardList fl = newListWithId(ID1).withTitle("updated").build(); 
+		FlashcardList fl = newListWithId(ID1).withTitle("updated").build();
 		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
 
 		// when
