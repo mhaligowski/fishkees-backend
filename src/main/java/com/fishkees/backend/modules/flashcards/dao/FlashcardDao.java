@@ -11,7 +11,7 @@ public interface FlashcardDao {
 	Optional<Flashcard> findById(String id);
 	Optional<Flashcard> findByListIdAndId(String listId, String id);
 	Flashcard createNewFromObject(Flashcard flashcard);
-	Flashcard remove(String id);
-	Flashcard removeByListIdAndId(String listId, String flashcardId);
+	Optional<Flashcard> remove(String id);
+	Optional<Flashcard> removeByListIdAndId(String listId, String flashcardId);
 	Flashcard update(Flashcard flashcard);
 }

@@ -102,7 +102,8 @@ public class FlashcardListResourceMockTest {
 		// given
 		FlashcardList flashcardList = FlashcardListFixtures.single();
 		String id = flashcardList.getId();
-		when(flashcardListDao.remove(id)).thenReturn(flashcardList);
+		when(flashcardListDao.remove(id))
+				.thenReturn(Optional.of(flashcardList));
 
 		// when
 		Response response = testObj.remove(id);
@@ -117,6 +118,10 @@ public class FlashcardListResourceMockTest {
 
 	@Test
 	public void should_return_404_when_returning_nonexisting() throws Exception {
+		// given
+		when(flashcardListDao.remove(NONEXISTING)).thenReturn(
+				Optional.<FlashcardList> absent());
+		
 		// when
 		Response response = testObj.remove(NONEXISTING);
 

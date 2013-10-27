@@ -232,7 +232,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcardToRemove = FlashcardFixtures.single();
 		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
-				.thenReturn(flashcardToRemove);
+				.thenReturn(Optional.of(flashcardToRemove));
 
 		// when
 		Response response = testObj.remove(DEFAULT_PARENT_ID, DEFAULT_ID);
@@ -248,6 +248,10 @@ public class FlashcardResourceMockTest {
 
 	@Test
 	public void should_return_404_when_either_list_or_flashcard_was_not_found() {
+		// given
+		when(dao.removeByListIdAndId("otherListId", DEFAULT_ID)).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		Response response = testObj.remove("otherListId", DEFAULT_ID);
 

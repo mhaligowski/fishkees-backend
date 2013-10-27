@@ -101,12 +101,13 @@ public class FlashcardResource {
 	@Path("/{flashcardId}")
 	public Response remove(@PathParam("listId") String listId,
 			@PathParam("flashcardId") String flashcardId) {
-		Flashcard removed = flashcardDao.removeByListIdAndId(listId, flashcardId);
+		Optional<Flashcard> removed = flashcardDao.removeByListIdAndId(listId,
+				flashcardId);
 
-		if (removed == null) {
+		if (removed.isPresent()) {
+			return Response.ok(removed.get()).build();
+		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-
-		return Response.ok(removed).build();
 	}
 }

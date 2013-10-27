@@ -9,6 +9,6 @@ public interface FlashcardListDao {
 	List<FlashcardList> findAll();
 	FlashcardList createNewFromObject(FlashcardList flashcardList);
 	Optional<FlashcardList> findById(String id);
-	FlashcardList remove(String id);
+	Optional<FlashcardList> remove(String id);
 	FlashcardList update(FlashcardList flashcardList);
 }

@@ -45,7 +45,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		when(dao.findById(ID1)).thenReturn(Optional.of(flashcardList1));
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
 				flashcardList1);
-		when(dao.remove(ID1)).thenReturn(flashcardList1);
+		when(dao.remove(ID1)).thenReturn(Optional.of(flashcardList1));
 		addResource(testObj);
 	}
 
@@ -143,6 +143,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 
 	@Test
 	public void should_return_404_when_removing_nonexisting() {
+		// given
+		when(dao.remove("nonexisting")).thenReturn(Optional.<FlashcardList>absent());
+		
 		// when
 		ClientResponse response = client().resource(
 				"/flashcardlists/nonexisting").delete(ClientResponse.class);

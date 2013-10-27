@@ -340,7 +340,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		// given
 		Flashcard single = FlashcardFixtures.single();
 		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
-				.thenReturn(single);
+				.thenReturn(Optional.of(single));
 
 		// when
 		ClientResponse response = client().resource(
@@ -363,6 +363,10 @@ public class FlashcardResourceTest extends ResourceTest {
 
 	@Test
 	public void should_return_404_when_not_existing_list_or_flashcard() {
+		// given
+		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
+				.thenReturn(Optional.<Flashcard> absent());
+
 		// when
 		ClientResponse response = client().resource(
 				"/flashcardlists/flashcardListId/flashcards/someId").delete(

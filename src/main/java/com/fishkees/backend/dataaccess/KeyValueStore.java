@@ -35,8 +35,8 @@ public abstract class KeyValueStore<K, V> {
 		return Lists.newArrayList(map.values());
 	}
 
-	public V remove(K key) {
-		return map.remove(key);
+	public Optional<V> remove(K key) {
+		return Optional.fromNullable(map.remove(key));
 	}
 
 	public V update(K key, V value) {

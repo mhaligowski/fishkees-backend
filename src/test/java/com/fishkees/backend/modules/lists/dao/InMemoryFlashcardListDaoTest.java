@@ -41,8 +41,8 @@ public class InMemoryFlashcardListDaoTest {
 		when(storage.get(ID1)).thenReturn(Optional.of(lists.get(0)));
 		when(storage.get(ID2)).thenReturn(Optional.of(lists.get(1)));
 
-		when(storage.remove(ID1)).thenReturn(lists.get(0));
-		when(storage.remove(ID2)).thenReturn(lists.get(1));
+		when(storage.remove(ID1)).thenReturn(Optional.of(lists.get(0)));
+		when(storage.remove(ID2)).thenReturn(Optional.of(lists.get(1)));
 	}
 
 	@After
@@ -109,21 +109,24 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_return_appropriate_object_when_removing() {
 		// when
-		FlashcardList removed = testObj.remove(ID1);
+		Optional<FlashcardList> removed = testObj.remove(ID1);
 
 		// then
-		assertEquals(ID1, removed.getId());
+		assertEquals(ID1, removed.get().getId());
 
 		verify(storage).remove(ID1);
 	}
 
 	@Test
 	public void should_return_null_if_removing_non_existing() {
+		// given
+		when(storage.remove(NONEXISTING)).thenReturn(Optional.<FlashcardList>absent());
+		
 		// when
-		FlashcardList removed = testObj.remove(NONEXISTING);
+		Optional<FlashcardList> removed = testObj.remove(NONEXISTING);
 
 		// then
-		assertNull(removed);
+		assertFalse(removed.isPresent());
 		verify(storage).remove(NONEXISTING);
 	}
 

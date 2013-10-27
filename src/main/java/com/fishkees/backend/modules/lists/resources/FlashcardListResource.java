@@ -36,13 +36,14 @@ public class FlashcardListResource {
 	@GET
 	@Path("/{listId}")
 	public Response find(@PathParam("listId") String listId) {
-		 Optional<FlashcardList> flashcardList = flashcardListDao.findById(listId);
-		 
-		 if (flashcardList.isPresent()) {
-			 return Response.ok(flashcardList.get()).build();
-		 } else{
-			 return Response.status(Status.NOT_FOUND).build(); 
-		 }
+		Optional<FlashcardList> flashcardList = flashcardListDao
+				.findById(listId);
+
+		if (flashcardList.isPresent()) {
+			return Response.ok(flashcardList.get()).build();
+		} else {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 
 	@POST
@@ -53,9 +54,8 @@ public class FlashcardListResource {
 
 		UriBuilder builder = UriBuilder.fromPath("/{listId}");
 		URI uri = builder.build(newFlashcardList.getId());
-		Response response = Response.created(uri)
-									.entity(newFlashcardList)
-									.build();
+		Response response = Response.created(uri).entity(newFlashcardList)
+				.build();
 
 		return response;
 	}
@@ -63,13 +63,13 @@ public class FlashcardListResource {
 	@DELETE
 	@Path("/{listId}")
 	public Response remove(@PathParam("listId") String id) {
-		FlashcardList removed = flashcardListDao.remove(id);
+		Optional<FlashcardList> removed = flashcardListDao.remove(id);
 
-		if (removed == null) {
+		if (removed.isPresent()) {
+			return Response.ok(removed.get()).build();
+		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-
-		return Response.ok(removed).build();
 	}
 
 	@PUT

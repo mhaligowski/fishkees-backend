@@ -108,22 +108,22 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_remove_the_given_flashcard_returning_the_removed_item() {
 		// when
-		Flashcard removed = this.testObj.remove(ID3);
+		Optional<Flashcard> removed = this.testObj.remove(ID3);
 
 		// then
 		assertThat(this.testObj.all()).containsExactly(f1, f2);
-		assertNotNull(removed);
-		assertEquals(ID3, removed.getId());
+		assertTrue(removed.isPresent());
+		assertEquals(ID3, removed.get().getId());
 	}
 
 	@Test
 	public void should_return_null_if_removing_non_existing() {
 		// when
-		Flashcard removed = this.testObj.remove("1000");
+		Optional<Flashcard> removed = this.testObj.remove("1000");
 
 		// then
 		assertThat(this.testObj.all()).containsExactly(f1, f2, f3);
-		assertNull(removed);
+		assertFalse(removed.isPresent());
 	}
 
 	@Test

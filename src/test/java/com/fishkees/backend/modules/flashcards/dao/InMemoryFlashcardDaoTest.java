@@ -49,9 +49,9 @@ public class InMemoryFlashcardDaoTest {
 		when(storage.get(ID2)).thenReturn(Optional.of(flashcards.get(1)));
 		when(storage.get(ID3)).thenReturn(Optional.of(flashcards.get(2)));
 
-		when(storage.remove(ID1)).thenReturn(flashcards.get(0));
-		when(storage.remove(ID2)).thenReturn(flashcards.get(1));
-		when(storage.remove(ID3)).thenReturn(flashcards.get(2));
+		when(storage.remove(ID1)).thenReturn(Optional.of(flashcards.get(0)));
+		when(storage.remove(ID2)).thenReturn(Optional.of(flashcards.get(1)));
+		when(storage.remove(ID3)).thenReturn(Optional.of(flashcards.get(2)));
 	}
 
 	@After
@@ -117,23 +117,27 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_removed_element() {
 		// when
-		Flashcard removed = testObj.remove(ID1);
+		Optional<Flashcard> removed = testObj.remove(ID1);
 
 		// then
-		assertEquals(ID1, removed.getId());
+		assertEquals(ID1, removed.get().getId());
 
 		verify(storage).remove(ID1);
 	}
 
 	@Test
 	public void should_return_null_if_removing_non_exsiting() {
+		// given
+		final String NONEXISTING = "1000";
+		when(storage.remove(NONEXISTING)).thenReturn(Optional.<Flashcard>absent());
+		
 		// when
-		Flashcard removed = testObj.remove("1000");
+		Optional<Flashcard> removed = testObj.remove(NONEXISTING);
 
 		// then
-		assertNull(removed);
+		assertFalse(removed.isPresent());
 
-		verify(storage).remove("1000");
+		verify(storage).remove(NONEXISTING);
 	}
 
 	@Test
@@ -256,11 +260,11 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_the_removed_flashcard() {
 		// when
-		Flashcard flashcard = testObj.removeByListIdAndId("flashcardListId1",
+		Optional<Flashcard> flashcard = testObj.removeByListIdAndId("flashcardListId1",
 				ID1);
 
 		// then
-		assertEquals(flashcard, flashcards.get(0));
+		assertEquals(flashcards.get(0), flashcard.get());
 
 		// verify
 		verify(storage).get(ID1);
@@ -270,11 +274,12 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_null_if_removing_non_existing_object() {
 		// when
-		Flashcard flashcard = testObj.removeByListIdAndId(
-				"flashcardListId11000", ID1);
+		final String NONEXISTING_LIST = "flashcardListId11000";
+		Optional<Flashcard> flashcard = testObj.removeByListIdAndId(
+				NONEXISTING_LIST, ID1);
 
 		// then
-		assertNull(flashcard);
+		assertFalse(flashcard.isPresent());
 
 		// verify
 		verify(storage).get(ID1);
