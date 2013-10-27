@@ -10,7 +10,7 @@ import org.junit.Test;
 public class URLWrapperTest {
 
 	@Test
-	public void testOpenReader() throws Exception {
+	public void should_open_real_reader_from_url() throws Exception {
 		// given
 		URLWrapper testObj = new URLWrapper();
 		
