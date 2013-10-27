@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -27,7 +28,7 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	}
 
 	@Override
-	public Flashcard createNewFromObject(Flashcard flashcard) {
+	public Optional<Flashcard> createNewFromObject(Flashcard flashcard) {
 		String newId = storage.getNewId();
 
 		Flashcard newList = new Flashcard(newId,
@@ -36,38 +37,38 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 
 		storage.put(newId, newList);
 
-		return newList;
+		return Optional.of(newList);
 	}
 
 	@Override
-	public Flashcard findById(String id) {
+	public Optional<Flashcard> findById(String id) {
 		return storage.get(id.toString());
 	}
 
 	@Override
-	public Flashcard remove(String id) {
+	public Optional<Flashcard> remove(String id) {
 		return storage.remove(id.toString());
 	}
 	
 	@Override
-	public Flashcard removeByListIdAndId(String listId, String flashcardId) {
-		Flashcard flashcard = findByListIdAndId(listId, flashcardId);
-		if (flashcard == null) {
-			return null;
+	public Optional<Flashcard> removeByListIdAndId(String listId, String flashcardId) {
+		Optional<Flashcard> flashcard = findByListIdAndId(listId, flashcardId);
+		if (!flashcard.isPresent()) {
+			return Optional.absent();
 		}
 		
 		return storage.remove(flashcardId);
 	}
 
 	@Override
-	public Flashcard update(Flashcard flashcard) {
+	public Optional<Flashcard> update(Flashcard flashcard) {
 		return storage.update(flashcard.getId().toString(), flashcard);
 	}
 
 	@Override
 	public List<Flashcard> findAllByListId(final String listId) {
-		FlashcardList flashcardList = listDao.findById(listId);
-		if (flashcardList == null) {
+		Optional<FlashcardList> flashcardList = listDao.findById(listId);
+		if (!flashcardList.isPresent()) {
 			return null;
 		}
 		
@@ -85,17 +86,18 @@ public class InMemoryFlashcardDao implements FlashcardDao {
 	}
 
 	@Override
-	public Flashcard findByListIdAndId(String listId, String id) {
-		Flashcard flashcard = storage.get(id);
+	public Optional<Flashcard> findByListIdAndId(String listId, String id) {
+		Optional<Flashcard> flashcard = storage.get(id);
 		
-		if (flashcard == null) {
-			return null;
+		if (!flashcard.isPresent()) {
+			return Optional.absent();
 		}
 		
-		if (listId.equals(flashcard.getFlashcardListId())) {
+		String flashcardListId = flashcard.get().getFlashcardListId();
+		if (listId.equals(flashcardListId)) {
 			return flashcard;
 		} else {
-			return null;
+			return Optional.absent();
 		}
 	}
 

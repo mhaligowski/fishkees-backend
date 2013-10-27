@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 public class InMemoryFlashcardListDao implements FlashcardListDao {
@@ -16,7 +17,7 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 		return Lists.newArrayList(storage.all());
 	}
 
-	public FlashcardList createNewFromObject(FlashcardList flashcardList) {
+	public Optional<FlashcardList> createNewFromObject(FlashcardList flashcardList) {
 		String newId = storage.getNewId();
 
 		FlashcardList newList = new FlashcardList(newId,
@@ -24,21 +25,21 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 
 		storage.put(newId, newList);
 
-		return newList;
+		return Optional.of(newList);
 	}
 
 	@Override
-	public FlashcardList findById(String id) {
+	public Optional<FlashcardList> findById(String id) {
 		return storage.get(id.toString());
 	}
 
 	@Override
-	public FlashcardList remove(String id) {
+	public Optional<FlashcardList> remove(String id) {
 		return storage.remove(id.toString());
 	}
 
 	@Override
-	public FlashcardList update(FlashcardList flashcardList) {
+	public Optional<FlashcardList> update(FlashcardList flashcardList) {
 		return storage.update(flashcardList.getId().toString(), flashcardList);
 	}
 }

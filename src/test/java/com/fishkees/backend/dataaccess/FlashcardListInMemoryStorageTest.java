@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 public class FlashcardListInMemoryStorageTest {
@@ -54,13 +55,19 @@ public class FlashcardListInMemoryStorageTest {
 
 		// then
 		assertThat(testObj.all()).containsOnly(fl1, fl2, fl3, newFl);
-		assertEquals(newFl, testObj.get(newFl.getId()));
+		assertEquals(newFl, testObj.get(newFl.getId()).get());
 	}
 
 	@Test
 	public void should_return_null_when_finding_nonexisting() {
+		// given
 		String NONEXISTING_ID = "0";
-		assertNull(testObj.get(NONEXISTING_ID));
+		
+		// when
+		Optional<FlashcardList> result = testObj.get(NONEXISTING_ID);
+		
+		assertNotNull(result);
+		assertFalse(result.isPresent());
 	}
 
 	@Test
@@ -75,11 +82,11 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void should_return_proper_one_when_querying() {
 		// when
-		FlashcardList flashcardList = testObj.get(ID2);
+		Optional<FlashcardList> flashcardList = testObj.get(ID2);
 
 		// then
-		assertEquals(ID2, flashcardList.getId());
-		assertEquals(TITLE2, flashcardList.getTitle());
+		assertEquals(ID2, flashcardList.get().getId());
+		assertEquals(TITLE2, flashcardList.get().getTitle());
 	}
 
 	@Test
@@ -108,22 +115,22 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void should_return_removed_item_when_item_exists() {
 		// when
-		FlashcardList removed = this.testObj.remove(ID2);
+		Optional<FlashcardList> removed = this.testObj.remove(ID2);
 
 		// then
 		assertThat(this.testObj.all()).containsOnly(fl1, fl3);
-		assertEquals(fl2, removed);
+		assertEquals(fl2, removed.get());
 	}
 
 	@Test
 	public void should_return_null_when_removing_nonexisting() {
 		// when
 		String NONEXISTING = "1000";
-		FlashcardList removed = this.testObj.remove(NONEXISTING);
+		Optional<FlashcardList> removed = this.testObj.remove(NONEXISTING);
 
 		// then
 		assertThat(this.testObj.all()).containsOnly(fl1, fl2, fl3);
-		assertNull(removed);
+		assertThat(removed.isPresent());
 	}
 
 	@Test
@@ -132,10 +139,10 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = newListWithId(ID1).build(); 
 
 		// when
-		FlashcardList update = testObj.update(ID1, fl);
+		Optional<FlashcardList> update = testObj.update(ID1, fl);
 
 		// then
-		assertEquals(fl, update);
+		assertEquals(fl, update.get());
 		assertThat(this.testObj.all()).containsOnly(fl, fl2, fl3);
 	}
 
@@ -146,10 +153,10 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = newListWithId(NONEXISTING).build(); 
 
 		// when
-		FlashcardList update = testObj.update(NONEXISTING, fl);
+		Optional<FlashcardList> update = testObj.update(NONEXISTING, fl);
 
 		// then
-		assertNull(update);
+		assertFalse(update.isPresent());
 		assertThat(this.testObj.all()).containsOnly(fl1, fl2, fl3);
 	}
 

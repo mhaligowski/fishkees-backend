@@ -22,6 +22,7 @@ import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
@@ -70,7 +71,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = flashcardBuilder.build();
 		when(dao.createNewFromObject(any(Flashcard.class)))
-				.thenReturn(expected);
+				.thenReturn(Optional.of(expected));
 
 		// when
 		ClientResponse response = client()
@@ -120,7 +121,11 @@ public class FlashcardResourceTest extends ResourceTest {
 	}
 
 	@Test
-	public void should_return_404_when_findin_non_existing() {
+	public void should_return_404_when_finding_non_existing() {
+		// given
+		when(dao.findByListIdAndId("otherListId", "someId1")).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		ClientResponse clientResponse = client().resource(
 				"/flashcardlists/otherListId/flashcards/someId1").get(
@@ -137,7 +142,7 @@ public class FlashcardResourceTest extends ResourceTest {
 	public void should_return_the_proper_element() {
 		// given
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
-				flashcards.get(0));
+				Optional.of(flashcards.get(0)));
 
 		// when
 		ClientResponse clientResponse = client().resource(
@@ -230,7 +235,8 @@ public class FlashcardResourceTest extends ResourceTest {
 		// given
 		Flashcard toUpdate = flashcardBuilder.withValues("update front",
 				"updated back").build();
-		when(dao.update(any(Flashcard.class))).thenReturn(toUpdate);
+		when(dao.update(any(Flashcard.class)))
+				.thenReturn(Optional.of(toUpdate));
 
 		// when
 		ClientResponse response = client()
@@ -311,8 +317,10 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_updating_non_existing() {
 		// given
-		Flashcard toUpdate = flashcardBuilder.updateId("notFoundId")
+		final Flashcard toUpdate = flashcardBuilder.updateId("notFoundId")
 				.withValues("updated front", "updated back").build();
+		when(dao.update(any(Flashcard.class))).thenReturn(
+				Optional.<Flashcard> absent());
 
 		// when
 		ClientResponse response = client()
@@ -335,7 +343,7 @@ public class FlashcardResourceTest extends ResourceTest {
 		// given
 		Flashcard single = FlashcardFixtures.single();
 		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
-				.thenReturn(single);
+				.thenReturn(Optional.of(single));
 
 		// when
 		ClientResponse response = client().resource(
@@ -358,6 +366,10 @@ public class FlashcardResourceTest extends ResourceTest {
 
 	@Test
 	public void should_return_404_when_not_existing_list_or_flashcard() {
+		// given
+		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
+				.thenReturn(Optional.<Flashcard> absent());
+
 		// when
 		ClientResponse response = client().resource(
 				"/flashcardlists/flashcardListId/flashcards/someId").delete(

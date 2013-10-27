@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
+import com.google.common.base.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FlashcardListResourceMockTest {
@@ -55,7 +56,7 @@ public class FlashcardListResourceMockTest {
 	public void should_return_the_appropriate_list() throws Exception {
 		// given
 		FlashcardList list = FlashcardListFixtures.single();
-		when(flashcardListDao.findById(ID1)).thenReturn(list);
+		when(flashcardListDao.findById(ID1)).thenReturn(Optional.of(list));
 
 		// when
 		Response result = testObj.find(ID1);
@@ -67,6 +68,10 @@ public class FlashcardListResourceMockTest {
 
 	@Test
 	public void should_result_with_404_when_nonexisting() {
+		// given
+		when(flashcardListDao.findById(NONEXISTING)).thenReturn(
+				Optional.<FlashcardList> absent());
+
 		// when
 		Response result = testObj.find(NONEXISTING);
 
@@ -81,7 +86,7 @@ public class FlashcardListResourceMockTest {
 		FlashcardList listData = FlashcardListFixtures.partial();
 		FlashcardList newList = newListWithId(ID1).withTitle("abcd").build();
 		when(flashcardListDao.createNewFromObject(listData))
-				.thenReturn(newList);
+				.thenReturn(Optional.of(newList));
 
 		// when
 		Response response = testObj.create(listData);
@@ -97,7 +102,8 @@ public class FlashcardListResourceMockTest {
 		// given
 		FlashcardList flashcardList = FlashcardListFixtures.single();
 		String id = flashcardList.getId();
-		when(flashcardListDao.remove(id)).thenReturn(flashcardList);
+		when(flashcardListDao.remove(id))
+				.thenReturn(Optional.of(flashcardList));
 
 		// when
 		Response response = testObj.remove(id);
@@ -112,6 +118,10 @@ public class FlashcardListResourceMockTest {
 
 	@Test
 	public void should_return_404_when_returning_nonexisting() throws Exception {
+		// given
+		when(flashcardListDao.remove(NONEXISTING)).thenReturn(
+				Optional.<FlashcardList> absent());
+		
 		// when
 		Response response = testObj.remove(NONEXISTING);
 
@@ -123,10 +133,12 @@ public class FlashcardListResourceMockTest {
 	}
 
 	@Test
-	public void should_return_409_when_updating_with_conflicting_ids() throws Exception {
+	public void should_return_409_when_updating_with_conflicting_ids()
+			throws Exception {
 		// when
 		String OTHER_ID = "54321";
-		Response response = testObj.update(ID1, newListWithId(OTHER_ID).build());
+		Response response = testObj
+				.update(ID1, newListWithId(OTHER_ID).build());
 
 		// then
 		assertNotNull(response);
@@ -134,9 +146,13 @@ public class FlashcardListResourceMockTest {
 	}
 
 	@Test
-	public void should_return_404_when_updating_nonexisting_list() throws Exception {
+	public void should_return_404_when_updating_nonexisting_list()
+			throws Exception {
+		// given
+		final FlashcardList fl1 = newListWithId(ID1).build();
+		when(flashcardListDao.update(fl1)).thenReturn(Optional.<FlashcardList>absent());
+		
 		// when
-		FlashcardList fl1 = newListWithId(ID1).build();
 		Response response = testObj.update(ID1, fl1);
 
 		// then
@@ -150,7 +166,7 @@ public class FlashcardListResourceMockTest {
 	public void should_return_200_when_updating_properlu() throws Exception {
 		// when
 		FlashcardList fl1 = newListWithId(ID1).withTitle("abcd").build();
-		when(flashcardListDao.update(fl1)).thenReturn(fl1);
+		when(flashcardListDao.update(fl1)).thenReturn(Optional.of(fl1));
 
 		Response response = testObj.update(ID1, fl1);
 

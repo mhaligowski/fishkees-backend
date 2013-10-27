@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.base.Optional;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/flashcardlists/{listId}/flashcards")
@@ -44,13 +45,13 @@ public class FlashcardResource {
 	@Path("/{flashcardId}")
 	public Response find(@PathParam("listId") String listId,
 			@PathParam("flashcardId") String flashcardId) {
-		Flashcard flashcard = flashcardDao.findByListIdAndId(listId,
+		Optional<Flashcard> flashcard = flashcardDao.findByListIdAndId(listId,
 				flashcardId);
 
-		if (flashcard == null) {
-			return Response.status(Status.NOT_FOUND).build();
+		if (flashcard.isPresent()) {
+			return Response.ok(flashcard.get()).build();
 		} else {
-			return Response.ok(flashcard).build();
+			return Response.status(Status.NOT_FOUND).build();
 		}
 	}
 
@@ -63,13 +64,13 @@ public class FlashcardResource {
 					.entity("Conflicting listIds").build();
 		}
 
-		final Flashcard newFlashcard = flashcardDao
+		final Optional<Flashcard> newFlashcard = flashcardDao
 				.createNewFromObject(flashcard);
 
 		UriBuilder builder = UriBuilder.fromPath("/{cardId}");
-		URI uri = builder.build(newFlashcard.getId());
+		URI uri = builder.build(newFlashcard.get().getId());
 
-		return Response.created(uri).entity(newFlashcard).build();
+		return Response.created(uri).entity(newFlashcard.get()).build();
 	}
 
 	@PUT
@@ -87,25 +88,27 @@ public class FlashcardResource {
 			return Response.status(Status.CONFLICT).entity(CONFLICT_ID).build();
 		}
 
-		Flashcard updated = flashcardDao.update(toUpdate);
+		Optional<Flashcard> updated = flashcardDao.update(toUpdate);
 
-		if (updated == null) {
+		if (updated.isPresent()) {
+			return Response.ok(updated.get()).build();
+		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 
-		return Response.ok(updated).build();
 	}
 
 	@DELETE
 	@Path("/{flashcardId}")
 	public Response remove(@PathParam("listId") String listId,
 			@PathParam("flashcardId") String flashcardId) {
-		Flashcard removed = flashcardDao.removeByListIdAndId(listId, flashcardId);
+		Optional<Flashcard> removed = flashcardDao.removeByListIdAndId(listId,
+				flashcardId);
 
-		if (removed == null) {
+		if (removed.isPresent()) {
+			return Response.ok(removed.get()).build();
+		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-
-		return Response.ok(removed).build();
 	}
 }

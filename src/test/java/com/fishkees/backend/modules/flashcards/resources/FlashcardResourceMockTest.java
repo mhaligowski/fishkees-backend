@@ -21,6 +21,7 @@ import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
 import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.flashcards.dao.FlashcardDao;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,7 +56,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcard = FlashcardFixtures.partial();
 		Flashcard expected = flashcardBuilder.build();
-		when(dao.createNewFromObject(flashcard)).thenReturn(expected);
+		when(dao.createNewFromObject(flashcard)).thenReturn(Optional.of(expected));
 
 		// when
 		Response response = testObj.create(DEFAULT_PARENT_ID, flashcard);
@@ -89,7 +90,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcard = FlashcardFixtures.single();
 		when(dao.findByListIdAndId("flashcardListId1", "someId1")).thenReturn(
-				flashcard);
+				Optional.of(flashcard));
 
 		// when
 		Response response = testObj.find("flashcardListId1", "someId1");
@@ -104,6 +105,10 @@ public class FlashcardResourceMockTest {
 
 	@Test
 	public void should_return_404_for_nonexisting_flashcard() {
+		// given
+		when(dao.findByListIdAndId("otherList", "someId1")).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		Response response = testObj.find("otherList", "someId1");
 
@@ -158,9 +163,9 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_200_with_updated_object_when_update_is_successful() {
 		// given
-		Flashcard updated = flashcardBuilder.withValues("updated front",
+		final Flashcard updated = flashcardBuilder.withValues("updated front",
 				"updated back").build();
-		when(dao.update(updated)).thenReturn(updated);
+		when(dao.update(updated)).thenReturn(Optional.of(updated));
 
 		// when
 		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,
@@ -209,7 +214,8 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_404_when_updating_non_existing_list() {
 		// given
-		Flashcard flashcard = FlashcardFixtures.single();
+		final Flashcard flashcard = FlashcardFixtures.single();
+		when(dao.update(flashcard)).thenReturn(Optional.<Flashcard>absent());
 
 		// when
 		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,
@@ -227,7 +233,7 @@ public class FlashcardResourceMockTest {
 		// given
 		Flashcard flashcardToRemove = FlashcardFixtures.single();
 		when(dao.removeByListIdAndId(DEFAULT_PARENT_ID, DEFAULT_ID))
-				.thenReturn(flashcardToRemove);
+				.thenReturn(Optional.of(flashcardToRemove));
 
 		// when
 		Response response = testObj.remove(DEFAULT_PARENT_ID, DEFAULT_ID);
@@ -243,6 +249,10 @@ public class FlashcardResourceMockTest {
 
 	@Test
 	public void should_return_404_when_either_list_or_flashcard_was_not_found() {
+		// given
+		when(dao.removeByListIdAndId("otherListId", DEFAULT_ID)).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		Response response = testObj.remove("otherListId", DEFAULT_ID);
 
