@@ -44,7 +44,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 		when(dao.findAll()).thenReturn(Lists.newArrayList(flashcardList1));
 		when(dao.findById(ID1)).thenReturn(Optional.of(flashcardList1));
 		when(dao.createNewFromObject(any(FlashcardList.class))).thenReturn(
-				flashcardList1);
+				Optional.of(flashcardList1));
 		when(dao.remove(ID1)).thenReturn(Optional.of(flashcardList1));
 		addResource(testObj);
 	}

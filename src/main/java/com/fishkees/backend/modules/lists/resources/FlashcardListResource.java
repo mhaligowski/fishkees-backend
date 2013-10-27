@@ -49,11 +49,11 @@ public class FlashcardListResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(@Valid FlashcardList flashcardList) {
-		final FlashcardList newFlashcardList = flashcardListDao
+		final Optional<FlashcardList> newFlashcardList = flashcardListDao
 				.createNewFromObject(flashcardList);
 
 		UriBuilder builder = UriBuilder.fromPath("/{listId}");
-		URI uri = builder.build(newFlashcardList.getId());
+		URI uri = builder.build(newFlashcardList.get().getId());
 		Response response = Response.created(uri).entity(newFlashcardList)
 				.build();
 

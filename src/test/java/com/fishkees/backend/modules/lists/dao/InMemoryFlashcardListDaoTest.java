@@ -16,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder;
+import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
 import com.google.common.base.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -63,12 +63,12 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_create_new_object_from_passed_one_with_copied_data() {
 		// given
-		FlashcardList fl = FlashcardListTestBuilder.newListWithId(null)
-				.withTitle("abcd").build();
+		final FlashcardList fl = newListWithId(null).withTitle("abcd").build();
 		when(storage.getNewId()).thenReturn(ID1);
 
 		// when
-		FlashcardList resultFlashcardList = testObj.createNewFromObject(fl);
+		Optional<FlashcardList> resultFlashcardList = testObj
+				.createNewFromObject(fl);
 
 		// then
 		verify(storage).getNewId();
@@ -86,8 +86,8 @@ public class InMemoryFlashcardListDaoTest {
 		assertNotNull(id);
 		assertEquals(id, newFlashcardListFromStorage.getId());
 		assertEquals("abcd", newFlashcardListFromStorage.getTitle());
-		assertEquals(newFlashcardListFromStorage, resultFlashcardList);
-		assertNotNull(resultFlashcardList.getCreateDate());
+		assertEquals(newFlashcardListFromStorage, resultFlashcardList.get());
+		assertNotNull(resultFlashcardList.get().getCreateDate());
 	}
 
 	@Test
@@ -134,8 +134,7 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_return_null_if_updateing_non_existing() {
 		// given
-		FlashcardList flashcardList = FlashcardListTestBuilder.newListWithId(
-				NONEXISTING).build();
+		FlashcardList flashcardList = newListWithId(NONEXISTING).build();
 		when(storage.update(NONEXISTING, flashcardList)).thenReturn(
 				Optional.<FlashcardList> absent());
 
@@ -150,8 +149,7 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_return_the_updated_object() {
 		// given
-		FlashcardList fl = FlashcardListTestBuilder.newListWithId(ID1)
-				.withTitle("new title").build();
+		FlashcardList fl = newListWithId(ID1).withTitle("new title").build();
 		when(storage.update(ID1, fl)).thenReturn(Optional.of(fl));
 
 		// when

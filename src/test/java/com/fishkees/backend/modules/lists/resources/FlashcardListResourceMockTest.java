@@ -86,7 +86,7 @@ public class FlashcardListResourceMockTest {
 		FlashcardList listData = FlashcardListFixtures.partial();
 		FlashcardList newList = newListWithId(ID1).withTitle("abcd").build();
 		when(flashcardListDao.createNewFromObject(listData))
-				.thenReturn(newList);
+				.thenReturn(Optional.of(newList));
 
 		// when
 		Response response = testObj.create(listData);
