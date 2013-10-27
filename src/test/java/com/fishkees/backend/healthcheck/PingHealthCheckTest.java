@@ -18,7 +18,7 @@ import com.yammer.metrics.core.HealthCheck.Result;
 public class PingHealthCheckTest {
 	
 	@Test
-	public void testUnhealthy() throws IOException {
+	public void should_return_unhealthy_when_cannot_connect_to_the_external_server() throws IOException {
 		// given
 		URLWrapper urlWrapper = mock(URLWrapper.class);
 		String urlString = "###";
@@ -34,7 +34,7 @@ public class PingHealthCheckTest {
 	}
 	
 	@Test
-	public void testHealthy() throws Exception {
+	public void should_return_healthy_when_can_connect_to_external_server() throws Exception {
 		// given
 		String urlString = "http://www.google.com";
 		
