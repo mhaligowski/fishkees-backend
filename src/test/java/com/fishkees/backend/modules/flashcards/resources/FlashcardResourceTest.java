@@ -235,7 +235,8 @@ public class FlashcardResourceTest extends ResourceTest {
 		// given
 		Flashcard toUpdate = flashcardBuilder.withValues("update front",
 				"updated back").build();
-		when(dao.update(any(Flashcard.class))).thenReturn(toUpdate);
+		when(dao.update(any(Flashcard.class)))
+				.thenReturn(Optional.of(toUpdate));
 
 		// when
 		ClientResponse response = client()
@@ -316,8 +317,10 @@ public class FlashcardResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_updating_non_existing() {
 		// given
-		Flashcard toUpdate = flashcardBuilder.updateId("notFoundId")
+		final Flashcard toUpdate = flashcardBuilder.updateId("notFoundId")
 				.withValues("updated front", "updated back").build();
+		when(dao.update(any(Flashcard.class))).thenReturn(
+				Optional.<Flashcard> absent());
 
 		// when
 		ClientResponse response = client()

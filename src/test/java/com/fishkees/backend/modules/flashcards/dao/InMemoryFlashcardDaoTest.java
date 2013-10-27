@@ -4,6 +4,7 @@ import static org.fest.assertions.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder.*;
 
 import java.util.List;
 
@@ -18,7 +19,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.flashcards.FlashcardFixtures;
 import com.fishkees.backend.modules.flashcards.core.Flashcard;
-import com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.common.base.Optional;
@@ -72,9 +72,8 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_store_new_flashcard_from_partial() {
 		// given
-		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(null)
-				.withParent("flashcardListId1").withValues("front 1", "back 1")
-				.build();
+		Flashcard f = newFlashcardWithId(null).withParent("flashcardListId1")
+				.withValues("front 1", "back 1").build();
 		when(storage.getNewId()).thenReturn(ID1);
 
 		// when
@@ -129,8 +128,9 @@ public class InMemoryFlashcardDaoTest {
 	public void should_return_null_if_removing_non_exsiting() {
 		// given
 		final String NONEXISTING = "1000";
-		when(storage.remove(NONEXISTING)).thenReturn(Optional.<Flashcard>absent());
-		
+		when(storage.remove(NONEXISTING)).thenReturn(
+				Optional.<Flashcard> absent());
+
 		// when
 		Optional<Flashcard> removed = testObj.remove(NONEXISTING);
 
@@ -143,31 +143,32 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_null_if_updating_non_existing() {
 		// given
-		String NON_EXISTING = "10";
-		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(NON_EXISTING)
-				.build();
+		final String NON_EXISTING = "10";
+		final Flashcard f = newFlashcardWithId(NON_EXISTING).build();
+		when(storage.update(NON_EXISTING, f)).thenReturn(
+				Optional.<Flashcard> absent());
 
 		// when
-		Flashcard update = testObj.update(f);
+		Optional<Flashcard> update = testObj.update(f);
 
 		// then
-		assertNull(update);
+		assertFalse(update.isPresent());
 		verify(storage).update(NON_EXISTING, f);
 	}
 
 	@Test
 	public void should_return_updated_value() {
 		// given
-		Flashcard f = FlashcardTestBuilder.newFlashcardWithId(ID1)
+		final Flashcard f = newFlashcardWithId(ID1)
 				.withParent("flashcardList1").withValues("front 1", "back 1")
 				.build();
-		when(storage.update(ID1, f)).thenReturn(f);
+		when(storage.update(ID1, f)).thenReturn(Optional.of(f));
 
 		// when
-		Flashcard updated = testObj.update(f);
+		Optional<Flashcard> updated = testObj.update(f);
 
 		// then
-		assertEquals(f, updated);
+		assertEquals(f, updated.get());
 		verify(storage).update(ID1, f);
 	}
 
@@ -190,7 +191,8 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_empty_list_when_looking_for_non_existing() {
 		// given
-		when(listDao.findById(anyString())).thenReturn(Optional.<FlashcardList>absent());
+		when(listDao.findById(anyString())).thenReturn(
+				Optional.<FlashcardList> absent());
 
 		// when
 		List<Flashcard> resultList = testObj
@@ -222,7 +224,8 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_the_list_when_searching_by_list_id_and_id() {
 		// when
-		Optional<Flashcard> actual = testObj.findByListIdAndId("flashcardListId1", ID1);
+		Optional<Flashcard> actual = testObj.findByListIdAndId(
+				"flashcardListId1", ID1);
 
 		// then
 		assertEquals(flashcards.get(0), actual.get());
@@ -233,7 +236,8 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_null_if_looking_for_non_existing_list() {
 		// when
-		Optional<Flashcard> actual = testObj.findByListIdAndId("flashcardListId2", ID1);
+		Optional<Flashcard> actual = testObj.findByListIdAndId(
+				"flashcardListId2", ID1);
 
 		// then
 		assertFalse(actual.isPresent());
@@ -245,11 +249,12 @@ public class InMemoryFlashcardDaoTest {
 	public void should_return_null_when_looking_for_nonexisting_flashcard() {
 		// given
 		final String NONEXISTING = "id2000";
-		when(storage.get(NONEXISTING)).thenReturn(Optional.<Flashcard>absent());
-		
+		when(storage.get(NONEXISTING))
+				.thenReturn(Optional.<Flashcard> absent());
+
 		// when
-		Optional<Flashcard> actual = testObj.findByListIdAndId("flashcardListId2",
-				NONEXISTING);
+		Optional<Flashcard> actual = testObj.findByListIdAndId(
+				"flashcardListId2", NONEXISTING);
 
 		// then
 		assertFalse(actual.isPresent());
@@ -260,8 +265,8 @@ public class InMemoryFlashcardDaoTest {
 	@Test
 	public void should_return_the_removed_flashcard() {
 		// when
-		Optional<Flashcard> flashcard = testObj.removeByListIdAndId("flashcardListId1",
-				ID1);
+		Optional<Flashcard> flashcard = testObj.removeByListIdAndId(
+				"flashcardListId1", ID1);
 
 		// then
 		assertEquals(flashcards.get(0), flashcard.get());

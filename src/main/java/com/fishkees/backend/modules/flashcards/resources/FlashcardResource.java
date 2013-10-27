@@ -88,13 +88,14 @@ public class FlashcardResource {
 			return Response.status(Status.CONFLICT).entity(CONFLICT_ID).build();
 		}
 
-		Flashcard updated = flashcardDao.update(toUpdate);
+		Optional<Flashcard> updated = flashcardDao.update(toUpdate);
 
-		if (updated == null) {
+		if (updated.isPresent()) {
+			return Response.ok(updated.get()).build();
+		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 
-		return Response.ok(updated).build();
 	}
 
 	@DELETE

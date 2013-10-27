@@ -114,8 +114,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_finding_non_existing() {
 		// given
-		when(dao.findById("nonExisting")).thenReturn(Optional.<FlashcardList>absent());
-			
+		when(dao.findById("nonExisting")).thenReturn(
+				Optional.<FlashcardList> absent());
+
 		// when
 		ClientResponse clientResponse = client().resource(
 				"/flashcardlists/nonExisting").get(ClientResponse.class);
@@ -144,8 +145,9 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_removing_nonexisting() {
 		// given
-		when(dao.remove("nonexisting")).thenReturn(Optional.<FlashcardList>absent());
-		
+		when(dao.remove("nonexisting")).thenReturn(
+				Optional.<FlashcardList> absent());
+
 		// when
 		ClientResponse response = client().resource(
 				"/flashcardlists/nonexisting").delete(ClientResponse.class);
@@ -173,9 +175,11 @@ public class FlashcardListResourceTest extends ResourceTest {
 	@Test
 	public void should_return_404_when_updating_nonexisting() {
 		// given
-		String NONEXISTING = "54321";
-		FlashcardList fl = newListWithId(NONEXISTING).withTitle("updated")
-				.build();
+		final String NONEXISTING = "54321";
+		final FlashcardList fl = newListWithId(NONEXISTING)
+				.withTitle("updated").build();
+		when(dao.update(any(FlashcardList.class))).thenReturn(
+				Optional.<FlashcardList> absent());
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/54321")
@@ -191,7 +195,7 @@ public class FlashcardListResourceTest extends ResourceTest {
 	public void should_return_200_when_succesful_update() {
 		// given
 		FlashcardList fl = newListWithId(ID1).withTitle("updated").build();
-		when(dao.update(any(FlashcardList.class))).thenReturn(fl);
+		when(dao.update(any(FlashcardList.class))).thenReturn(Optional.of(fl));
 
 		// when
 		ClientResponse response = client().resource("/flashcardlists/12345")

@@ -39,13 +39,13 @@ public abstract class KeyValueStore<K, V> {
 		return Optional.fromNullable(map.remove(key));
 	}
 
-	public V update(K key, V value) {
+	public Optional<V> update(K key, V value) {
 		if (this.map.containsKey(key)) {
 			map.put(key, value);
-			return value;
+			return Optional.of(value);
 		}
 
-		return null;
+		return Optional.absent();
 	};
 
 	public String getNewId() {

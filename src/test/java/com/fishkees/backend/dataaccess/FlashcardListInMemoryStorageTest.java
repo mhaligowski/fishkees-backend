@@ -139,10 +139,10 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = newListWithId(ID1).build(); 
 
 		// when
-		FlashcardList update = testObj.update(ID1, fl);
+		Optional<FlashcardList> update = testObj.update(ID1, fl);
 
 		// then
-		assertEquals(fl, update);
+		assertEquals(fl, update.get());
 		assertThat(this.testObj.all()).containsOnly(fl, fl2, fl3);
 	}
 
@@ -153,10 +153,10 @@ public class FlashcardListInMemoryStorageTest {
 		FlashcardList fl = newListWithId(NONEXISTING).build(); 
 
 		// when
-		FlashcardList update = testObj.update(NONEXISTING, fl);
+		Optional<FlashcardList> update = testObj.update(NONEXISTING, fl);
 
 		// then
-		assertNull(update);
+		assertFalse(update.isPresent());
 		assertThat(this.testObj.all()).containsOnly(fl1, fl2, fl3);
 	}
 

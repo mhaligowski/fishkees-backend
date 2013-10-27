@@ -163,9 +163,9 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_200_with_updated_object_when_update_is_successful() {
 		// given
-		Flashcard updated = flashcardBuilder.withValues("updated front",
+		final Flashcard updated = flashcardBuilder.withValues("updated front",
 				"updated back").build();
-		when(dao.update(updated)).thenReturn(updated);
+		when(dao.update(updated)).thenReturn(Optional.of(updated));
 
 		// when
 		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,
@@ -214,7 +214,8 @@ public class FlashcardResourceMockTest {
 	@Test
 	public void should_return_404_when_updating_non_existing_list() {
 		// given
-		Flashcard flashcard = FlashcardFixtures.single();
+		final Flashcard flashcard = FlashcardFixtures.single();
+		when(dao.update(flashcard)).thenReturn(Optional.<Flashcard>absent());
 
 		// when
 		Response response = testObj.update(DEFAULT_PARENT_ID, DEFAULT_ID,

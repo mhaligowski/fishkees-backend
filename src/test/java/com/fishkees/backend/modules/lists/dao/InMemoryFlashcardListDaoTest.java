@@ -120,8 +120,9 @@ public class InMemoryFlashcardListDaoTest {
 	@Test
 	public void should_return_null_if_removing_non_existing() {
 		// given
-		when(storage.remove(NONEXISTING)).thenReturn(Optional.<FlashcardList>absent());
-		
+		when(storage.remove(NONEXISTING)).thenReturn(
+				Optional.<FlashcardList> absent());
+
 		// when
 		Optional<FlashcardList> removed = testObj.remove(NONEXISTING);
 
@@ -135,12 +136,14 @@ public class InMemoryFlashcardListDaoTest {
 		// given
 		FlashcardList flashcardList = FlashcardListTestBuilder.newListWithId(
 				NONEXISTING).build();
+		when(storage.update(NONEXISTING, flashcardList)).thenReturn(
+				Optional.<FlashcardList> absent());
 
 		// when
-		FlashcardList update = testObj.update(flashcardList);
+		Optional<FlashcardList> update = testObj.update(flashcardList);
 
 		// then
-		assertNull(update);
+		assertFalse(update.isPresent());
 		verify(storage).update(NONEXISTING, flashcardList);
 	}
 
@@ -149,13 +152,13 @@ public class InMemoryFlashcardListDaoTest {
 		// given
 		FlashcardList fl = FlashcardListTestBuilder.newListWithId(ID1)
 				.withTitle("new title").build();
-		when(storage.update(ID1, fl)).thenReturn(fl);
+		when(storage.update(ID1, fl)).thenReturn(Optional.of(fl));
 
 		// when
-		FlashcardList updated = testObj.update(fl);
+		Optional<FlashcardList> updated = testObj.update(fl);
 
 		// then
-		assertEquals(fl, updated);
+		assertEquals(fl, updated.get());
 		verify(storage).update(ID1, fl);
 	}
 }

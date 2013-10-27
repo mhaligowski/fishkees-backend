@@ -13,5 +13,5 @@ public interface FlashcardDao {
 	Flashcard createNewFromObject(Flashcard flashcard);
 	Optional<Flashcard> remove(String id);
 	Optional<Flashcard> removeByListIdAndId(String listId, String flashcardId);
-	Flashcard update(Flashcard flashcard);
+	Optional<Flashcard> update(Flashcard flashcard);
 }

@@ -148,8 +148,11 @@ public class FlashcardListResourceMockTest {
 	@Test
 	public void should_return_404_when_updating_nonexisting_list()
 			throws Exception {
+		// given
+		final FlashcardList fl1 = newListWithId(ID1).build();
+		when(flashcardListDao.update(fl1)).thenReturn(Optional.<FlashcardList>absent());
+		
 		// when
-		FlashcardList fl1 = newListWithId(ID1).build();
 		Response response = testObj.update(ID1, fl1);
 
 		// then
@@ -163,7 +166,7 @@ public class FlashcardListResourceMockTest {
 	public void should_return_200_when_updating_properlu() throws Exception {
 		// when
 		FlashcardList fl1 = newListWithId(ID1).withTitle("abcd").build();
-		when(flashcardListDao.update(fl1)).thenReturn(fl1);
+		when(flashcardListDao.update(fl1)).thenReturn(Optional.of(fl1));
 
 		Response response = testObj.update(ID1, fl1);
 

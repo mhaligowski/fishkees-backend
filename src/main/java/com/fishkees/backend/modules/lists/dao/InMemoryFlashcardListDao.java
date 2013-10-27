@@ -39,7 +39,7 @@ public class InMemoryFlashcardListDao implements FlashcardListDao {
 	}
 
 	@Override
-	public FlashcardList update(FlashcardList flashcardList) {
+	public Optional<FlashcardList> update(FlashcardList flashcardList) {
 		return storage.update(flashcardList.getId().toString(), flashcardList);
 	}
 }

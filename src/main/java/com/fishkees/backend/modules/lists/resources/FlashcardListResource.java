@@ -82,12 +82,13 @@ public class FlashcardListResource {
 					.entity("Conflicting ids").build();
 		}
 
-		FlashcardList updated = flashcardListDao.update(flashcardList);
+		Optional<FlashcardList> updated = flashcardListDao
+				.update(flashcardList);
 
-		if (updated == null) {
+		if (updated.isPresent()) {
+			return Response.ok(updated.get()).build();
+		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-
-		return Response.ok(updated).build();
 	}
 }
