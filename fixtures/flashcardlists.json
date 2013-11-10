@@ -8,5 +8,10 @@
         "id": "someFlashcardListId2",
         "title": "Russian for intermediate",
         "create_date": 1339347167000
+    },
+    {
+        "id": "someFlashcardListId3",
+        "title": "List with no flashcards",
+        "create_date": 1339347167000    	
     }
 ]
