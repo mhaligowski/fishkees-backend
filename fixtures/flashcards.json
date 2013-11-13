@@ -2,15 +2,15 @@
 	{
 		"id": "someId1",
 		"flashcard_list_id": "someFlashcardListId1",
-		"front": "front 1",
-		"back": "back 1",
+		"front": "*front 1*",
+		"back": "_back 1_",
 		"create_date": 520603200000
 	},
 	{
 		"id": "someId2",
 		"flashcard_list_id": "someFlashcardListId1",
-		"front": "front 2",
-		"back": "back 2",
+		"front": "**front 2**",
+		"back": "__back 2__",
 		"create_date": 520603200000
 	},
 	{
