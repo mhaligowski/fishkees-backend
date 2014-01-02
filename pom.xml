@@ -40,7 +40,7 @@
 					<mainClass>com.fishkees.backend.service.FishkeesService</mainClass>
 					<arguments>
 						<argument>server</argument>
-						<argument>configuration.yml</argument>
+						<argument>conf/configuration.yml</argument>
 					</arguments>
 				</configuration>
 			</plugin>
