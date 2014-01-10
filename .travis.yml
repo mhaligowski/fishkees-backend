@@ -1,4 +1,12 @@
 language: java
 jdk:
-  - oraclejdk7
+- oraclejdk7
+deploy:
+  provider: heroku
+  api_key:
+    secure: CoTR27DFVTVsJoL8JGQBJhyWg9iQY/k6Kp+zTDqUyccPD+LajhicIgqUQ4jtbGtWLKHJq0P477zaif+ZfhckgUyYW+W/2drHGw0l8OUmvKrqBUacTJ4004Ikwq853ky2u8MXT0zYWhiNzF/8I+Nss7vME8OHuJE8oaGX0aHBrvg=
+  app: fishkees-demo
+  on:
+    repo: mhaligowski/fishkees-backend
+    branch: master
 
