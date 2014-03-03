@@ -11,7 +11,10 @@
 
 	<properties>
 		<dropwizard.version>0.6.2</dropwizard.version>
+		<morphia.version>0.106</morphia.version>
+		<guice.version>4.0-beta</guice.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
 	</properties>
 
 	<build>
@@ -99,7 +102,14 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>4.0-beta</version>
+			<version>${guice.version}</version>
+		</dependency>
+
+		<!-- Morphia -->
+		<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${morphia.version}</version>
 		</dependency>
 
 		<!-- TEST -->
