@@ -1,4 +1,4 @@
-package com.fishkees.backend.modules.lists.dao;
+package com.fishkees.backend.modules.lists.dao.inmemory;
 
 import java.util.Date;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
+import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
