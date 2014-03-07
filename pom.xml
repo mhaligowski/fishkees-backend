@@ -13,8 +13,9 @@
 		<dropwizard.version>0.6.2</dropwizard.version>
 		<morphia.version>0.106</morphia.version>
 		<guice.version>4.0-beta</guice.version>
+		<dozer.version>5.4.0</dozer.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 	</properties>
 
 	<build>
@@ -110,6 +111,12 @@
 			<groupId>org.mongodb.morphia</groupId>
 			<artifactId>morphia</artifactId>
 			<version>${morphia.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>${dozer.version}</version>
 		</dependency>
 
 		<!-- TEST -->
