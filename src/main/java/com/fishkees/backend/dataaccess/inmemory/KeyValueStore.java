@@ -1,4 +1,4 @@
-package com.fishkees.backend.dataaccess;
+package com.fishkees.backend.dataaccess.inmemory;
 
 import java.util.HashMap;
 import java.util.List;

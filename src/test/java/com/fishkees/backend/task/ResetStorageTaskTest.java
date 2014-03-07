@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
-import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
+import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResetStorageTaskTest {

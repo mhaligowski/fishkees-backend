@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
+import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 

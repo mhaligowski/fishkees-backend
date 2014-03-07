@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.fishkees.backend.configuration.FixturesConfiguration;
-import com.fishkees.backend.dataaccess.KeyValueStore;
+import com.fishkees.backend.dataaccess.inmemory.KeyValueStore;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
-import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
+import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
 import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

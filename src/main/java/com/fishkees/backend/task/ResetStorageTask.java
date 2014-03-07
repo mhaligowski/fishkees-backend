@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import javax.inject.Inject;
 
 import com.fishkees.backend.modules.flashcards.dao.FlashcardInMemoryStorage;
-import com.fishkees.backend.modules.lists.dao.FlashcardListInMemoryStorage;
+import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
 import com.google.common.collect.ImmutableMultimap;
 import com.yammer.dropwizard.tasks.Task;
 

@@ -16,7 +16,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fishkees.backend.modules.lists.FlashcardListFixtures;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
+import com.fishkees.backend.modules.lists.dao.inmemory.FlashcardListInMemoryStorage;
+
 import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
+
 import com.google.common.base.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
