@@ -7,7 +7,7 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
 @Entity("flashcard_lists")
-public class MorphiaFlashcardList {
+class MorphiaFlashcardList {
 	private @Id ObjectId id;
 	private String title;
 	private Date createDate;
