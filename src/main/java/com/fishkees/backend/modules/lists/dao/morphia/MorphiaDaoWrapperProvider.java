@@ -15,16 +15,19 @@ class MorphiaDaoWrapperProvider implements Provider<MorphiaDaoWrapper> {
 	public MorphiaDaoWrapperProvider(Morphia morphiaObject, Datastore datastore) {
 		this.morphiaObject = morphiaObject;
 		this.datastore = datastore;
-
 	}
 
 	@Override
 	public MorphiaDaoWrapper get() {
+		mapFlashcardListIfNotMapped();
+
+		return new MorphiaDaoWrapper(datastore);
+	}
+
+	private void mapFlashcardListIfNotMapped() {
 		if (!morphiaObject.isMapped(MorphiaFlashcardList.class)) {
 			morphiaObject.map(MorphiaFlashcardList.class);
 		}
-
-		return new MorphiaDaoWrapper(datastore);
 	}
 
 }
