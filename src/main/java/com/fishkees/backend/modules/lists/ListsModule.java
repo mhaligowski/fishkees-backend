@@ -36,7 +36,7 @@ public final class ListsModule extends AbstractModule {
 	public static ListsModule moduleWithFixture(FixturesConfiguration config) {
 		return new ListsModule(config);
 	}
-
+	
 	@Override
 	protected void configure() {
 		bind(FlashcardListDao.class).to(InMemoryFlashcardListDao.class);

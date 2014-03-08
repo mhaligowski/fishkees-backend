@@ -2,6 +2,7 @@ package com.fishkees.backend.dataaccess.mongo;
 
 import javax.inject.Singleton;
 
+import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.fishkees.backend.configuration.MongoConfiguration;
@@ -22,10 +23,12 @@ public class MongoDbModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(Mongo.class).toProvider(MongoProvider.class).in(Singleton.class);
-		bind(Morphia.class).toProvider(MorphiaObjectProvider.class).in(
-				Singleton.class);
 		bind(String.class).annotatedWith(Names.named(MONGO_DB_NAME))
 				.toInstance(configuration.getDb());
+		bind(Morphia.class).toProvider(MorphiaObjectProvider.class).in(
+				Singleton.class);
+		bind(Datastore.class).toProvider(DatastoreObjectProvider.class).in(
+				Singleton.class);
 	}
 
 	@Provides
