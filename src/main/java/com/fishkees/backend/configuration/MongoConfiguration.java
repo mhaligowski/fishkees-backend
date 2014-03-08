@@ -16,6 +16,9 @@ public class MongoConfiguration extends Configuration {
 	@JsonProperty
 	private String password;
 
+	@JsonProperty
+	private String db;
+	
 	public String getHost() {
 		return host;
 	}
@@ -30,6 +33,10 @@ public class MongoConfiguration extends Configuration {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public String getDb() {
+		return db;
 	}
 
 }
