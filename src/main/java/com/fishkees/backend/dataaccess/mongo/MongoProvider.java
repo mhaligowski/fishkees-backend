@@ -12,7 +12,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-public class MongoProvider implements Provider<Mongo> {
+class MongoProvider implements Provider<Mongo> {
 
 	@Inject
 	private MongoConfiguration conf;
