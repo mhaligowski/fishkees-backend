@@ -15,7 +15,7 @@ import com.fishkees.backend.modules.lists.resources.FlashcardListResource;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class FlashcardListsIntegrationTest {
+public class FlashcardListsIT {
 	private static final String ID1 = "someNiceId1";
 	private static final String ID2 = "someNiceId2";
 

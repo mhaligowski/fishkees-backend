@@ -25,8 +25,7 @@ public class MongoDbModule extends AbstractModule {
 		bind(Mongo.class).toProvider(MongoProvider.class).in(Singleton.class);
 		bind(String.class).annotatedWith(Names.named(MONGO_DB_NAME))
 				.toInstance(configuration.getDb());
-		bind(Morphia.class).toProvider(MorphiaObjectProvider.class).in(
-				Singleton.class);
+		bind(Morphia.class).in(Singleton.class);
 		bind(Datastore.class).toProvider(DatastoreObjectProvider.class).in(
 				Singleton.class);
 	}
