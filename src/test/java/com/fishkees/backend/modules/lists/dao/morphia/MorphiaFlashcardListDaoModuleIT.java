@@ -14,9 +14,8 @@ import com.fishkees.backend.dataaccess.morphia.MorphiaModule;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mongodb.Mongo;
 
-public class FlashcardListMorphiaIT {
+public class MorphiaFlashcardListDaoModuleIT {
 
 	private Injector injector;
 
@@ -34,15 +33,6 @@ public class FlashcardListMorphiaIT {
 	}
 
 	@Test
-	public void dao_should_be_instance_of_morphia() {
-		// when
-		FlashcardListDao flashcardListDao = injector.getInstance(FlashcardListDao.class);
-		
-		// then
-		assertTrue(flashcardListDao instanceof MorphiaFlashcardListDao);
-	}
-
-	@Test
 	public void morphia_entity_should_be_registered() {
 		// given 
 		@SuppressWarnings("unused")
@@ -53,27 +43,6 @@ public class FlashcardListMorphiaIT {
 		
 		//then 
 		assertTrue(morphiaObject.isMapped(MorphiaFlashcardList.class));
-	}
-
-	@Test
-	public void morphia_object_should_be_singleton() {
-		// when
-		Morphia morphia1 = injector.getInstance(Morphia.class);
-		Morphia morphia2 = injector.getInstance(Morphia.class);
-		
-		// then
-		assertSame(morphia1, morphia2);
-	}
-	
-	@Test
-	public void mongo_object_should_be_singleton() {
-		// when
-		Mongo mongo1 = injector.getInstance(Mongo.class);
-		Mongo mongo2 = injector.getInstance(Mongo.class);
-		
-		// then
-		assertSame(mongo1, mongo2);
-	}
-	
+	}	
 	
 }
