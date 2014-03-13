@@ -1,4 +1,4 @@
-package com.fishkees.backend.dataaccess.mongo;
+package com.fishkees.backend.dataaccess.morphia;
 
 import javax.inject.Singleton;
 
@@ -11,18 +11,18 @@ import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mongodb.Mongo;
 
-public class MongoDbModule extends AbstractModule {
+public class MorphiaModule extends AbstractModule {
 	public static final String MONGO_DB_NAME = "MongoDbName";
 
 	private MongoConfiguration configuration;
 
-	public MongoDbModule(MongoConfiguration configuration) {
+	public MorphiaModule(MongoConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
 	@Override
 	protected void configure() {
-		bind(Mongo.class).toProvider(MongoProvider.class).in(Singleton.class);
+		bind(Mongo.class).toProvider(MongoObjectProvider.class).in(Singleton.class);
 		bind(String.class).annotatedWith(Names.named(MONGO_DB_NAME))
 				.toInstance(configuration.getDb());
 		bind(Morphia.class).in(Singleton.class);

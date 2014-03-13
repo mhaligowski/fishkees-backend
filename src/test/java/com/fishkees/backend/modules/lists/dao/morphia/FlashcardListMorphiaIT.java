@@ -10,7 +10,7 @@ import org.mongodb.morphia.Morphia;
 
 import com.fishkees.backend.configuration.ConfigurationParser;
 import com.fishkees.backend.configuration.MongoConfiguration;
-import com.fishkees.backend.dataaccess.mongo.MongoDbModule;
+import com.fishkees.backend.dataaccess.morphia.MorphiaModule;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -29,7 +29,7 @@ public class FlashcardListMorphiaIT {
 		final URL resource = this.getClass().getResource(filename);
 		MongoConfiguration mongoConf = confParser.parseConfiguration(resource);
 
-		injector = Guice.createInjector(new MongoDbModule(mongoConf),
+		injector = Guice.createInjector(new MorphiaModule(mongoConf),
 				new MorphiaFlashcardListDaoModule());
 	}
 

@@ -1,4 +1,4 @@
-package com.fishkees.backend.dataaccess.mongo;
+package com.fishkees.backend.dataaccess.morphia;
 
 import java.net.UnknownHostException;
 
@@ -12,7 +12,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-class MongoProvider implements Provider<Mongo> {
+class MongoObjectProvider implements Provider<Mongo> {
 
 	@Inject
 	private MongoConfiguration conf;

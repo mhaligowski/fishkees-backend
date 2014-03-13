@@ -1,4 +1,4 @@
-package com.fishkees.backend.dataaccess.mongo;
+package com.fishkees.backend.dataaccess.morphia;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -18,7 +18,7 @@ import com.mongodb.MongoClient;
 public class MongoProviderTest {
 	
 	@InjectMocks
-	private MongoProvider testObj;
+	private MongoObjectProvider testObj;
 	
 	@Mock
 	private MongoConfiguration configuration;

@@ -1,4 +1,4 @@
-package com.fishkees.backend.dataaccess.mongo;
+package com.fishkees.backend.dataaccess.morphia;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -9,7 +9,7 @@ import org.mongodb.morphia.Morphia;
 
 import com.mongodb.Mongo;
 
-import static com.fishkees.backend.dataaccess.mongo.MongoDbModule.*;
+import static com.fishkees.backend.dataaccess.morphia.MorphiaModule.*;
 
 class DatastoreObjectProvider implements Provider<Datastore> {
 	private final String dbName;
