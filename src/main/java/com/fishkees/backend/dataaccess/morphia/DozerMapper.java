@@ -22,7 +22,8 @@ class DozerMapper implements Mapper {
 	@Override
 	public <S extends MorphiaEntity, T extends FishkeesEntity> void register(
 			Class<S> sourceClass, Class<T> targetClass) {
-		BeanMappingBuilder builder = mapperBuilderFactory.create(sourceClass, targetClass);
+		BeanMappingBuilder builder = mapperBuilderFactory.create(sourceClass,
+				targetClass);
 		dozerBeanMapper.addMapping(builder);
 	}
 

@@ -2,14 +2,12 @@ package com.fishkees.backend.dataaccess.morphia;
 
 import javax.inject.Singleton;
 
-import org.dozer.loader.api.BeanMappingBuilder;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.fishkees.backend.configuration.MongoConfiguration;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import com.mongodb.Mongo;
 
@@ -44,8 +42,7 @@ public class MorphiaModule extends AbstractModule {
 
 	private void bindMapperObjects() {
 		bind(Mapper.class).to(DozerMapper.class).in(Singleton.class);
-		install(new FactoryModuleBuilder().implement(BeanMappingBuilder.class,
-				MorphiaMappingBuilder.class).build(MapperBuilderFactory.class));
+		bind(MapperBuilderFactory.class).in(Singleton.class);
 	}
 
 	@Provides
