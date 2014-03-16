@@ -2,10 +2,11 @@ package com.fishkees.backend.modules.lists.core;
 
 import java.util.Date;
 
+import com.fishkees.backend.modules.core.FishkeesEntity;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
 @JsonSnakeCase
-public class FlashcardList {
+public class FlashcardList implements FishkeesEntity {
 	private String id;
 	private String title;
 	private Date createDate;

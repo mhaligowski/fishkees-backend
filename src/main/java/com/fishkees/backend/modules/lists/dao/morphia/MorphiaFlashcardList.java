@@ -6,8 +6,10 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
+import com.fishkees.backend.dataaccess.morphia.MorphiaEntity;
+
 @Entity("flashcard_lists")
-class MorphiaFlashcardList {
+class MorphiaFlashcardList implements MorphiaEntity {
 	private @Id ObjectId id;
 	private String title;
 	private Date createDate;

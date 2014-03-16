@@ -4,10 +4,11 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.fishkees.backend.modules.core.FishkeesEntity;
 import com.yammer.dropwizard.json.JsonSnakeCase;
 
 @JsonSnakeCase
-public class Flashcard {
+public class Flashcard implements FishkeesEntity {
 	private String id;
 	private String flashcardListId;
 	private String front;
