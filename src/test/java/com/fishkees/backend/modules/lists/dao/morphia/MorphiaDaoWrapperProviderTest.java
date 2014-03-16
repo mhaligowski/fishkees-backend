@@ -13,6 +13,8 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.DatastoreImpl;
 import org.mongodb.morphia.Morphia;
 
+import com.fishkees.backend.dataaccess.morphia.Mapper;
+
 @RunWith(MockitoJUnitRunner.class)
 public class MorphiaDaoWrapperProviderTest {
 
@@ -25,6 +27,9 @@ public class MorphiaDaoWrapperProviderTest {
 	@Mock(extraInterfaces = { Datastore.class }, answer = Answers.RETURNS_DEEP_STUBS)
 	private DatastoreImpl datastore;
 
+	@Mock
+	private Mapper mapper;
+	
 	@Test
 	public void should_map_if_not_mapped() {
 		// given
