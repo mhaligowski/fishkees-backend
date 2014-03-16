@@ -22,12 +22,14 @@ public class MorphiaModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(Mongo.class).toProvider(MongoObjectProvider.class).in(Singleton.class);
+		bind(Mongo.class).toProvider(MongoObjectProvider.class).in(
+				Singleton.class);
 		bind(String.class).annotatedWith(Names.named(MONGO_DB_NAME))
 				.toInstance(configuration.getDb());
 		bind(Morphia.class).in(Singleton.class);
 		bind(Datastore.class).toProvider(DatastoreObjectProvider.class).in(
 				Singleton.class);
+		bind(Mapper.class).to(DozerMapper.class).in(Singleton.class);
 	}
 
 	@Provides
