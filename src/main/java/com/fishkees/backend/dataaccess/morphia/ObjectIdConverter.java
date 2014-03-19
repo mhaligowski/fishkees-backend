@@ -3,6 +3,8 @@ package com.fishkees.backend.dataaccess.morphia;
 import org.bson.types.ObjectId;
 import org.dozer.DozerConverter;
 
+import com.google.common.base.Strings;
+
 public class ObjectIdConverter extends DozerConverter<ObjectId, String> {
 
 	public ObjectIdConverter() {
@@ -16,7 +18,11 @@ public class ObjectIdConverter extends DozerConverter<ObjectId, String> {
 
 	@Override
 	public ObjectId convertFrom(String source, ObjectId destination) {
-		return new ObjectId(source);
+		if (Strings.isNullOrEmpty(source)) {
+			return null;
+		} else {
+			return new ObjectId(source);
+		}
 	}
 
 }

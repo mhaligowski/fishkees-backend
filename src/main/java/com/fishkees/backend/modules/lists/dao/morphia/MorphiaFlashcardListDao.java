@@ -1,10 +1,11 @@
 package com.fishkees.backend.modules.lists.dao.morphia;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.mongodb.morphia.Key;
+import org.bson.types.ObjectId;
 
 import com.fishkees.backend.dataaccess.morphia.Mapper;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
@@ -28,8 +29,15 @@ class MorphiaFlashcardListDao implements FlashcardListDao {
 	@Override
 	public Optional<FlashcardList> createNewFromObject(
 			FlashcardList flashcardList) {
-		return null;
+		MorphiaFlashcardList morphiaEntity = mapper.map(flashcardList, MorphiaFlashcardList.class);
 		
+		morphiaEntity.setId(ObjectId.get());
+		morphiaEntity.setCreateDate(new Date());
+		
+		morphiaDaoWrapper.save(morphiaEntity);
+		
+		final FlashcardList resultFlashcardList = mapper.map(morphiaEntity, FlashcardList.class);
+		return Optional.of(resultFlashcardList);
 	}
 
 	@Override

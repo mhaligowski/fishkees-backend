@@ -87,7 +87,7 @@ public class InMemoryFlashcardListDaoTest {
 		String id = stringCaptor.getValue();
 		FlashcardList newFlashcardListFromStorage = listCaptor.getValue();
 
-		assertNotNull(id);
+		assertNotSame(fl, resultFlashcardList.get());
 		assertEquals(id, newFlashcardListFromStorage.getId());
 		assertEquals("abcd", newFlashcardListFromStorage.getTitle());
 		assertEquals(newFlashcardListFromStorage, resultFlashcardList.get());
