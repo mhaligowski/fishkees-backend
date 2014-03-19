@@ -13,6 +13,7 @@ import com.fishkees.backend.configuration.MongoConfiguration;
 import com.fishkees.backend.dataaccess.morphia.entity.StubFishkeesEntity;
 import com.fishkees.backend.dataaccess.morphia.entity.StubMorphiaEntity;
 import com.fishkees.backend.modules.lists.dao.morphia.MorphiaFlashcardListDaoModule;
+import com.google.common.base.Strings;
 import com.google.inject.Guice;
 
 public class MorphiaMapperIT {
@@ -58,6 +59,31 @@ public class MorphiaMapperIT {
 		// then
 		assertEquals(objectId, result.getId().toString());
 		assertEquals(fieldValue, result.getField());
+	}
+	
+	@Test
+	public void should_map_object_id_to_string() {
+		// given
+		String expected = Strings.repeat("abcd", 6);
+		ObjectId objectId = new ObjectId(expected);
+		
+		// when
+		String actual = testObj.map(objectId);
+		
+		// then
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void should_map_string_to_objectId() {
+		// given
+		String value = Strings.repeat("abcd", 6);
+		
+		// when
+		ObjectId actual = testObj.map(value);
+		
+		// then
+		assertEquals(value, actual.toString());
 	}
 
 	private StubMorphiaEntity getMorphiaEntity(String objectId,

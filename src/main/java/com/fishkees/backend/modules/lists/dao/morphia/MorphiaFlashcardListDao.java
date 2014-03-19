@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.mongodb.morphia.Key;
+
+import com.fishkees.backend.dataaccess.morphia.Mapper;
 import com.fishkees.backend.modules.lists.core.FlashcardList;
 import com.fishkees.backend.modules.lists.dao.FlashcardListDao;
 import com.google.common.base.Optional;
@@ -12,6 +15,9 @@ class MorphiaFlashcardListDao implements FlashcardListDao {
 
 	@Inject
 	private MorphiaDaoWrapper morphiaDaoWrapper;
+	
+	@Inject
+	private Mapper mapper;
 	
 	@Override
 	public List<FlashcardList> findAll() {
@@ -22,19 +28,17 @@ class MorphiaFlashcardListDao implements FlashcardListDao {
 	@Override
 	public Optional<FlashcardList> createNewFromObject(
 			FlashcardList flashcardList) {
-		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 	@Override
 	public Optional<FlashcardList> findById(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Optional<FlashcardList> remove(String id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

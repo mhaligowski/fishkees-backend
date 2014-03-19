@@ -2,6 +2,7 @@ package com.fishkees.backend.dataaccess.morphia;
 
 import javax.inject.Inject;
 
+import org.bson.types.ObjectId;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 
@@ -30,6 +31,16 @@ class DozerMapper implements Mapper {
 	@Override
 	public <S, T> T map(S object, Class<T> targetClass) {
 		return dozerBeanMapper.map(object, targetClass);
+	}
+
+	@Override
+	public ObjectId map(String id) {
+		return new ObjectId(id);
+	}
+
+	@Override
+	public String map(ObjectId objectId) {
+		return objectId.toString();
 	}
 
 }
