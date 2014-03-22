@@ -3,11 +3,10 @@ jdk:
 - oraclejdk7
 env:
   global:
-    - MONGO_HOST=oceanic.mongohq.com
-    - MONGO_PORT=10035
-    - MONGO_USERNAME=test
-    - MONGO_PASSWORD=test
-    - MONGO_DB=fishkeesTest
+  - MONGO_HOST=oceanic.mongohq.com
+  - MONGO_PORT=10035
+  - MONGO_USERNAME=travis-test
+  - MONGO_DB=fishkeesTest
 script: mvn verify
 deploy:
   provider: heroku
@@ -17,4 +16,5 @@ deploy:
   on:
     repo: mhaligowski/fishkees-backend
     branch: master
-
+dd:
+  secure: Q0WFcCv2Eh61M6cZpZxYMklOXWnva+ojSD+DCsJUyv+ammEHY3KuAmsCYp+dtFZ8z/d2FntHjmdnRRpl5nvU/zYbz6ieRPIjlcjrQhSss3Yh2zbBU0yfbwvaAhmG+zxykZV6a1v8UEYhQBL0xA+tzFtVGCc88nHxgZlmkZkWj58=
