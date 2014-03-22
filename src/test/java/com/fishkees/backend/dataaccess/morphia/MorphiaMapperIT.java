@@ -12,7 +12,6 @@ import com.fishkees.backend.configuration.ConfigurationParser;
 import com.fishkees.backend.configuration.MongoConfiguration;
 import com.fishkees.backend.dataaccess.morphia.entity.StubFishkeesEntity;
 import com.fishkees.backend.dataaccess.morphia.entity.StubMorphiaEntity;
-import com.fishkees.backend.modules.lists.dao.morphia.MorphiaFlashcardListDaoModule;
 import com.google.common.base.Strings;
 import com.google.inject.Guice;
 
@@ -23,8 +22,7 @@ public class MorphiaMapperIT {
 	@Before
 	public void setUp() {
 		MongoConfiguration mongoConfiguration = getMongoConfiguration();
-		testObj = Guice.createInjector(new MorphiaModule(mongoConfiguration))
-				.getInstance(Mapper.class);
+		testObj = Guice.createInjector(new MorphiaModule(mongoConfiguration)).getInstance(Mapper.class);
 		testObj.register(StubMorphiaEntity.class, StubFishkeesEntity.class);
 	}
 
@@ -36,8 +34,7 @@ public class MorphiaMapperIT {
 		StubMorphiaEntity morphiaEntity = getMorphiaEntity(objectId, fieldValue);
 
 		// when
-		StubFishkeesEntity result = testObj.map(morphiaEntity,
-				StubFishkeesEntity.class);
+		StubFishkeesEntity result = testObj.map(morphiaEntity, StubFishkeesEntity.class);
 
 		// then
 		assertEquals(objectId, result.getId());
@@ -49,27 +46,25 @@ public class MorphiaMapperIT {
 		// given
 		final String fieldValue = "someFieldValue";
 		final String objectId = ObjectId.get().toString();
-		StubFishkeesEntity morphiaEntity = getFishkeesEntity(objectId,
-				fieldValue);
+		StubFishkeesEntity morphiaEntity = getFishkeesEntity(objectId, fieldValue);
 
 		// when
-		StubMorphiaEntity result = testObj.map(morphiaEntity,
-				StubMorphiaEntity.class);
+		StubMorphiaEntity result = testObj.map(morphiaEntity, StubMorphiaEntity.class);
 
 		// then
 		assertEquals(objectId, result.getId().toString());
 		assertEquals(fieldValue, result.getField());
 	}
-	
+
 	@Test
 	public void should_map_object_id_to_string() {
 		// given
 		String expected = Strings.repeat("abcd", 6);
 		ObjectId objectId = new ObjectId(expected);
-		
+
 		// when
 		String actual = testObj.map(objectId);
-		
+
 		// then
 		assertEquals(expected, actual);
 	}
@@ -78,16 +73,15 @@ public class MorphiaMapperIT {
 	public void should_map_string_to_objectId() {
 		// given
 		String value = Strings.repeat("abcd", 6);
-		
+
 		// when
 		ObjectId actual = testObj.map(value);
-		
+
 		// then
 		assertEquals(value, actual.toString());
 	}
 
-	private StubMorphiaEntity getMorphiaEntity(String objectId,
-			String fieldValue) {
+	private StubMorphiaEntity getMorphiaEntity(String objectId, String fieldValue) {
 		StubMorphiaEntity entity1 = new StubMorphiaEntity();
 		entity1.setId(new ObjectId(objectId));
 		entity1.setField(fieldValue);
@@ -95,8 +89,7 @@ public class MorphiaMapperIT {
 		return entity1;
 	}
 
-	private StubFishkeesEntity getFishkeesEntity(String objectId,
-			String fieldValue) {
+	private StubFishkeesEntity getFishkeesEntity(String objectId, String fieldValue) {
 		StubFishkeesEntity entity1 = new StubFishkeesEntity();
 		entity1.setId(objectId);
 		entity1.setField(fieldValue);
@@ -105,10 +98,9 @@ public class MorphiaMapperIT {
 	}
 
 	private MongoConfiguration getMongoConfiguration() {
-		URL configurationFile = MorphiaFlashcardListDaoModule.class
-				.getResource("mongoConfiguration.yml");
-		MongoConfiguration mongoConfiguration = new ConfigurationParser<>(
-				MongoConfiguration.class).parseConfiguration(configurationFile);
+		URL configurationFile = MorphiaModule.class.getResource("mongoConfiguration.yml");
+		MongoConfiguration mongoConfiguration = new ConfigurationParser<>(MongoConfiguration.class)
+				.parseConfiguration(configurationFile);
 		return mongoConfiguration;
 	}
 }

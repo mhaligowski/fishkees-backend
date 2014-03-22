@@ -17,12 +17,6 @@ public class ConfigurationParser<C extends Configuration> {
 		this.klazz = type;
 	}
 
-	public C parseConfiguration(String filename) {
-		URL resource = this.getClass().getResource(filename);
-
-		return parseConfiguration(resource);
-	}
-
 	public C parseConfiguration(URL resource) {
 		final ConfigurationFactory<C> configurationFactory = ConfigurationFactory
 				.forClass(klazz, new Validator());

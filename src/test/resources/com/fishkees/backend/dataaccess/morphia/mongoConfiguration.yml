@@ -1,0 +1,5 @@
+host: ${mongo.test.host}
+port: ${mongo.test.port}
+username: ${mongo.test.username}
+password: ${mongo.test.password}
+db: ${mongo.test.db}

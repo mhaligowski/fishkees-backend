@@ -15,7 +15,13 @@
 		<guice.version>4.0-beta</guice.version>
 		<dozer.version>5.4.0</dozer.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+		
+		<!--  MongoDB test configuration -->
+		<mongo.test.host>${env.MONGO_HOST}</mongo.test.host>
+		<mongo.test.port>${env.MONGO_PORT}</mongo.test.port>
+		<mongo.test.username>${env.MONGO_USERNAME}</mongo.test.username>
+		<mongo.test.password>${env.MONGO_PASSWORD}</mongo.test.password>
+		<mongo.test.db>${env.MONGO_DB}</mongo.test.db>
 	</properties>
 
 	<build>
@@ -98,6 +104,12 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 	</build>
 
 	<dependencies>
