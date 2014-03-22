@@ -7,6 +7,7 @@ env:
   - MONGO_PORT=10035
   - MONGO_USERNAME=travis-test
   - MONGO_DB=fishkeesTest
+  - secure: lSu3u+WvOiNLarSTNh9E/9tH0FSEmx8coqC7gZqg+242aq66BTKI6SU6LTxX3n5gOVunZIJJj0dBgUauCwHa2nv1JiKjyt2WBs54IKBX8CdxEYyPK2EOJIOo7n6olY0fuBwpVM5ygvh+I4hBI0/JlKwge/5nPZCa0VfFkRllo4A=
 script: mvn verify
 deploy:
   provider: heroku
@@ -16,5 +17,3 @@ deploy:
   on:
     repo: mhaligowski/fishkees-backend
     branch: master
-dd:
-  secure: Q0WFcCv2Eh61M6cZpZxYMklOXWnva+ojSD+DCsJUyv+ammEHY3KuAmsCYp+dtFZ8z/d2FntHjmdnRRpl5nvU/zYbz6ieRPIjlcjrQhSss3Yh2zbBU0yfbwvaAhmG+zxykZV6a1v8UEYhQBL0xA+tzFtVGCc88nHxgZlmkZkWj58=
