@@ -7,8 +7,7 @@ env:
   - MONGO_PORT=10035
   - MONGO_USERNAME=travis-test
   - MONGO_DB=fishkeesTest
-  - secure: eSKuWVDtYDwyW9fNH/4ESwAPHcj4ZwkY4cNggL9nysdMiD+/26bgGm4WNrcEm8bJ/+VJZOtgaQp4TeDThIsBM3ywAU3TjFrkhSA67O8m07gkbxjPg7EF8nJ4joaVEZXBVYxYGTNMZTHdjGwXGChV6UCc9yld/F2x49mlcZXiVyI=
-  - secure: VdqtZnJs0nI2LAPUoPUSL4PY96wkayML1Ub2Vf1hTyXQ6SCkLWpAsBsFWjAUn5uVdH4gW376uqYz8p1LBXB25h2eZRLGlkSH68OqXqG4Zf+pM0VeIZp8K5DnCVG51+CCJYmYjvP8830KgpzfmiBLvEmWOqKVCCnBhogkrMFshQM=
+  - secure: imeqLtdvZ/oqubVnSDIBEoJMvvyll8H9c9lV1yvwus9LfDogOlv/jCl9AkW6KKqLzOUsvdHuBGoupR7gfptz1Zm29SeRwczTn6rrbkno01V5WjE8LWHAmxnZfmMjaP4WnDtdejXNhKiHNeBz7DOQw9TWrcDrWFB4iq/0F7i/33M=
 script: mvn verify -q
 deploy:
   provider: heroku
