@@ -1,7 +1,9 @@
 language: java
 jdk:
 - oraclejdk7
-script: mvn verify -Dmongo.test.host="oceanic.mongohq.com" -Dmongo.test.port=10035 -Dmongo.test.username=test -Dmongo.test.password=test -Dmongo.test.db=fishkeesTest
+env:
+- MONGO_HOST=oceanic.mongohq.com MONGO_PORT=10035 MONGO_USERNAME=test MONGO_PASSWORD=test MONGO_DB=fishkeesTest
+script: mvn verify
 deploy:
   provider: heroku
   api_key:
