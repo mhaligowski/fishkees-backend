@@ -7,8 +7,8 @@ env:
   - MONGO_PORT=10035
   - MONGO_USERNAME=travis-test
   - MONGO_DB=fishkeesTest
-  - secure: lSu3u+WvOiNLarSTNh9E/9tH0FSEmx8coqC7gZqg+242aq66BTKI6SU6LTxX3n5gOVunZIJJj0dBgUauCwHa2nv1JiKjyt2WBs54IKBX8CdxEYyPK2EOJIOo7n6olY0fuBwpVM5ygvh+I4hBI0/JlKwge/5nPZCa0VfFkRllo4A=
-script: mvn verify
+  - MONGO_PASSWORD=L9wHARf
+script: mvn verify -q
 deploy:
   provider: heroku
   api_key:
