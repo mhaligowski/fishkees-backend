@@ -2,7 +2,12 @@ language: java
 jdk:
 - oraclejdk7
 env:
-- MONGO_HOST=oceanic.mongohq.com MONGO_PORT=10035 MONGO_USERNAME=test MONGO_PASSWORD=test MONGO_DB=fishkeesTest
+  global:
+    - MONGO_HOST=oceanic.mongohq.com
+    - MONGO_PORT=10035
+    - MONGO_USERNAME=test
+    - MONGO_PASSWORD=test
+    - MONGO_DB=fishkeesTest
 script: mvn verify
 deploy:
   provider: heroku
