@@ -1,6 +1,6 @@
 package com.fishkees.backend.modules.flashcards.dao;
 
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
 import static com.fishkees.backend.modules.flashcards.core.FlashcardTestBuilder.*;
 
@@ -18,12 +18,9 @@ public class FlashcardInMemoryStorageTest {
 	private static final String ID2 = "fId2";
 	private static final String ID3 = "fId3";
 	private FlashcardInMemoryStorage testObj;
-	private final Flashcard f1 = newFlashcardWithId(ID1).withParent("FL1")
-			.withValues("front 1", "back 1").build();;
-	private Flashcard f2 = newFlashcardWithId(ID2).withParent("FL2")
-			.withValues("front 2", "back 2").build();
-	private Flashcard f3 = newFlashcardWithId(ID3).withParent("FL3")
-			.withValues("front 3", "back 3").build();
+	private final Flashcard f1 = newFlashcardWithId(ID1).withParent("FL1").withValues("front 1", "back 1").build();;
+	private Flashcard f2 = newFlashcardWithId(ID2).withParent("FL2").withValues("front 2", "back 2").build();
+	private Flashcard f3 = newFlashcardWithId(ID3).withParent("FL3").withValues("front 3", "back 3").build();
 
 	@Before
 	public void setUp() {
@@ -92,8 +89,8 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_restore_the_initial_state() {
 		// given
-		Flashcard n = newFlashcardWithId("100").withParent("other list")
-				.withValues("other front", "other back").build();
+		Flashcard n = newFlashcardWithId("100").withParent("other list").withValues("other front", "other back")
+				.build();
 		this.testObj.put("100", n);
 		assertThat(this.testObj.all()).containsExactly(f1, f2, f3, n);
 
@@ -130,7 +127,7 @@ public class FlashcardInMemoryStorageTest {
 		// given
 		final Flashcard f = newFlashcardWithId(ID1).withParent("updatedListId")
 				.withValues("updated front", "updated back").build();
-		
+
 		// when
 		Optional<Flashcard> update = testObj.update(ID1, f);
 
@@ -145,9 +142,8 @@ public class FlashcardInMemoryStorageTest {
 	@Test
 	public void should_do_nothing_when_updating_non_existing() {
 		// given
-		Flashcard f = newFlashcardWithId("4")
-				.withValues("updated front", "updated back")
-				.withParent("updatedList").build();
+		Flashcard f = newFlashcardWithId("4").withValues("updated front", "updated back").withParent("updatedList")
+				.build();
 
 		// when
 		Optional<Flashcard> update = testObj.update("4", f);

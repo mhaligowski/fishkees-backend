@@ -1,7 +1,7 @@
 package com.fishkees.backend.modules.lists.resources;
 
 import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 

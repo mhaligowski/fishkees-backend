@@ -1,7 +1,7 @@
 package com.fishkees.backend.dataaccess;
 
 import static com.fishkees.backend.modules.lists.core.FlashcardListTestBuilder.*;
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -62,10 +62,10 @@ public class FlashcardListInMemoryStorageTest {
 	public void should_return_null_when_finding_nonexisting() {
 		// given
 		String NONEXISTING_ID = "0";
-		
+
 		// when
 		Optional<FlashcardList> result = testObj.get(NONEXISTING_ID);
-		
+
 		assertNotNull(result);
 		assertFalse(result.isPresent());
 	}
@@ -102,7 +102,7 @@ public class FlashcardListInMemoryStorageTest {
 	public void should_have_the_same_elements_after_reset() {
 		// given
 		String NEW_ID = "100";
-		FlashcardList newFlashcardList = newListWithId(NEW_ID).build(); 
+		FlashcardList newFlashcardList = newListWithId(NEW_ID).build();
 
 		// when
 		this.testObj.put(NEW_ID, newFlashcardList);
@@ -136,7 +136,7 @@ public class FlashcardListInMemoryStorageTest {
 	@Test
 	public void should_return_updated_item() {
 		// given
-		FlashcardList fl = newListWithId(ID1).build(); 
+		FlashcardList fl = newListWithId(ID1).build();
 
 		// when
 		Optional<FlashcardList> update = testObj.update(ID1, fl);
@@ -150,7 +150,7 @@ public class FlashcardListInMemoryStorageTest {
 	public void should_return_null_when_updateing_non_existing() {
 		// given
 		String NONEXISTING = "nonexisting";
-		FlashcardList fl = newListWithId(NONEXISTING).build(); 
+		FlashcardList fl = newListWithId(NONEXISTING).build();
 
 		// when
 		Optional<FlashcardList> update = testObj.update(NONEXISTING, fl);
