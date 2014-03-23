@@ -15,8 +15,8 @@
 		<guice.version>4.0-beta</guice.version>
 		<dozer.version>5.4.0</dozer.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<!--  MongoDB test configuration -->
+
+		<!-- MongoDB test configuration -->
 		<mongo.test.host>${env.MONGO_HOST}</mongo.test.host>
 		<mongo.test.port>${env.MONGO_PORT}</mongo.test.port>
 		<mongo.test.username>${env.MONGO_USERNAME}</mongo.test.username>
@@ -125,7 +125,7 @@
 			<version>8.1.10.v20130312</version>
 		</dependency>
 
-		<!--  Guice -->
+		<!-- Guice -->
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
@@ -178,6 +178,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
